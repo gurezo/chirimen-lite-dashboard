@@ -1,13 +1,13 @@
 <div class="wrapper">
   <!-- <iframe src="https://tutorial.chirimen.org/pizero/esm-examples/"></iframe> -->
   @if (example$ | async; as example) {
-    <app-example-list
+    <choh-example-list
       [gpioExample]="example[0]"
       [i2cExample]="example[1]"
       [remoteExample]="example[2]"
     />
   }
   <div class="button-area">
-    <app-button [label]="'閉じる'" type="button" (clickEvent)="closeModal()" />
+    <choh-button [label]="'閉じる'" type="button" (clickEvent)="closeModal()" />
   </div>
 </div>

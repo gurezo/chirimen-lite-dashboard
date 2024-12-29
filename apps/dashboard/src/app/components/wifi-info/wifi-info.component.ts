@@ -3,7 +3,7 @@ import { MatCardModule } from '@angular/material/card';
 import { WiFiInformation } from '../../models';
 
 @Component({
-  selector: 'app-wifi-info',
+  selector: 'choh-wifi-info',
   standalone: true,
   imports: [MatCardModule],
   templateUrl: './wifi-info.component.html',

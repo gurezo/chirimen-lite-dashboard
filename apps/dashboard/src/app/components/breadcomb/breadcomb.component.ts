@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
-  selector: 'app-breadcomb',
+  selector: 'choh-breadcomb',
   standalone: true,
   imports: [MatToolbarModule, MatIconModule, MatDividerModule, NgFor],
   templateUrl: './breadcomb.component.html',

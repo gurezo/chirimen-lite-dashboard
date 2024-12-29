@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { EditorContainersComponent } from '../../containers';
 
 @Component({
-  selector: 'app-editor',
+  selector: 'choh-editor',
   standalone: true,
   imports: [EditorContainersComponent],
-  template: `<app-editor-containers />`,
+  template: `<choh-editor-containers />`,
 })
 export default class EditorComponent {}

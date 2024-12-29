@@ -4,7 +4,7 @@
   </div>
   <div class="wifi-list">
     @for (wifiInfo of wifiInfoList; track wifiInfo.SSID) {
-      <app-wifi-info [wifiInfo]="wifiInfo" />
+      <choh-wifi-info [wifiInfo]="wifiInfo" />
     } @empty {
       <span> There are no Wi-Fi Information </span>
     }
@@ -24,10 +24,10 @@
   </div>
   <mat-divider />
   <div class="button-area">
-    <app-button [label]="'Wifi Scan'" type="button" />
-    <app-button [label]="'Wifi Info'" type="button" />
-    <app-button [label]="'Reset Wifi'" type="button" />
-    <app-button [label]="'Reboot'" type="button" />
-    <app-button [label]="'閉じる'" type="button" (clickEvent)="closeModal()" />
+    <choh-button [label]="'Wifi Scan'" type="button" />
+    <choh-button [label]="'Wifi Info'" type="button" />
+    <choh-button [label]="'Reset Wifi'" type="button" />
+    <choh-button [label]="'Reboot'" type="button" />
+    <choh-button [label]="'閉じる'" type="button" (clickEvent)="closeModal()" />
   </div>
 </div>

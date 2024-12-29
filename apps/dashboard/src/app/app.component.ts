@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { IconService } from './service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'choh-root',
   standalone: true,
   imports: [RouterOutlet],
   templateUrl: './app.component.html',

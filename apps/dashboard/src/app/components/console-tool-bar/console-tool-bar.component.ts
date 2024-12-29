@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
-  selector: 'app-console-tool-bar',
+  selector: 'choh-console-tool-bar',
   standalone: true,
   imports: [MatDividerModule, MatIconModule, MatMenuModule],
   templateUrl: './console-tool-bar.component.html',

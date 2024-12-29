@@ -360,7 +360,7 @@ class ComplexDataStore {
 }
 
 @Component({
-  selector: 'app-tree',
+  selector: 'choh-tree',
   standalone: true,
   imports: [
     CdkContextMenuTrigger,

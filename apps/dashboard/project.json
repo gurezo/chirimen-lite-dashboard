@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "apps/dashboard/src",
-  "prefix": "app",
+  "prefix": "choh",
   "generators": {
     "@schematics/angular:component": {
       "style": "scss"

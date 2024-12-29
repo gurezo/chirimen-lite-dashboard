@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-button',
+  selector: 'choh-button',
   standalone: true,
   imports: [MatButtonModule],
   templateUrl: './button.component.html',

@@ -7,7 +7,7 @@ import { DialogService } from '../../service/dialog/dialog.service';
 import { ExampleDialogService } from './example.dialog.service';
 
 @Component({
-  selector: 'app-example',
+  selector: 'choh-example',
   standalone: true,
   imports: [ButtonComponent, ExampleListComponent, AsyncPipe],
   templateUrl: './example.component.html',

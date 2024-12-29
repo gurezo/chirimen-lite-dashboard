@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
 @Component({
-  selector: 'app-header',
+  selector: 'choh-header',
   standalone: true,
   imports: [AsyncPipe, MatIconModule, MatMenuModule, RouterLink],
   templateUrl: './header.component.html',

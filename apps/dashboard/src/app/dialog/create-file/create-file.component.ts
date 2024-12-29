@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-create-file',
+  selector: 'choh-create-file',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './create-file.component.html',
