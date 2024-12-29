@@ -13,7 +13,6 @@ import {
   of as observableOf,
 } from 'rxjs';
 import { delay, map, shareReplay } from 'rxjs/operators';
-import { sleep } from '../../functions';
 import { LoadingState } from './loading.state';
 import { RawData } from './raw-data';
 import { TransformedData } from './transformed.data';
@@ -388,11 +387,8 @@ export class TreeComponent {
   trackBy = (index: number, node: TransformedData) => this.expansionKey(node);
   expansionKey = (node: TransformedData) => node.raw.id;
 
-  // ngOnInit() {
-  //   this._dataStore.loadRoots();
-  // }
-  async ngOnInit() {
-    await this.demoTreeAction();
+  ngOnInit() {
+    this._dataStore.loadRoots();
   }
 
   onExpand(node: TransformedData, expanded: boolean) {
@@ -400,10 +396,5 @@ export class TreeComponent {
       // Only perform a load on expansion.
       this._dataStore.loadChildren(node.raw.id);
     }
-  }
-
-  private async demoTreeAction() {
-    await sleep(16000);
-    this._dataStore.loadRoots();
   }
 }
