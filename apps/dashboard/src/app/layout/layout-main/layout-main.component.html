@@ -1,4 +1,4 @@
-<app-header
+<choh-header
   [connected$]="connected$"
   (eventConnect)="onConnect()"
   (eventDisConnect)="onDisConnect()"
@@ -7,11 +7,11 @@
   <div class="wrapper">
     <div class="box1">
       <!-- パンくず -->
-      <app-breadcomb />
+      <choh-breadcomb />
     </div>
     <!-- ディレクトリツリー -->
     <div class="box2">
-      <app-tree />
+      <choh-tree />
     </div>
     <mat-divider vertical />
     <div class="box2">
@@ -20,19 +20,19 @@
           <ng-template mat-tab-label>
             <mat-icon>terminal</mat-icon>Console
           </ng-template>
-          <app-console />
+          <choh-console />
         </mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
             <mat-icon>description</mat-icon>Editor
           </ng-template>
-          <app-editor />
+          <choh-editor />
         </mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
             <mat-icon>fiber_pin</mat-icon>Pin Assign
           </ng-template>
-          <app-pin-assign />
+          <choh-pin-assign />
         </mat-tab>
       </mat-tab-group>
     </div>
@@ -50,6 +50,6 @@
       priority
       alt="PiZeroW_OTG"
     />
-    <app-button [label]="'Web Serial Connect'" (clickEvent)="onConnect()" />
+    <choh-button [label]="'Web Serial Connect'" (clickEvent)="onConnect()" />
   </div>
 }

@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { WifiSettingContainersComponent } from '../../containers';
 
 @Component({
-  selector: 'app-wifi-setting',
+  selector: 'choh-wifi-setting',
   standalone: true,
   imports: [WifiSettingContainersComponent],
-  template: `<app-wifi-setting />`,
+  template: `<choh-wifi-setting />`,
 })
 export default class WifiSettingComponent {}

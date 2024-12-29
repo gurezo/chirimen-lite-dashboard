@@ -4,7 +4,7 @@ import { ButtonComponent } from '../../components';
 import { DialogService } from '../../service/dialog/dialog.service';
 
 @Component({
-  selector: 'app-file-upload',
+  selector: 'choh-file-upload',
   standalone: true,
   imports: [ButtonComponent, ReactiveFormsModule],
   templateUrl: './file-upload.component.html',

@@ -17,7 +17,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
 ];
 
 @Component({
-  selector: 'app-chirimen-setup',
+  selector: 'choh-chirimen-setup',
   standalone: true,
   imports: [ButtonComponent, MatTable, MatTableModule],
   templateUrl: './chirimen-setup.component.html',

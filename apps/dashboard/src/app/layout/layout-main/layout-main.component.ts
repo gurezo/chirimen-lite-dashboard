@@ -17,7 +17,7 @@ import { WebSerialService } from '../../service';
 import { WebSerialActions } from '../../store';
 
 @Component({
-  selector: 'app-layout-main',
+  selector: 'choh-layout-main',
   standalone: true,
   imports: [
     AsyncPipe,

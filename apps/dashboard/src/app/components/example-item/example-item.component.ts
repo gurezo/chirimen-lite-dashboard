@@ -5,7 +5,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ExampleItem } from '../../models';
 
 @Component({
-  selector: 'app-example-item',
+  selector: 'choh-example-item',
   standalone: true,
   imports: [MatIconModule, MatTableModule, MatTooltipModule],
   templateUrl: './example-item.component.html',

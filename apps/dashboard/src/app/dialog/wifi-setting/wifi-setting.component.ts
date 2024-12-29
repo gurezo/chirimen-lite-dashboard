@@ -10,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-  selector: 'app-wifi-setting',
+  selector: 'choh-wifi-setting',
   standalone: true,
   imports: [
     ButtonComponent,

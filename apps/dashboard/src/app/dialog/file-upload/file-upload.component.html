@@ -2,8 +2,8 @@
   <h2>ファイルをアップロード</h2>
   <form [formGroup]="uploadForm" (ngSubmit)="fileInput.click()">
     <div class="button-area">
-      <app-button [label]="'アップロード'" type="button" />
-      <app-button
+      <choh-button [label]="'アップロード'" type="button" />
+      <choh-button
         [label]="'閉じる'"
         type="button"
         (clickEvent)="closeModal()"
