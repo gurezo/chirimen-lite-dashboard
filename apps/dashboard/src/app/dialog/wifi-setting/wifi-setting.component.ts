@@ -1,4 +1,3 @@
-import { NgFor } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
@@ -18,7 +17,6 @@ import { MatInputModule } from '@angular/material/input';
     MatDividerModule,
     MatFormFieldModule,
     MatInputModule,
-    NgFor,
     ReactiveFormsModule,
   ],
   templateUrl: './wifi-setting.component.html',
