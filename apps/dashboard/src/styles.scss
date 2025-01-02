@@ -1,13 +1,13 @@
+@use "@angular/material/prebuilt-themes/indigo-pink.css";
+@use "@angular/cdk/overlay-prebuilt.css";
+@use "@xterm/xterm/css/xterm.css";
+
+// regular style toast
+@use "ngx-toastr/toastr";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import "@angular/material/prebuilt-themes/indigo-pink.css";
-@import "@angular/cdk/overlay-prebuilt.css";
-@import "@xterm/xterm/css/xterm.css";
-
-// regular style toast
-@import "ngx-toastr/toastr";
 
 /* You can add global styles to this file, and also import other style files */
 
