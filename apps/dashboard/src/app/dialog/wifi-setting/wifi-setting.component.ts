@@ -10,7 +10,6 @@ import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'choh-wifi-setting',
-  standalone: true,
   imports: [
     ButtonComponent,
     WifiInfoComponent,

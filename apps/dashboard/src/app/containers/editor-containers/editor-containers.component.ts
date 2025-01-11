@@ -6,7 +6,6 @@ import { MonacoEditorService } from './services';
 
 @Component({
   selector: 'choh-editor-containers',
-  standalone: true,
   imports: [FormsModule, MonacoEditorModule, EditorToolBarComponent],
   templateUrl: './editor-containers.component.html',
   styleUrl: './editor-containers.component.scss',

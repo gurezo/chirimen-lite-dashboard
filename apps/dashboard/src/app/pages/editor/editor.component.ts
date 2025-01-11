@@ -3,7 +3,6 @@ import { EditorContainersComponent } from '../../containers';
 
 @Component({
   selector: 'choh-editor',
-  standalone: true,
   imports: [EditorContainersComponent],
   template: `<choh-editor-containers />`,
 })

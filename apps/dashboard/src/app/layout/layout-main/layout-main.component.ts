@@ -18,7 +18,6 @@ import { WebSerialActions } from '../../store';
 
 @Component({
   selector: 'choh-layout-main',
-  standalone: true,
   imports: [
     AsyncPipe,
     BreadcombComponent,

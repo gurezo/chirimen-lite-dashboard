@@ -3,7 +3,6 @@ import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'choh-button',
-  standalone: true,
   imports: [MatButtonModule],
   templateUrl: './button.component.html',
 })

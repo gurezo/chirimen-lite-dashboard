@@ -6,7 +6,6 @@ import { ExampleItem } from '../../models';
 
 @Component({
   selector: 'choh-example-item',
-  standalone: true,
   imports: [MatIconModule, MatTableModule, MatTooltipModule],
   templateUrl: './example-item.component.html',
   styleUrl: './example-item.component.scss',

@@ -5,7 +5,6 @@ import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'choh-editor-tool-bar',
-  standalone: true,
   imports: [MatDividerModule, MatIconModule, MatMenuModule],
   templateUrl: './editor-tool-bar.component.html',
   styleUrl: './editor-tool-bar.component.scss',
