@@ -4,7 +4,6 @@ import { DialogService } from '../../service/dialog/dialog.service';
 
 @Component({
   selector: 'choh-i2cdetect',
-  standalone: true,
   imports: [ButtonComponent],
   templateUrl: './i2cdetect.component.html',
   styleUrl: './i2cdetect.component.scss',

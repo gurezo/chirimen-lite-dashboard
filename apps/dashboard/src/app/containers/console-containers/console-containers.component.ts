@@ -10,7 +10,6 @@ import { DialogService } from '../../service/dialog/dialog.service';
 
 @Component({
   selector: 'choh-console-containers',
-  standalone: true,
   imports: [ConsoleToolBarComponent, MatDividerModule],
   templateUrl: './console-containers.component.html',
   styleUrl: './console-containers.component.scss',

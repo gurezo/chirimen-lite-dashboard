@@ -4,7 +4,6 @@ import { IconService } from './service';
 
 @Component({
   selector: 'choh-root',
-  standalone: true,
   imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

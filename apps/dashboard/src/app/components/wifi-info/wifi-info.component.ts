@@ -4,7 +4,6 @@ import { WiFiInformation } from '../../models';
 
 @Component({
   selector: 'choh-wifi-info',
-  standalone: true,
   imports: [MatCardModule],
   templateUrl: './wifi-info.component.html',
   styleUrl: './wifi-info.component.scss',

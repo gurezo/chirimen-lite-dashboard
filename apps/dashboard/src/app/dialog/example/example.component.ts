@@ -8,7 +8,6 @@ import { ExampleDialogService } from './example.dialog.service';
 
 @Component({
   selector: 'choh-example',
-  standalone: true,
   imports: [ButtonComponent, ExampleListComponent, AsyncPipe],
   templateUrl: './example.component.html',
   styleUrl: './example.component.scss',

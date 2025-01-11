@@ -3,7 +3,6 @@ import { PinAssignContainersComponent } from '../../containers';
 
 @Component({
   selector: 'choh-pin-assign',
-  standalone: true,
   imports: [PinAssignContainersComponent],
   template: `<choh-pin-assign />`,
 })

@@ -5,7 +5,6 @@ import { DialogService } from '../../service/dialog/dialog.service';
 
 @Component({
   selector: 'choh-file-upload',
-  standalone: true,
   imports: [ButtonComponent, ReactiveFormsModule],
   templateUrl: './file-upload.component.html',
   styleUrl: './file-upload.component.scss',

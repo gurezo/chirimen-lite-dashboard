@@ -7,7 +7,6 @@ import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'choh-header',
-  standalone: true,
   imports: [AsyncPipe, MatIconModule, MatMenuModule, RouterLink],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
