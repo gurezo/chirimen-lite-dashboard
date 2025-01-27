@@ -19,7 +19,7 @@ export class ConsoleContainersComponent implements AfterViewInit {
   store = inject(Store);
   service = inject(WebSerialService);
   xtermService = inject(XtermService);
-  dailogService = inject(DialogService);
+  dialogService = inject(DialogService);
   dialog = inject(Dialog);
 
   label = 'connect';
@@ -31,24 +31,24 @@ export class ConsoleContainersComponent implements AfterViewInit {
   }
 
   openWifiSettingDialog() {
-    this.dailogService.openWifiSettingDialog();
+    this.dialogService.openWifiSettingDialog();
   }
 
   createFile() {}
 
   openExampleFrameDialog() {
-    this.dailogService.openExampleFrameDialog();
+    this.dialogService.openExampleFrameDialog();
   }
 
   openSetupChirimenDialog() {
-    this.dailogService.openSetupChirimenDialog();
+    this.dialogService.openSetupChirimenDialog();
   }
   openI2CDetectDialog() {
-    this.dailogService.openI2CDetectDialog();
+    this.dialogService.openI2CDetectDialog();
   }
 
   openFileUploadDialog() {
-    this.dailogService.openFileUploadDialog();
+    this.dialogService.openFileUploadDialog();
   }
 
   private configTerminal() {
