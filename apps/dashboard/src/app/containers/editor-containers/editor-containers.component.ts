@@ -5,13 +5,13 @@ import { EditorToolBarComponent } from '../../components';
 import { MonacoEditorService } from './services';
 
 @Component({
-  selector: 'choh-editor',
+  selector: 'choh-editor-containers',
   imports: [FormsModule, MonacoEditorModule, EditorToolBarComponent],
-  templateUrl: './editor.component.html',
-  styleUrl: './editor.component.scss',
+  templateUrl: './editor-containers.component.html',
+  styleUrl: './editor-containers.component.scss',
   providers: [MonacoEditorService],
 })
-export class EditorComponent implements OnInit {
+export class EditorContainersComponent implements OnInit {
   private monaca = inject(MonacoEditorService);
   editorOptions = {
     theme: 'vs-dark',

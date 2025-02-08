@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MonacoEditorModule, provideMonacoEditor } from 'ngx-monaco-editor-v2';
 import { monacoConfig } from '../../shared';
-import { EditorComponent } from './editor.component';
+import { EditorContainersComponent } from './editor-containers.component';
 
-describe('EditorComponent', () => {
-  let component: EditorComponent;
-  let fixture: ComponentFixture<EditorComponent>;
+describe('EditorContainersComponent', () => {
+  let component: EditorContainersComponent;
+  let fixture: ComponentFixture<EditorContainersComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EditorComponent, MonacoEditorModule],
+      imports: [EditorContainersComponent, MonacoEditorModule],
       providers: [provideMonacoEditor(monacoConfig)],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(EditorComponent);
+    fixture = TestBed.createComponent(EditorContainersComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
