@@ -4,6 +4,6 @@ import { ConsoleContainersComponent } from '../../containers';
 @Component({
   selector: 'choh-console',
   imports: [ConsoleContainersComponent],
-  template: `<choh-console />`,
+  template: `<choh-console-containers />`,
 })
 export default class ConsoleComponent {}
