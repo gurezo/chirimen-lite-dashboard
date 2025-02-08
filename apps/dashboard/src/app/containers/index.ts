@@ -1,6 +1,6 @@
 import { ConsoleComponent } from './console/console.component';
-import { EditorComponent } from './editor/editor.component';
+import { EditorContainersComponent } from './editor-containers/editor-containers.component';
 
-const containers = [ConsoleComponent, EditorComponent];
+const containers = [ConsoleComponent, EditorContainersComponent];
 
-export { ConsoleComponent, containers, EditorComponent };
+export { ConsoleComponent, containers, EditorContainersComponent };

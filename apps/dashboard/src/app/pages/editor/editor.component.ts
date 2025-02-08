@@ -4,6 +4,6 @@ import { EditorContainersComponent } from '../../containers';
 @Component({
   selector: 'choh-editor',
   imports: [EditorContainersComponent],
-  template: `<choh-editor />`,
+  template: `<choh-editor-containers />`,
 })
 export default class EditorComponent {}
