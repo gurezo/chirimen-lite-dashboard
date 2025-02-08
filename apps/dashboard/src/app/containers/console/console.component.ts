@@ -9,13 +9,13 @@ import { WebSerialService, XtermService } from '../../service';
 import { DialogService } from '../../service/dialog/dialog.service';
 
 @Component({
-  selector: 'choh-console-containers',
+  selector: 'choh-console',
   imports: [ConsoleToolBarComponent, MatDividerModule],
-  templateUrl: './console-containers.component.html',
-  styleUrl: './console-containers.component.scss',
+  templateUrl: './console.component.html',
+  styleUrl: './console.component.scss',
   providers: [WebSerialService],
 })
-export class ConsoleContainersComponent implements AfterViewInit {
+export class ConsoleComponent implements AfterViewInit {
   store = inject(Store);
   service = inject(WebSerialService);
   xtermService = inject(XtermService);
