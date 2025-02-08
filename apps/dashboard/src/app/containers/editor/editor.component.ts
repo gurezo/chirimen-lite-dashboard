@@ -2,17 +2,17 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { EditorToolBarComponent } from '../../components';
-import { MonacoEditorService } from './services';
+import { EditorService } from './services';
 
 @Component({
   selector: 'choh-editor',
   imports: [FormsModule, MonacoEditorModule, EditorToolBarComponent],
   templateUrl: './editor.component.html',
   styleUrl: './editor.component.scss',
-  providers: [MonacoEditorService],
+  providers: [EditorService],
 })
 export class EditorComponent implements OnInit {
-  private monaca = inject(MonacoEditorService);
+  private monaca = inject(EditorService);
   editorOptions = {
     theme: 'vs-dark',
     language: 'javascript',

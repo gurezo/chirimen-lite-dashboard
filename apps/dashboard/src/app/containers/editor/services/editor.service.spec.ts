@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MonacoEditorService } from './monaco-editor.service';
+import { EditorService } from './editor.service';
 
-describe('MonacoEditorService', () => {
-  let service: MonacoEditorService;
+describe('EditorService', () => {
+  let service: EditorService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(MonacoEditorService);
+    service = TestBed.inject(EditorService);
   });
 
   it('should be created', () => {
