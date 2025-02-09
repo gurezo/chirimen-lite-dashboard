@@ -22,14 +22,11 @@ export class WebSerialService {
       this.port = await navigator.serial.requestPort();
       await this.port.open({ baudRate: 115200 });
 
-      // 選択されたポートが Raspberry Pi Zero かどうかを判定
       const isPiZero = await isRaspberryPiZero(this.port);
 
       if (isPiZero) {
-        // alert('OK!!! 接続されたデバイスは Raspberry Pi Zero です。');
         return WEB_SERIAL_OPEN_SUCCESS;
       } else {
-        // alert('NG!!! 接続されたデバイスは Raspberry Pi Zero ではありません。');
         return WEB_SERIAL_IS_NOT_RASPBEYY_PI_ZERO;
       }
     } catch (error) {
@@ -41,19 +38,15 @@ export class WebSerialService {
     if (error instanceof DOMException) {
       switch (error.message) {
         case WEB_SERIAL_ERROR_PORT_NO_SELECTED:
-          // alert('NG!!! ポートが選択されていません。');
           return WEB_SERIAL_ERROR_PORT_NO_SELECTED;
         case WEB_SERIAL_ERROR_PORT_ALERADY_OPEN:
-          // alert('NG!!! Raspberry Pi Zero が接続されたままです。');
           return WEB_SERIAL_ERROR_PORT_ALERADY_OPEN;
         case WEB_SERIAL_ERROR_PORT_OPEN_FAIL:
           return WEB_SERIAL_ERROR_PORT_OPEN_FAIL;
         default:
-          // alert('NG!!! 原因不明のエラーです。');
           return WEB_SERIAL_ERROR_UNKNOWN;
       }
     } else {
-      // alert('NG!!! 原因不明のエラーです。');
       return WEB_SERIAL_ERROR_UNKNOWN;
     }
   }
