@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { catchError, from, map, Observable, throwError } from 'rxjs';
+import { SerialPort as SerialPortPolyfill } from 'web-serial-polyfill';
 import {
   WEB_SERIAL_ERROR_PORT_ALERADY_OPEN,
   WEB_SERIAL_ERROR_PORT_NO_SELECTED,
@@ -14,11 +15,7 @@ import { isRaspberryPiZero } from '../../functions';
   providedIn: 'root',
 })
 export class WebSerialService {
-  private port: SerialPort | null;
-
-  constructor() {
-    this.port = null;
-  }
+  private port: SerialPort | SerialPortPolyfill | undefined;
 
   async connect(): Promise<string> {
     try {
