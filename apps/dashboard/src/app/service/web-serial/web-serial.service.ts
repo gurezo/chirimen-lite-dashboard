@@ -1,23 +1,13 @@
 import { Injectable } from '@angular/core';
-import {
-  catchError,
-  filter,
-  finalize,
-  from,
-  map,
-  Observable,
-  throwError,
-} from 'rxjs';
+import { catchError, finalize, from, map, Observable, throwError } from 'rxjs';
 import {
   WEB_SERIAL_ERROR_PORT_ALERADY_OPEN,
   WEB_SERIAL_ERROR_PORT_NO_SELECTED,
   WEB_SERIAL_ERROR_PORT_OPEN_FAIL,
-  WEB_SERIAL_ERROR_PORT_READABLE_FAIL,
   WEB_SERIAL_ERROR_PORT_WRITABLE_FAIL,
   WEB_SERIAL_ERROR_UNKNOWN,
   WEB_SERIAL_IS_NOT_RASPBEYY_PI_ZERO,
   WEB_SERIAL_OPEN_SUCCESS,
-  WEB_SERIAL_PORT_READABLE_SUCCESS,
   WEB_SERIAL_PORT_WRITABLE_SUCCESS,
 } from '../../constants';
 import { isRaspberryPiZero } from '../../functions';
@@ -29,8 +19,6 @@ export class WebSerialService {
   private port: SerialPort | null;
   private writer: WritableStreamDefaultWriter | null = null;
   private encoder = new TextEncoderStream();
-  private reader: ReadableStreamDefaultReader | null = null;
-  private decoder = new TextDecoderStream();
 
   constructor() {
     this.port = null;
@@ -45,7 +33,6 @@ export class WebSerialService {
 
       if (isPiZero) {
         this.configPortWriter();
-        this.configPortReader();
         return WEB_SERIAL_OPEN_SUCCESS;
       } else {
         return WEB_SERIAL_IS_NOT_RASPBEYY_PI_ZERO;
@@ -63,20 +50,6 @@ export class WebSerialService {
         this.writer = this.encoder.writable.getWriter();
         this.encoder.readable.pipeTo(this.port.writable);
         return WEB_SERIAL_PORT_WRITABLE_SUCCESS;
-      }
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  configPortReader() {
-    try {
-      if (this.port == null || this.port.readable == null) {
-        return WEB_SERIAL_ERROR_PORT_READABLE_FAIL;
-      } else {
-        this.reader = this.decoder.readable.getReader();
-        this.port.readable.pipeTo(this.decoder.writable);
-        return WEB_SERIAL_PORT_READABLE_SUCCESS;
       }
     } catch (error) {
       throw error;
@@ -104,9 +77,6 @@ export class WebSerialService {
     try {
       if (this.writer) {
         await this.writer.releaseLock();
-      }
-      if (this.reader) {
-        await this.reader.releaseLock();
       }
       await this.port?.close();
     } catch (error) {}
@@ -137,21 +107,36 @@ export class WebSerialService {
     if (!this.port) {
       return throwError(() => new Error('Serial port not connected'));
     }
-    if (!this.reader) {
+
+    const reader = this.port.readable?.getReader();
+    const decoder = new TextDecoder();
+    if (!reader) {
       return throwError(() => new Error('Serial port not connected'));
     }
 
-    return from(this.reader.read()).pipe(
-      filter(({ value, done }) => !!done),
-      map(({ value, done }) => {
-        this.writer?.releaseLock();
-        return value ?? '';
-      }),
-      catchError((error) => {
-        console.error('Error sending data:', error);
-        this.writer?.releaseLock();
-        return throwError(() => error);
-      }),
-    );
+    return new Observable<string>((observer) => {
+      const readChunk = () => {
+        reader
+          .read()
+          .then(({ value, done }) => {
+            if (done) {
+              observer.complete();
+              return;
+            }
+            const chunk = decoder.decode(value);
+            observer.next(chunk);
+            readChunk();
+          })
+          .catch((error) => {
+            observer.error(error);
+          });
+      };
+
+      readChunk();
+
+      return () => {
+        reader.releaseLock();
+      };
+    });
   }
 }
