@@ -54,7 +54,9 @@ export class WebSerialService {
   async disConnect() {
     try {
       await this.port?.close();
-    } catch (error) {}
+    } catch (error) {
+      console.error('Error port close:', error);
+    }
   }
 
   sendData(data: string): Observable<void> {
