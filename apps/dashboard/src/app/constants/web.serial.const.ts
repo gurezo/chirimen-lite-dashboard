@@ -13,7 +13,3 @@ export const WEB_SERIAL_ERROR_PORT_WRITABLE_FAIL =
   "Failed to execute 'open' on 'SerialPort': Failed to open serial port.writable.";
 export const WEB_SERIAL_PORT_WRITABLE_SUCCESS =
   'Successed to config serial port.writable.';
-export const WEB_SERIAL_ERROR_PORT_READABLE_FAIL =
-  "Failed to execute 'open' on 'SerialPort': Failed to open serial port.readable.";
-export const WEB_SERIAL_PORT_READABLE_SUCCESS =
-  'Successed to config serial port.readable.';
