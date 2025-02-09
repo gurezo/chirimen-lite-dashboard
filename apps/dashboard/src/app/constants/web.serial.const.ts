@@ -9,3 +9,7 @@ export const WEB_SERIAL_ERROR_PORT_ALERADY_OPEN =
 export const WEB_SERIAL_ERROR_PORT_OPEN_FAIL =
   "Failed to execute 'open' on 'SerialPort': Failed to open serial port.";
 export const WEB_SERIAL_ERROR_UNKNOWN = 'Unknown Error';
+export const WEB_SERIAL_ERROR_PORT_WRITABLE_FAIL =
+  "Failed to execute 'open' on 'SerialPort': Failed to open serial port.writable.";
+export const WEB_SERIAL_PORT_WRITABLE_SUCCESS =
+  'Successed to config serial port.writable.';
