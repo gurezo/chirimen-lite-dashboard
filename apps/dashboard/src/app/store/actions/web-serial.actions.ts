@@ -8,6 +8,10 @@ export const WebSerialActions = createActionGroup({
     onConnectSuccess: props<{ isConnected: boolean }>(),
     onConnectFail: props<{ isConnected: boolean }>(),
     onDisConnect: emptyProps(),
-    receivedData: props<{ receivedData: string[] }>(),
+    sendData: props<{ sendData: string }>(),
+    onSendSuccess: emptyProps(),
+    onSendFail: emptyProps(),
+    receivedData: props<{ receivedData: string }>(),
+    error: props<{ error: unknown }>(),
   },
 });
