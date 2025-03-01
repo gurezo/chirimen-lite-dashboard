@@ -1,4 +1,6 @@
 export interface WebSerialState {
   isConnected: boolean;
-  receivedData: string[];
+  sendData: string;
+  receivedData: string;
+  error: unknown;
 }
