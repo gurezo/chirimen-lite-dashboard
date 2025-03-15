@@ -1,49 +1,22 @@
-h3 {
-  margin: 4px 0 8px 16px;
+.example-tree-invisible {
+  display: none;
 }
 
-cdk-tree-node {
-  display: flex;
-  align-items: center;
+.example-tree ul,
+.example-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+.example-tree-node {
+  display: block;
+  line-height: 40px;
 }
 
-.example-menu {
-  display: inline-flex;
-  flex-direction: column;
-  min-width: 180px;
-  max-width: 280px;
-  background-color: rgb(255, 255, 255);
-  padding: 6px 0;
+.example-tree-node .example-tree-node {
+  padding-left: 40px;
 }
 
-.example-menu-item {
-  background-color: transparent;
-  cursor: pointer;
-  border: none;
-
-  user-select: none;
-  min-width: 64px;
-  line-height: 36px;
-  padding: 0 16px;
-
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  flex: 1;
-}
-
-.example-menu-item:hover {
-  background-color: rgb(208, 208, 208);
-}
-
-.example-menu-item:active {
-  background-color: rgb(170, 170, 170);
-}
-
-.parent-only {
-  padding-left: 16px;
-}
-
-.parent-only:hover {
-  background-color: rgb(240, 240, 240);
+.example-toggle {
+  vertical-align: middle;
 }
