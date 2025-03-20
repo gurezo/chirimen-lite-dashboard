@@ -11,16 +11,21 @@
 
 .example-tree-node {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   line-height: 40px;
 }
 
 .example-tree-node .example-tree-node {
-  padding-left: 40px;
+  padding-left: 8px;
 }
 
 .example-toggle {
   vertical-align: middle;
+}
+
+.example-tree-node-content {
+  display: flex;
+  align-items: center;
 }
 
 .example-tree-icon {
@@ -28,4 +33,14 @@
   width: 20px;
   height: 20px;
   font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.example-tree-children {
+  width: 100%;
+  margin-left: 8px;
 }
