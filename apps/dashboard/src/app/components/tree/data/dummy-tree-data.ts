@@ -11,7 +11,7 @@ export function flattenNodes(nodes: NestedFoodNode[]): NestedFoodNode[] {
   return flattenedNodes;
 }
 
-export const TREE_DATA: NestedFoodNode[] = [
+export const DUMMY_TREE_DATA: NestedFoodNode[] = [
   {
     name: '.bash_history',
     type: 'file',
