@@ -46,4 +46,10 @@ export class TreeComponent {
       !parent || (!!this.tree?.isExpanded(parent) && this.shouldRender(parent))
     );
   }
+
+  toggleNode(node: NestedFoodNode) {
+    if (this.hasChild(0, node)) {
+      this.tree.toggle(node);
+    }
+  }
 }
