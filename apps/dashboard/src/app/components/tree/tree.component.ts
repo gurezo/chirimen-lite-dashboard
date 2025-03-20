@@ -10,7 +10,6 @@ import { NestedFoodNode } from './models/nested-food-node.model';
   selector: 'choh-tree',
   imports: [CdkTreeModule, MatButtonModule, MatIconModule],
   templateUrl: './tree.component.html',
-  styleUrl: './tree.component.scss',
 })
 export class TreeComponent {
   @ViewChild(CdkTree) tree: CdkTree<NestedFoodNode>;
