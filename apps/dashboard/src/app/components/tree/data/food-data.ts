@@ -11,22 +11,87 @@ export function flattenNodes(nodes: NestedFoodNode[]): NestedFoodNode[] {
   return flattenedNodes;
 }
 
-export const FOOD_DATA: NestedFoodNode[] = [
+export const TREE_DATA: NestedFoodNode[] = [
   {
-    name: 'Fruit',
-    children: [{ name: 'Apple' }, { name: 'Banana' }, { name: 'Fruit loops' }],
+    name: '.bash_history',
+    type: 'file',
+    children: [],
   },
   {
-    name: 'Vegetables',
+    name: '.bashrc',
+    type: 'file',
+    children: [],
+  },
+  {
+    name: '.cache',
+    type: 'folder',
+    children: [],
+  },
+  {
+    name: '.forever',
+    type: 'folder',
+    children: [],
+  },
+  {
+    name: '.npm',
+    type: 'folder',
+    children: [],
+  },
+  {
+    name: '.profile',
+    type: 'file',
+    children: [],
+  },
+  {
+    name: '.sudo_as_admin_successful',
+    type: 'file',
+    children: [],
+  },
+  {
+    name: 'myApp',
+    type: 'folder',
     children: [
       {
-        name: 'Green',
-        children: [{ name: 'Broccoli' }, { name: 'Brussels sprouts' }],
+        name: 'RelayServer.js',
+        type: 'file',
+        children: [],
       },
       {
-        name: 'Orange',
-        children: [{ name: 'Pumpkins' }, { name: 'Carrots' }],
+        name: 'main-hello-real-world.js',
+        type: 'file',
+        children: [],
+      },
+      {
+        name: 'node_modules',
+        type: 'folder',
+        children: [
+          {
+            name: '.bin',
+            type: 'folder',
+            children: [],
+          },
+          {
+            name: 'package-lock.json',
+            type: 'file',
+            children: [],
+          },
+        ],
+      },
+      {
+        name: 'package-lock.json',
+        type: 'file',
+        children: [],
+      },
+      {
+        name: 'package.json',
+        type: 'file',
+        children: [],
       },
     ],
+  },
+  {
+    name: 'wifi_setup.sh',
+    type: 'file',
+    children: [],
   },
 ];
