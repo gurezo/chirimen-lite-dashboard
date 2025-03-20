@@ -3,7 +3,7 @@ import { CdkTree, CdkTreeModule } from '@angular/cdk/tree';
 import { Component, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FOOD_DATA, flattenNodes } from './data/food-data';
+import { TREE_DATA, flattenNodes } from './data/food-data';
 import { NestedFoodNode } from './models/nested-food-node.model';
 
 @Component({
@@ -17,7 +17,7 @@ export class TreeComponent {
 
   childrenAccessor = (dataNode: NestedFoodNode) => dataNode.children ?? [];
 
-  dataSource = new ArrayDataSource(FOOD_DATA);
+  dataSource = new ArrayDataSource(TREE_DATA);
 
   constructor() {
     this.tree = new CdkTree<NestedFoodNode>(
@@ -30,7 +30,7 @@ export class TreeComponent {
     !!node.children && node.children.length > 0;
 
   getParentNode(node: NestedFoodNode) {
-    for (const parent of flattenNodes(FOOD_DATA)) {
+    for (const parent of flattenNodes(TREE_DATA)) {
       if (parent.children?.includes(node)) {
         return parent;
       }
