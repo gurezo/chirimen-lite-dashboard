@@ -6,7 +6,6 @@ import { ExampleItemComponent } from '../example-item/example-item.component';
   selector: 'choh-example-list',
   imports: [ExampleItemComponent],
   templateUrl: './example-list.component.html',
-  styleUrl: './example-list.component.scss',
 })
 export class ExampleListComponent {
   @Input() gpioExample!: ExampleItem[];
