@@ -3,11 +3,12 @@
   <cdk-nested-tree-node
     #treeNode="cdkNestedTreeNode"
     *cdkTreeNodeDef="let node"
-    class="flex flex-col leading-10"
+    class="flex flex-col leading-8"
   >
     <div class="flex items-center pl-2">
       <mat-icon
         class="mr-2 w-5 h-5 text-xl flex items-center justify-center cursor-pointer select-none"
+        [class.text-yellow-500]="node.type === 'folder'"
       >
         {{ node.type === "folder" ? "folder" : "insert_drive_file" }}
       </mat-icon>
@@ -20,11 +21,12 @@
     *cdkTreeNodeDef="let node; when: hasChild"
     [cdkTreeNodeTypeaheadLabel]="node.name"
     isExpandable
-    class="flex flex-col leading-10"
+    class="flex flex-col leading-8"
   >
     <div class="flex items-center pl-2">
       <mat-icon
         class="mr-2 w-5 h-5 text-xl flex items-center justify-center cursor-pointer select-none"
+        [class.text-yellow-500]="node.type === 'folder'"
         (click)="toggleNode(node)"
       >
         {{ node.type === "folder" ? "folder" : "insert_drive_file" }}
