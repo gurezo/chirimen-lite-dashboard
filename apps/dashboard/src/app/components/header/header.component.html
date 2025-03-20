@@ -1,21 +1,25 @@
 <header>
-  <div class="header-container">
-    <div class="logo-container" routerLink="/">
-      <img src="CHIRIMEN-banner.png" alt="Web Serial Console" />
+  <div class="flex justify-between items-center px-4">
+    <div class="flex items-center" routerLink="/">
+      <img
+        src="CHIRIMEN-banner.png"
+        alt="Web Serial Console"
+        class="w-64 h-[67px] my-4 mr-4"
+      />
     </div>
-    <div class="menu-container">
+    <div class="flex items-center">
       <mat-icon [matMenuTriggerFor]="menu">menu</mat-icon>
       <mat-menu #menu="matMenu">
         @if (connected$ | async; as connected) {
-          <button mat-menu-item (click)="eventDisConnect.emit()">
-            <mat-icon>sync_disabled</mat-icon>
-            <span>Web Serial DisConnect</span>
-          </button>
+        <button mat-menu-item (click)="eventDisConnect.emit()">
+          <mat-icon>sync_disabled</mat-icon>
+          <span>Web Serial DisConnect</span>
+        </button>
         } @else {
-          <button mat-menu-item (click)="eventConnect.emit()">
-            <mat-icon>sync</mat-icon>
-            <span>Web Serial Connect</span>
-          </button>
+        <button mat-menu-item (click)="eventConnect.emit()">
+          <mat-icon>sync</mat-icon>
+          <span>Web Serial Connect</span>
+        </button>
         }
       </mat-menu>
     </div>

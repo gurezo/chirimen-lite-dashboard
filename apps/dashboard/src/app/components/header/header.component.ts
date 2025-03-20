@@ -9,7 +9,6 @@ import { Observable, of } from 'rxjs';
   selector: 'choh-header',
   imports: [AsyncPipe, MatIconModule, MatMenuModule, RouterLink],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
   @Input() connected$: Observable<boolean> = of(false);
