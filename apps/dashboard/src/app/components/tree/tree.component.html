@@ -3,10 +3,10 @@
   <cdk-nested-tree-node
     #treeNode="cdkNestedTreeNode"
     *cdkTreeNodeDef="let node"
-    class="example-tree-node"
+    class="choh-tree-node"
   >
-    <div class="example-tree-node-content">
-      <mat-icon class="example-tree-icon">
+    <div class="choh-tree-node-content">
+      <mat-icon class="choh-tree-icon">
         {{ node.type === "folder" ? "folder" : "insert_drive_file" }}
       </mat-icon>
       {{ node.name }}
@@ -18,17 +18,17 @@
     *cdkTreeNodeDef="let node; when: hasChild"
     [cdkTreeNodeTypeaheadLabel]="node.name"
     isExpandable
-    class="example-tree-node"
+    class="choh-tree-node"
   >
-    <div class="example-tree-node-content">
-      <mat-icon class="example-tree-icon" (click)="toggleNode(node)">
+    <div class="choh-tree-node-content">
+      <mat-icon class="choh-tree-icon" (click)="toggleNode(node)">
         {{ node.type === "folder" ? "folder" : "insert_drive_file" }}
       </mat-icon>
       {{ node.name }}
     </div>
     <div
-      class="example-tree-children"
-      [class.example-tree-invisible]="!tree.isExpanded(node)"
+      class="choh-tree-children"
+      [class.choh-tree-invisible]="!tree.isExpanded(node)"
     >
       <ng-container cdkTreeNodeOutlet></ng-container>
     </div>
