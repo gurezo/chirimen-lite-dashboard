@@ -24,17 +24,17 @@ export const DUMMY_TREE_DATA: NestedFoodNode[] = [
   },
   {
     name: '.cache',
-    type: 'folder',
+    type: 'file',
     children: [],
   },
   {
     name: '.forever',
-    type: 'folder',
+    type: 'file',
     children: [],
   },
   {
     name: '.npm',
-    type: 'folder',
+    type: 'file',
     children: [],
   },
   {
@@ -67,7 +67,7 @@ export const DUMMY_TREE_DATA: NestedFoodNode[] = [
         children: [
           {
             name: '.bin',
-            type: 'folder',
+            type: 'file',
             children: [],
           },
           {
