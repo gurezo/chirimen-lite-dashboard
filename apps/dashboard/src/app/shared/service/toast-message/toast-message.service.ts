@@ -5,7 +5,7 @@ import {
   WEB_SERIAL_ERROR_PORT_NO_SELECTED,
   WEB_SERIAL_ERROR_PORT_OPEN_FAIL,
   WEB_SERIAL_IS_NOT_RASPBEYY_PI_ZERO,
-} from '../../constants';
+} from '../../../shared/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -24,14 +24,14 @@ export class ToastMessageService {
   webSerailSuccess(): void {
     this.success(
       'Raspberry Pi Zero に正常接続されました。',
-      'Web Serial Open Success',
+      'Web Serial Open Success'
     );
   }
 
   webSerailError(connectedResult: string): void {
     this.toastr.error(
       this.createErrorMessages(connectedResult),
-      'Web Serial Open Fail',
+      'Web Serial Open Fail'
     );
   }
 

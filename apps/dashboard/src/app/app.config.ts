@@ -9,14 +9,13 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideMonacoEditor } from 'ngx-monaco-editor-v2';
 import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
-import { monacoConfig } from './constants';
+import { monacoConfig } from './shared/constants';
 import {
   WebSerialEffects,
   webSerialFeatureKey,
   webSerialReducer,
-  xtermFeatureKey,
-  xtermReducer,
-} from './store';
+} from './shared/web-serial';
+import { xtermFeatureKey, xtermReducer } from './shared/xtterm';
 
 export const appConfig: ApplicationConfig = {
   providers: [

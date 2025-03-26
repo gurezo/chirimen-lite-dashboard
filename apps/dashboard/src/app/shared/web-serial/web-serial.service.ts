@@ -8,8 +8,8 @@ import {
   WEB_SERIAL_ERROR_UNKNOWN,
   WEB_SERIAL_IS_NOT_RASPBEYY_PI_ZERO,
   WEB_SERIAL_OPEN_SUCCESS,
-} from '../../constants';
-import { isRaspberryPiZero } from '../../functions';
+} from '../../shared/constants';
+import { isRaspberryPiZero } from '../functions';
 
 @Injectable({
   providedIn: 'root',
@@ -78,7 +78,7 @@ export class WebSerialService {
         console.error('Error sending data:', error);
         writer.releaseLock();
         return throwError(() => error);
-      }),
+      })
     );
   }
 

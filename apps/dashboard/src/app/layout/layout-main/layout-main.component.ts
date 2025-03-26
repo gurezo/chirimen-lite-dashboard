@@ -13,8 +13,8 @@ import {
 import { HeaderComponent } from '../../components/header/header.component';
 import ConsoleComponent from '../../pages/console/console.component';
 import EditorComponent from '../../pages/editor/editor.component';
-import { WebSerialService } from '../../service';
-import { WebSerialActions } from '../../store';
+import { WebSerialActions } from '../../shared/web-serial';
+import { WebSerialService } from '../../shared/web-serial/web-serial.service';
 
 @Component({
   selector: 'choh-layout-main',

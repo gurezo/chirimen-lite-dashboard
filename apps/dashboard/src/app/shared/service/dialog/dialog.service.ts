@@ -1,13 +1,13 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { inject, Injectable } from '@angular/core';
-import { PinAssignComponent } from '../../components';
+import { PinAssignComponent } from '../../../components';
 import {
   ChirimenSetupComponent,
   ExampleComponent,
   FileUploadComponent,
   I2cdetectComponent,
   WifiSettingComponent,
-} from '../../dialog';
+} from '../../../dialog';
 
 @Injectable({
   providedIn: 'root',

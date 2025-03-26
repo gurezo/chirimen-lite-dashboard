@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import { XTermActions } from '../actions';
-import { initialXtermState } from '../models';
+import { XTermActions } from './xterm.actions';
+import { initialXtermState } from './xterm.model';
 
 export const xtermReducer = createReducer(
   initialXtermState,
@@ -24,5 +24,5 @@ export const xtermReducer = createReducer(
   on(XTermActions.setError, (state, { error }) => ({
     ...state,
     error,
-  })),
+  }))
 );

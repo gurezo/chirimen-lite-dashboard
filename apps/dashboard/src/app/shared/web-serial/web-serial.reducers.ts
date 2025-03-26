@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import { WebSerialActions } from '../actions/web-serial.actions';
-import { WebSerialState } from '../models';
+import { WebSerialActions } from './web-serial.actions';
+import { WebSerialState } from './web.serrial.model';
 
 export const initialWebSerialState: WebSerialState = {
   isConnected: false,
@@ -41,5 +41,5 @@ export const webSerialReducer = createReducer(
   on(WebSerialActions.error, (state, { error }) => ({
     ...state,
     error,
-  })),
+  }))
 );
