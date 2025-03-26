@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../components';
-import { DialogService } from '../../service/dialog/dialog.service';
+import { DialogService } from '../../shared/service/dialog/dialog.service';
 
 @Component({
   selector: 'choh-file-upload',

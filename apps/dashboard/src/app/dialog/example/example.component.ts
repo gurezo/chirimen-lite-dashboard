@@ -3,7 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { BehaviorSubject, forkJoin } from 'rxjs';
 import { ButtonComponent, ExampleListComponent } from '../../components';
 import { ExampleItem } from '../../models';
-import { DialogService } from '../../service/dialog/dialog.service';
+import { DialogService } from '../../shared/service/dialog/dialog.service';
 import { ExampleDialogService } from './example.dialog.service';
 
 @Component({

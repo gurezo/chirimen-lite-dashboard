@@ -3,10 +3,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { ButtonComponent, WifiInfoComponent } from '../../components';
 import { dummyWiFiInformation } from '../../models';
-import { DialogService } from '../../service/dialog/dialog.service';
 // import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { DialogService } from '../../shared/service/dialog/dialog.service';
 
 @Component({
   selector: 'choh-wifi-setting',

@@ -2,9 +2,10 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 // import { Store } from '@ngrx/store';
 import { catchError, from, map, switchMap } from 'rxjs';
-import { WEB_SERIAL_OPEN_SUCCESS } from '../../constants';
-import { ToastMessageService, WebSerialService } from '../../service';
-import { WebSerialActions } from '../actions/web-serial.actions';
+import { WEB_SERIAL_OPEN_SUCCESS } from '../../shared/constants';
+import { ToastMessageService } from '../service';
+import { WebSerialActions } from './web-serial.actions';
+import { WebSerialService } from './web-serial.service';
 
 @Injectable()
 export class WebSerialEffects {
@@ -15,7 +16,7 @@ export class WebSerialEffects {
 
   init$ = createEffect(
     () => this.actions$.pipe(ofType(WebSerialActions.init)),
-    { dispatch: false },
+    { dispatch: false }
   );
 
   connect$ = createEffect(() =>
@@ -31,19 +32,19 @@ export class WebSerialEffects {
               this.toastMessage.webSerailError(connectedResult);
               return WebSerialActions.onConnectFail({ isConnected: false });
             }
-          }),
-        ),
-      ),
-    ),
+          })
+        )
+      )
+    )
   );
 
   disConnect$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(WebSerialActions.onDisConnect),
-        switchMap(() => from(this.service.disConnect())),
+        switchMap(() => from(this.service.disConnect()))
       ),
-    { dispatch: false },
+    { dispatch: false }
   );
 
   sendData$ = createEffect(() =>
@@ -52,10 +53,10 @@ export class WebSerialEffects {
       switchMap((action) =>
         this.service.sendData(action.sendData).pipe(
           map(() => WebSerialActions.onSendSuccess()),
-          catchError(async (error) => WebSerialActions.error(error)),
-        ),
-      ),
-    ),
+          catchError(async (error) => WebSerialActions.error(error))
+        )
+      )
+    )
   );
 
   receiveData$ = createEffect(() =>
@@ -64,11 +65,11 @@ export class WebSerialEffects {
       switchMap(() =>
         this.service.readData().pipe(
           map((receivedData) =>
-            WebSerialActions.receivedData({ receivedData }),
+            WebSerialActions.receivedData({ receivedData })
           ),
-          catchError(async (error) => WebSerialActions.error(error)),
-        ),
-      ),
-    ),
+          catchError(async (error) => WebSerialActions.error(error))
+        )
+      )
+    )
   );
 }
