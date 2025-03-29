@@ -4,6 +4,5 @@ import { Component } from '@angular/core';
   selector: 'choh-unsupported-browser',
   imports: [],
   templateUrl: './unsupported-browser.component.html',
-  styleUrl: './unsupported-browser.component.scss',
 })
 export default class UnsupportedBrowserComponent {}
