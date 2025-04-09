@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable } from 'rxjs';
-import { ExampleItem } from '../../models';
 import { convertExampleJsonToList } from '../../shared/functions';
+import { ExampleItem } from '../../shared/models';
 import { ExampleService } from '../../shared/service';
 
 @Injectable({

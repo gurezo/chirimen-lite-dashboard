@@ -1,4 +1,4 @@
-import { ExampleItem, ExampleJson } from '../../models';
+import { ExampleItem, ExampleJson } from '../models';
 
 export function convertExampleJsonToList(
   jsonList: ExampleJson[]

@@ -2,7 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { BehaviorSubject, forkJoin } from 'rxjs';
 import { ButtonComponent, ExampleListComponent } from '../../components';
-import { ExampleItem } from '../../models';
+import { ExampleItem } from '../../shared/models';
 import { DialogService } from '../../shared/service/dialog/dialog.service';
 import { ExampleDialogService } from './example.dialog.service';
 

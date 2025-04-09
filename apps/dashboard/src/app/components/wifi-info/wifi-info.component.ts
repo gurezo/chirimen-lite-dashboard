@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { WiFiInformation } from '../../models';
+import { WiFiInformation } from '../../shared/models';
 
 @Component({
   selector: 'choh-wifi-info',

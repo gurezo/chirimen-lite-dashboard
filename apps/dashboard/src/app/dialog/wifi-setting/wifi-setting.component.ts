@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { ButtonComponent, WifiInfoComponent } from '../../components';
-import { dummyWiFiInformation } from '../../models';
+import { dummyWiFiInformation } from '../../shared/models';
 // import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';

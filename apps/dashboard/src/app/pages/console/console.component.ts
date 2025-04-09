@@ -4,7 +4,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { Store } from '@ngrx/store';
 import { Terminal } from '@xterm/xterm';
 import { ConsoleToolBarComponent } from '../../components';
-import { xtermConsoleConfigOptions } from '../../models';
+import { xtermConsoleConfigOptions } from '../../shared/models';
 import { XtermService } from '../../shared/service';
 import { DialogService } from '../../shared/service/dialog/dialog.service';
 import { WebSerialService } from '../../shared/web-serial/web-serial.service';
