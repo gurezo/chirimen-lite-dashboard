@@ -16,7 +16,9 @@
         "outputPath": "dist/dashboard",
         "index": "apps/dashboard/src/index.html",
         "browser": "apps/dashboard/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "apps/dashboard/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
@@ -41,7 +43,9 @@
           "node_modules/ngx-toastr/toastr.css",
           "apps/dashboard/src/styles.scss"
         ],
-        "scripts": ["node_modules/@xterm/xterm/lib/xterm.js"]
+        "scripts": [
+          "node_modules/@xterm/xterm/lib/xterm.js"
+        ]
       },
       "configurations": {
         "production": {
@@ -77,7 +81,8 @@
           "buildTarget": "apps-dashboard:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "continuous": true
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n"
@@ -85,7 +90,10 @@
     "test": {
       "executor": "@angular-builders/jest:run",
       "options": {
-        "polyfills": ["zone.js", "zone.js/testing"],
+        "polyfills": [
+          "zone.js",
+          "zone.js/testing"
+        ],
         "tsConfig": "apps/dashboard/tsconfig.spec.json",
         "configPath": "apps/dashboard/jest.config.ts"
       }
