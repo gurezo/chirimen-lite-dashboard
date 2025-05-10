@@ -4,52 +4,56 @@
   (eventDisConnect)="onDisConnect()"
 />
 @if (connected$ | async; as connected) {
-  <div class="wrapper">
-    <div class="box1">
-      <!-- パンくず -->
-      <choh-breadcomb />
-    </div>
-    <!-- ディレクトリツリー -->
-    <div class="box2">
-      <choh-tree />
-    </div>
-    <mat-divider vertical />
-    <div class="box2">
-      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-        <mat-tab label="Console">
-          <ng-template mat-tab-label>
-            <mat-icon>terminal</mat-icon>Console
-          </ng-template>
-          <choh-console />
-        </mat-tab>
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <mat-icon>description</mat-icon>Editor
-          </ng-template>
-          <choh-editor />
-        </mat-tab>
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <mat-icon>fiber_pin</mat-icon>Pin Assign
-          </ng-template>
-          <choh-pin-assign />
-        </mat-tab>
-      </mat-tab-group>
-    </div>
+<div
+  class="grid grid-cols-[1fr_auto_1.5fr_2.5fr] grid-rows-[auto_1fr] gap-2 h-screen"
+>
+  <div class="col-span-4">
+    <!-- パンくず -->
+    <choh-breadcomb />
   </div>
+  <!-- ディレクトリツリー -->
+  <div class="col-[1/2] flex flex-col min-h-0 overflow-hidden">
+    <choh-tree />
+  </div>
+  <mat-divider vertical class="col-[2/3] self-stretch" />
+  <div class="col-[3/5] flex flex-col min-h-0 overflow-hidden">
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+      <mat-tab label="Console">
+        <ng-template mat-tab-label>
+          <mat-icon>terminal</mat-icon>Console
+        </ng-template>
+        <choh-console />
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon>description</mat-icon>Editor
+        </ng-template>
+        <choh-editor />
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon>fiber_pin</mat-icon>Pin Assign
+        </ng-template>
+        <choh-pin-assign class="mt-2 ml-2" />
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
 } @else {
-  <div class="serial-connect">
-    <h2>
-      Raspberry Pi Zero と PC を USB で繋いだ後、Connect
-      ボタンをクリックして、Web Serail を接続して下さい
-    </h2>
-    <img
-      ngSrc="PiZeroW_OTG.jpg"
-      width="680"
-      height="270"
-      priority
-      alt="PiZeroW_OTG"
-    />
-    <choh-button [label]="'Web Serial Connect'" (clickEvent)="onConnect()" />
-  </div>
+<div
+  class="col-span-4 text-center h-[80vh] flex flex-col justify-center items-center gap-4"
+>
+  <h2>
+    Raspberry Pi Zero と PC を USB で繋いだ後、Connect ボタンをクリックして、Web
+    Serail を接続して下さい
+  </h2>
+  <img
+    ngSrc="PiZeroW_OTG.jpg"
+    width="680"
+    height="270"
+    priority
+    alt="PiZeroW_OTG"
+  />
+  <choh-button [label]="'Web Serial Connect'" (clickEvent)="onConnect()" />
+</div>
 }
