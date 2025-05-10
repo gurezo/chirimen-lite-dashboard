@@ -10,7 +10,6 @@ import { ExampleDialogService } from './example.dialog.service';
   selector: 'choh-example',
   imports: [ButtonComponent, ExampleListComponent, AsyncPipe],
   templateUrl: './example.component.html',
-  styleUrl: './example.component.scss',
 })
 export class ExampleComponent implements OnInit {
   private service = inject(DialogService);
