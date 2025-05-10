@@ -60,7 +60,7 @@ export class WebSerialService {
     }
   }
 
-  sendData(data: string): Observable<void> {
+  send(data: string): Observable<void> {
     if (!this.port) {
       return throwError(() => new Error('Serial port not connected'));
     }
@@ -83,7 +83,7 @@ export class WebSerialService {
     );
   }
 
-  readData(): Observable<string> {
+  read(): Observable<string> {
     if (!this.port) {
       return throwError(() => new Error('Serial port not connected'));
     }
