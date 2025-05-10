@@ -1,7 +1,13 @@
-<div class="wrapper">
+<div
+  class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-5 shadow-lg w-[400px] flex flex-col items-center justify-center"
+>
   <h2>ファイルをアップロード</h2>
-  <form [formGroup]="uploadForm" (ngSubmit)="fileInput.click()">
-    <div class="button-area">
+  <form
+    [formGroup]="uploadForm"
+    (ngSubmit)="fileInput.click()"
+    class="flex flex-col items-center"
+  >
+    <div class="flex justify-between w-full gap-[100px]">
       <choh-button [label]="'アップロード'" type="button" />
       <choh-button
         [label]="'閉じる'"
@@ -11,4 +17,9 @@
     </div>
   </form>
 </div>
-<input #fileInput type="file" (change)="onFileSelected($event)" />
+<input
+  #fileInput
+  type="file"
+  (change)="onFileSelected($event)"
+  class="hidden mb-5"
+/>
