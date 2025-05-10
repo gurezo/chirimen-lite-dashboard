@@ -21,9 +21,8 @@ import { WebSerialService } from '../../shared/web-serial/web-serial.service';
       (eventI2CDetect)="openI2CDetectDialog()"
       (eventFileUpload)="openFileUploadDialog()"
     />
-    <div id="consoleDom"></div>
+    <div id="consoleDom" class="mt-2"></div>
   `,
-  styleUrl: './console.component.scss',
   providers: [WebSerialService],
 })
 export default class ConsoleComponent implements AfterViewInit {
