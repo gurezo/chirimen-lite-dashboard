@@ -11,7 +11,7 @@ export const WebSerialActions = createActionGroup({
     sendData: props<{ sendData: string }>(),
     onSendSuccess: emptyProps(),
     onSendFail: emptyProps(),
-    receivedData: props<{ receivedData: string }>(),
+    receiveData: props<{ receiveData: string }>(),
     error: props<{ error: unknown }>(),
   },
 });

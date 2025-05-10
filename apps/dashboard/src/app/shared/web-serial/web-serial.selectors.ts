@@ -16,5 +16,5 @@ export const selectSendData = createSelector(
 
 export const selectReciveData = createSelector(
   selectWebSerialFeature,
-  (state: WebSerialState) => state.receivedData
+  (state: WebSerialState) => state.receiveData
 );

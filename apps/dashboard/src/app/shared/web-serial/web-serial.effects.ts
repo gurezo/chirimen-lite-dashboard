@@ -51,7 +51,7 @@ export class WebSerialEffects {
     this.actions$.pipe(
       ofType(WebSerialActions.sendData),
       switchMap((action) =>
-        this.service.sendData(action.sendData).pipe(
+        this.service.send(action.sendData).pipe(
           map(() => WebSerialActions.onSendSuccess()),
           catchError(async (error) => WebSerialActions.error(error))
         )
@@ -61,12 +61,10 @@ export class WebSerialEffects {
 
   receiveData$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(WebSerialActions.receivedData),
+      ofType(WebSerialActions.receiveData),
       switchMap(() =>
-        this.service.readData().pipe(
-          map((receivedData) =>
-            WebSerialActions.receivedData({ receivedData })
-          ),
+        this.service.read().pipe(
+          map((receiveData) => WebSerialActions.receiveData({ receiveData })),
           catchError(async (error) => WebSerialActions.error(error))
         )
       )
