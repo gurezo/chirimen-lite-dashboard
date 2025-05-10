@@ -7,7 +7,6 @@ import { MatMenuModule } from '@angular/material/menu';
   selector: 'choh-console-tool-bar',
   imports: [MatDividerModule, MatIconModule, MatMenuModule],
   templateUrl: './console-tool-bar.component.html',
-  styleUrl: './console-tool-bar.component.scss',
 })
 export class ConsoleToolBarComponent {
   @Output() eventWiFiSetting = new EventEmitter<void>();
