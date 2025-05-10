@@ -8,7 +8,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   selector: 'choh-breadcomb',
   imports: [MatToolbarModule, MatIconModule, MatDividerModule, NgFor],
   templateUrl: './breadcomb.component.html',
-  styleUrl: './breadcomb.component.scss',
 })
 export class BreadcombComponent implements OnInit {
   appitems = [

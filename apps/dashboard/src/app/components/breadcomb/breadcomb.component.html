@@ -1,20 +1,15 @@
 <mat-divider />
-<mat-toolbar
-  style="
-    height: 45px;
-    font-size: 16px;
-    font-weight: bold;
-    background-color: white;
-  "
->
-  <span>
-    <a mat-button (click)="breadCrumbMain()"> ここにパンくずを表示 </a>
-  </span>
-  <span *ngFor="let m of menuHeader; let indx = index">
-    <a mat-button>
-      {{ m.label }}
-      <mat-icon fxFlex="10">{{ m.icon }}</mat-icon>
-    </a>
-  </span>
-</mat-toolbar>
+<div class="flex justify-center text-3xl h-10 mt-7 mb-2">
+  <mat-toolbar class="h-[45px] text-base font-bold bg-white">
+    <span>
+      <a mat-button (click)="breadCrumbMain()"> ここにパンくずを表示 </a>
+    </span>
+    <span *ngFor="let m of menuHeader; let indx = index">
+      <a mat-button>
+        {{ m.label }}
+        <mat-icon fxFlex="10">{{ m.icon }}</mat-icon>
+      </a>
+    </span>
+  </mat-toolbar>
+</div>
 <mat-divider />
