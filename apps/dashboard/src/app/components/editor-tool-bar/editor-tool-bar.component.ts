@@ -7,7 +7,6 @@ import { MatMenuModule } from '@angular/material/menu';
   selector: 'choh-editor-tool-bar',
   imports: [MatDividerModule, MatIconModule, MatMenuModule],
   templateUrl: './editor-tool-bar.component.html',
-  styleUrl: './editor-tool-bar.component.scss',
 })
 export class EditorToolBarComponent {
   @Output() eventSaveFile = new EventEmitter<void>();
