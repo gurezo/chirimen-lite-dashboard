@@ -6,7 +6,6 @@ import { DialogService } from '../../shared/service/dialog/dialog.service';
   selector: 'choh-i2cdetect',
   imports: [ButtonComponent],
   templateUrl: './i2cdetect.component.html',
-  styleUrl: './i2cdetect.component.scss',
 })
 export class I2cdetectComponent {
   private service = inject(DialogService);
