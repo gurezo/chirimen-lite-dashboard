@@ -20,7 +20,6 @@ const ELEMENT_DATA: PeriodicElement[] = [
   selector: 'choh-chirimen-setup',
   imports: [ButtonComponent, MatTable, MatTableModule],
   templateUrl: './chirimen-setup.component.html',
-  styleUrl: './chirimen-setup.component.scss',
 })
 export class ChirimenSetupComponent {
   displayedColumns: string[] = ['Now Running', 'App Name', 'Select'];

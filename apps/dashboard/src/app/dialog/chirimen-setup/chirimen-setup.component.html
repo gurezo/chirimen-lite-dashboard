@@ -1,4 +1,6 @@
-<div class="wrapper">
+<div
+  class="bg-white flex flex-col justify-center items-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-5 shadow-lg w-[600px]"
+>
   <table mat-table [dataSource]="dataSource">
     <!-- runing Column -->
     <ng-container matColumnDef="Now Running">
@@ -23,7 +25,7 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-  <div class="button-area">
+  <div class="flex justify-end w-full">
     <choh-button [label]="'閉じる'" type="button" (clickEvent)="closeModal()" />
   </div>
 </div>
