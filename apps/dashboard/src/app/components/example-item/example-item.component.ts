@@ -8,7 +8,6 @@ import { ExampleItem } from '../../shared/models';
   selector: 'choh-example-item',
   imports: [MatIconModule, MatTableModule, MatTooltipModule],
   templateUrl: './example-item.component.html',
-  styleUrl: './example-item.component.scss',
 })
 export class ExampleItemComponent {
   @Input() label!: string;

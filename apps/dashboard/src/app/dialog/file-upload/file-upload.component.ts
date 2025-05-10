@@ -7,7 +7,6 @@ import { DialogService } from '../../shared/service/dialog/dialog.service';
   selector: 'choh-file-upload',
   imports: [ButtonComponent, ReactiveFormsModule],
   templateUrl: './file-upload.component.html',
-  styleUrl: './file-upload.component.scss',
 })
 export class FileUploadComponent {
   private service = inject(DialogService);

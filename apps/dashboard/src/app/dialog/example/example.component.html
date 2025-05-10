@@ -1,13 +1,15 @@
-<div class="wrapper">
+<div
+  class="bg-white flex flex-col items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-5 shadow-lg h-[600px] overflow-auto"
+>
   <!-- <iframe src="https://tutorial.chirimen.org/pizero/esm-examples/"></iframe> -->
   @if (example$ | async; as example) {
-    <choh-example-list
-      [gpioExample]="example[0]"
-      [i2cExample]="example[1]"
-      [remoteExample]="example[2]"
-    />
+  <choh-example-list
+    [gpioExample]="example[0]"
+    [i2cExample]="example[1]"
+    [remoteExample]="example[2]"
+  />
   }
-  <div class="button-area">
+  <div class="flex justify-end w-full">
     <choh-button [label]="'閉じる'" type="button" (clickEvent)="closeModal()" />
   </div>
 </div>
