@@ -5,6 +5,5 @@ import { Component } from '@angular/core';
   selector: 'choh-pin-assign',
   imports: [NgOptimizedImage],
   templateUrl: './pin-assign.component.html',
-  styleUrl: './pin-assign.component.scss',
 })
 export class PinAssignComponent {}
