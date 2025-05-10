@@ -1,33 +1,41 @@
-<div class="wrapper">
-  <div>
-    <h3>WiFi Scan Result</h3>
-  </div>
-  <div class="wifi-list">
-    @for (wifiInfo of wifiInfoList; track wifiInfo.SSID) {
+<div class="flex justify-center items-center h-screen overflow-hidden">
+  <div
+    class="bg-white flex flex-col gap-4 justify-center items-center p-5 shadow-lg max-h-[50vh] w-[95%]"
+  >
+    <div>
+      <h3>WiFi Scan Result</h3>
+    </div>
+    <div class="max-h-[620px] overflow-y-auto w-full">
+      @for (wifiInfo of wifiInfoList; track wifiInfo.SSID) {
       <choh-wifi-info [wifiInfo]="wifiInfo" />
-    } @empty {
+      } @empty {
       <span> There are no Wi-Fi Information </span>
-    }
-  </div>
-  <mat-divider />
-  <div>
-    <form>
-      <mat-form-field>
-        <mat-label>SSID</mat-label>
-        <input matInput type="text" />
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Password</mat-label>
-        <input matInput [type]="'password'" />
-      </mat-form-field>
-    </form>
-  </div>
-  <mat-divider />
-  <div class="button-area">
-    <choh-button [label]="'Wifi Scan'" type="button" />
-    <choh-button [label]="'Wifi Info'" type="button" />
-    <choh-button [label]="'Reset Wifi'" type="button" />
-    <choh-button [label]="'Reboot'" type="button" />
-    <choh-button [label]="'閉じる'" type="button" (clickEvent)="closeModal()" />
+      }
+    </div>
+    <mat-divider />
+    <div>
+      <form class="flex flex-row items-center">
+        <mat-form-field class="mr-2.5">
+          <mat-label>SSID</mat-label>
+          <input matInput type="text" />
+        </mat-form-field>
+        <mat-form-field class="mr-2.5">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="'password'" />
+        </mat-form-field>
+      </form>
+    </div>
+    <mat-divider />
+    <div class="flex justify-between w-full">
+      <choh-button [label]="'Wifi Scan'" type="button" class="mr-2.5" />
+      <choh-button [label]="'Wifi Info'" type="button" class="mr-2.5" />
+      <choh-button [label]="'Reset Wifi'" type="button" class="mr-2.5" />
+      <choh-button [label]="'Reboot'" type="button" class="mr-2.5" />
+      <choh-button
+        [label]="'閉じる'"
+        type="button"
+        (clickEvent)="closeModal()"
+      />
+    </div>
   </div>
 </div>
