@@ -2,14 +2,7 @@
 
 import { Injectable } from '@angular/core';
 import { catchError, from, map, Observable, throwError } from 'rxjs';
-import {
-  WEB_SERIAL_ERROR_PORT_ALERADY_OPEN,
-  WEB_SERIAL_ERROR_PORT_NO_SELECTED,
-  WEB_SERIAL_ERROR_PORT_OPEN_FAIL,
-  WEB_SERIAL_ERROR_UNKNOWN,
-  WEB_SERIAL_IS_NOT_RASPBEYY_PI_ZERO,
-  WEB_SERIAL_OPEN_SUCCESS,
-} from '../../shared/constants';
+import { WEB_SERIAL_MESSAGES } from '../../shared/constants';
 import { isRaspberryPiZero } from '../functions';
 
 @Injectable({
@@ -26,9 +19,9 @@ export class WebSerialService {
       const isPiZero = await isRaspberryPiZero(this.port);
 
       if (isPiZero) {
-        return WEB_SERIAL_OPEN_SUCCESS;
+        return WEB_SERIAL_MESSAGES.OPEN_SUCCESS;
       } else {
-        return WEB_SERIAL_IS_NOT_RASPBEYY_PI_ZERO;
+        return WEB_SERIAL_MESSAGES.IS_NOT_RASPBERRY_PI_ZERO;
       }
     } catch (error) {
       return this.connectError(error);
@@ -38,17 +31,17 @@ export class WebSerialService {
   connectError(error: unknown): string {
     if (error instanceof DOMException) {
       switch (error.message) {
-        case WEB_SERIAL_ERROR_PORT_NO_SELECTED:
-          return WEB_SERIAL_ERROR_PORT_NO_SELECTED;
-        case WEB_SERIAL_ERROR_PORT_ALERADY_OPEN:
-          return WEB_SERIAL_ERROR_PORT_ALERADY_OPEN;
-        case WEB_SERIAL_ERROR_PORT_OPEN_FAIL:
-          return WEB_SERIAL_ERROR_PORT_OPEN_FAIL;
+        case WEB_SERIAL_MESSAGES.ERROR_PORT_NO_SELECTED:
+          return WEB_SERIAL_MESSAGES.ERROR_PORT_NO_SELECTED;
+        case WEB_SERIAL_MESSAGES.ERROR_PORT_ALREADY_OPEN:
+          return WEB_SERIAL_MESSAGES.ERROR_PORT_ALREADY_OPEN;
+        case WEB_SERIAL_MESSAGES.ERROR_PORT_OPEN_FAIL:
+          return WEB_SERIAL_MESSAGES.ERROR_PORT_OPEN_FAIL;
         default:
-          return WEB_SERIAL_ERROR_UNKNOWN;
+          return WEB_SERIAL_MESSAGES.ERROR_UNKNOWN;
       }
     } else {
-      return WEB_SERIAL_ERROR_UNKNOWN;
+      return WEB_SERIAL_MESSAGES.ERROR_UNKNOWN;
     }
   }
 
