@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 // import { Store } from '@ngrx/store';
 import { catchError, from, map, switchMap } from 'rxjs';
-import { WEB_SERIAL_OPEN_SUCCESS } from '../../shared/constants';
+import { WEB_SERIAL_MESSAGES } from '../../shared/constants';
 import { ToastMessageService } from '../service';
 import { WebSerialActions } from './web-serial.actions';
 import { WebSerialService } from './web-serial.service';
@@ -25,7 +25,7 @@ export class WebSerialEffects {
       switchMap(() =>
         from(this.service.connect()).pipe(
           map((connectedResult) => {
-            if (connectedResult === WEB_SERIAL_OPEN_SUCCESS) {
+            if (connectedResult === WEB_SERIAL_MESSAGES.OPEN_SUCCESS) {
               this.toastMessage.webSerailSuccess();
               return WebSerialActions.onConnectSuccess({ isConnected: true });
             } else {
