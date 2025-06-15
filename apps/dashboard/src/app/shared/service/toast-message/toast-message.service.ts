@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { WEB_SERIAL } from '../../../shared/constants';
+import { TOAST } from '../../constants/toast.const';
 
 @Injectable({
   providedIn: 'root',
@@ -8,6 +9,8 @@ import { WEB_SERIAL } from '../../../shared/constants';
 export class ToastMessageService {
   toastr = inject(ToastrService);
   private portError = WEB_SERIAL.PORT.ERROR;
+  private toastSuccess = TOAST.SUCCESS;
+  private toastError = TOAST.ERROR;
 
   success(title: string, message: string): void {
     this.toastr.success(message, title);
@@ -18,31 +21,28 @@ export class ToastMessageService {
   }
 
   webSerailSuccess(): void {
-    this.success(
-      'Raspberry Pi Zero に正常接続されました。',
-      'Web Serial Open Success'
-    );
+    this.success(this.toastSuccess.OPEN_TITLE, this.toastSuccess.OPEN_MESSAGE);
   }
 
   webSerailError(connectedResult: string): void {
     this.toastr.error(
       this.createErrorMessages(connectedResult),
-      'Web Serial Open Fail'
+      this.toastError.FAIL
     );
   }
 
   createErrorMessages(connectedResult: string): string {
     switch (connectedResult) {
       case WEB_SERIAL.RASPBERRY_PI.IS_NOT_ZERO:
-        return '接続されたデバイスは Raspberry Pi Zero ではありません。';
+        return this.toastError.NOT_FOUND_MESSAGE;
       case this.portError.NO_SELECTED:
-        return 'ポートが選択されていません。';
+        return this.toastError.NO_SELECTED;
       case this.portError.PORT_ALREADY_OPEN:
-        return 'Raspberry Pi Zero が接続されたままです。';
+        return this.toastError.PORT_ALREADY_OPEN;
       case this.portError.PORT_OPEN_FAIL:
-        return 'Web Serial ポートの接続に失敗しました。';
+        return this.toastError.PORT_OPEN_FAIL;
       default:
-        return '原因不明のエラーです。';
+        return this.toastError.UNKNOWN;
     }
   }
 }
