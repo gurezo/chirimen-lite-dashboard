@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 // import { Store } from '@ngrx/store';
 import { catchError, from, map, switchMap } from 'rxjs';
-import { WEB_SERIAL_MESSAGES } from '../../shared/constants';
+import { WEB_SERIAL } from '../../shared/constants';
 import { ToastMessageService } from '../service';
 import { WebSerialActions } from './web-serial.actions';
 import { WebSerialService } from './web-serial.service';
@@ -25,7 +25,7 @@ export class WebSerialEffects {
       switchMap(() =>
         from(this.service.connect()).pipe(
           map((connectedResult) => {
-            if (connectedResult === WEB_SERIAL_MESSAGES.OPEN_SUCCESS) {
+            if (connectedResult === WEB_SERIAL.PORT.SUCCESS.OPEN) {
               this.toastMessage.webSerailSuccess();
               return WebSerialActions.onConnectSuccess({ isConnected: true });
             } else {
@@ -51,7 +51,7 @@ export class WebSerialEffects {
     this.actions$.pipe(
       ofType(WebSerialActions.sendData),
       switchMap((action) =>
-        this.service.send(action.sendData).pipe(
+        from(this.service.send(action.sendData)).pipe(
           map(() => WebSerialActions.onSendSuccess()),
           catchError(async (error) => WebSerialActions.error(error))
         )
@@ -63,8 +63,14 @@ export class WebSerialEffects {
     this.actions$.pipe(
       ofType(WebSerialActions.receiveData),
       switchMap(() =>
-        this.service.read().pipe(
-          map((receiveData) => WebSerialActions.receiveData({ receiveData })),
+        from(
+          this.service.read((data) => {
+            WebSerialActions.receiveData({ receiveData: data });
+          })
+        ).pipe(
+          map((receiveData) =>
+            WebSerialActions.receiveData({ receiveData: '' })
+          ),
           catchError(async (error) => WebSerialActions.error(error))
         )
       )
