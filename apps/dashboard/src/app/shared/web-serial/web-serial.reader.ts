@@ -6,8 +6,9 @@ export class WebSerialReader {
 
   constructor(private port: SerialPort) {}
 
-  async start(onData: (data: string) => void): Promise<void> {
+  async start(): Promise<string> {
     const decoder = new TextDecoderStream();
+    let result = '';
     try {
       this.readableStreamClosed =
         this.port.readable?.pipeTo(decoder.writable) ?? null;
@@ -17,7 +18,7 @@ export class WebSerialReader {
       while (true) {
         const { value, done } = await this.reader.read();
         if (done) break;
-        if (value) onData(value);
+        if (value) result += value;
       }
     } catch (err) {
       console.error('Read error:', err);
@@ -31,6 +32,7 @@ export class WebSerialReader {
         console.error('Cleanup error (reader):', e);
       }
     }
+    return result;
   }
 
   stop(): void {

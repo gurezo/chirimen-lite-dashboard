@@ -54,9 +54,9 @@ export class WebSerialService {
     }
   }
 
-  async read(onData: (data: string) => void): Promise<void> {
+  async read(): Promise<string> {
     if (!this.reader) throw new Error('SerialReader not initialized');
-    await this.reader.start(onData);
+    return await this.reader.start();
   }
 
   async send(data: string): Promise<void> {
