@@ -1,15 +1,18 @@
 /// <reference types="@types/w3c-web-serial" />
 
 import { Injectable } from '@angular/core';
-import { catchError, from, map, Observable, throwError } from 'rxjs';
 import { WEB_SERIAL_MESSAGES } from '../../shared/constants';
 import { isRaspberryPiZero } from '../functions';
+import { WebSerialReader } from './web-serial.reader';
+import { WebSerialWriter } from './web-serial.write';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WebSerialService {
   private port: SerialPort | undefined;
+  private reader: WebSerialReader | null = null;
+  private writer: WebSerialWriter | null = null;
 
   async connect(): Promise<string> {
     try {
@@ -19,6 +22,9 @@ export class WebSerialService {
       const isPiZero = await isRaspberryPiZero(this.port);
 
       if (isPiZero) {
+        this.reader = new WebSerialReader(this.port);
+        this.writer = new WebSerialWriter(this.port);
+
         return WEB_SERIAL_MESSAGES.OPEN_SUCCESS;
       } else {
         return WEB_SERIAL_MESSAGES.IS_NOT_RASPBERRY_PI_ZERO;
@@ -45,71 +51,21 @@ export class WebSerialService {
     }
   }
 
+  async startReading(onData: (data: string) => void): Promise<void> {
+    if (!this.reader) throw new Error('SerialReader not initialized');
+    await this.reader.start(onData);
+  }
+
+  async send(data: string): Promise<void> {
+    if (!this.writer) throw new Error('SerialWriter not initialized');
+    await this.writer.write(data);
+  }
+
   async disConnect() {
     try {
       await this.port?.close();
     } catch (error) {
       console.error('Error port close:', error);
     }
-  }
-
-  send(data: string): Observable<void> {
-    if (!this.port) {
-      return throwError(() => new Error('Serial port not connected'));
-    }
-
-    const encoder = new TextEncoder();
-    const writer = this.port.writable?.getWriter();
-    if (!writer) {
-      return throwError(() => new Error('Serial port not connected'));
-    }
-
-    return from(writer.write(encoder.encode(data))).pipe(
-      map(() => {
-        writer.releaseLock();
-      }),
-      catchError((error) => {
-        console.error('Error sending data:', error);
-        writer.releaseLock();
-        return throwError(() => error);
-      })
-    );
-  }
-
-  read(): Observable<string> {
-    if (!this.port) {
-      return throwError(() => new Error('Serial port not connected'));
-    }
-
-    const reader = this.port.readable?.getReader();
-    const decoder = new TextDecoder();
-    if (!reader) {
-      return throwError(() => new Error('Serial port not connected'));
-    }
-
-    return new Observable<string>((observer) => {
-      const readChunk = () => {
-        reader
-          .read()
-          .then(({ value, done }) => {
-            if (done) {
-              observer.complete();
-              return;
-            }
-            const chunk = decoder.decode(value);
-            observer.next(chunk);
-            readChunk();
-          })
-          .catch((error) => {
-            observer.error(error);
-          });
-      };
-
-      readChunk();
-
-      return () => {
-        reader.releaseLock();
-      };
-    });
   }
 }
