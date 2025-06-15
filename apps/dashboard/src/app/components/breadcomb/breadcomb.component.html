@@ -4,12 +4,14 @@
     <span>
       <a mat-button (click)="breadCrumbMain()"> ここにパンくずを表示 </a>
     </span>
-    <span *ngFor="let m of menuHeader; let indx = index">
-      <a mat-button>
-        {{ m.label }}
-        <mat-icon fxFlex="10">{{ m.icon }}</mat-icon>
-      </a>
-    </span>
+    @for (m of menuHeader; track m; let indx = $index) {
+      <span>
+        <a mat-button>
+          {{ m.label }}
+          <mat-icon fxFlex="10">{{ m.icon }}</mat-icon>
+        </a>
+      </span>
+    }
   </mat-toolbar>
 </div>
 <mat-divider />
