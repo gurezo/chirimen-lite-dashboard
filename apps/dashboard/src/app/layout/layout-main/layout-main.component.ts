@@ -1,8 +1,8 @@
 import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatDivider } from '@angular/material/divider';
+import { MatIcon } from '@angular/material/icon';
+import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
 import {
   BreadcombComponent,
@@ -13,8 +13,7 @@ import {
 import { HeaderComponent } from '../../components/header/header.component';
 import ConsoleComponent from '../../pages/console/console.component';
 import EditorComponent from '../../pages/editor/editor.component';
-import { WebSerialActions } from '../../shared/web-serial';
-import { WebSerialService } from '../../shared/web-serial/web-serial.service';
+import { WebSerialActions, WebSerialService } from '../../shared/web-serial';
 
 @Component({
   selector: 'choh-layout-main',
@@ -25,15 +24,16 @@ import { WebSerialService } from '../../shared/web-serial/web-serial.service';
     ConsoleComponent,
     EditorComponent,
     HeaderComponent,
-    MatDividerModule,
-    MatIconModule,
-    MatTabsModule,
+    MatDivider,
+    MatIcon,
+    MatTabGroup,
+    MatTab,
+    MatTabLabel,
     NgOptimizedImage,
     PinAssignComponent,
     TreeComponent,
   ],
   templateUrl: './layout-main.component.html',
-  styleUrl: './layout-main.component.scss',
 })
 export default class LayoutMainComponent {
   store = inject(Store);

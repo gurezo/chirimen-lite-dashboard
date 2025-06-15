@@ -7,7 +7,7 @@ import { ConsoleToolBarComponent } from '../../components';
 import { xtermConsoleConfigOptions } from '../../shared/models';
 import { XtermService } from '../../shared/service';
 import { DialogService } from '../../shared/service/dialog/dialog.service';
-import { WebSerialService } from '../../shared/web-serial/web-serial.service';
+import { WebSerialService } from '../../shared/web-serial';
 
 @Component({
   selector: 'choh-console',
