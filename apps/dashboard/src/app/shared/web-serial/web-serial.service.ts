@@ -1,7 +1,7 @@
 /// <reference types="@types/w3c-web-serial" />
 
 import { Injectable } from '@angular/core';
-import { WEB_SERIAL_MESSAGES } from '../../shared/constants';
+import { WEB_SERIAL } from '../../shared/constants';
 import { isRaspberryPiZero } from '../functions';
 import { WebSerialReader } from './web-serial.reader';
 import { WebSerialWriter } from './web-serial.write';
@@ -13,6 +13,9 @@ export class WebSerialService {
   private port: SerialPort | undefined;
   private reader: WebSerialReader | null = null;
   private writer: WebSerialWriter | null = null;
+  private portError = WEB_SERIAL.PORT.ERROR;
+  private portSuccess = WEB_SERIAL.PORT.SUCCESS;
+  private raspberryPi = WEB_SERIAL.RASPBERRY_PI;
 
   async connect(): Promise<string> {
     try {
@@ -25,9 +28,9 @@ export class WebSerialService {
         this.reader = new WebSerialReader(this.port);
         this.writer = new WebSerialWriter(this.port);
 
-        return WEB_SERIAL_MESSAGES.OPEN_SUCCESS;
+        return this.portSuccess.OPEN;
       } else {
-        return WEB_SERIAL_MESSAGES.IS_NOT_RASPBERRY_PI_ZERO;
+        return this.raspberryPi.IS_NOT_ZERO;
       }
     } catch (error) {
       return this.connectError(error);
@@ -37,21 +40,21 @@ export class WebSerialService {
   connectError(error: unknown): string {
     if (error instanceof DOMException) {
       switch (error.message) {
-        case WEB_SERIAL_MESSAGES.ERROR_PORT_NO_SELECTED:
-          return WEB_SERIAL_MESSAGES.ERROR_PORT_NO_SELECTED;
-        case WEB_SERIAL_MESSAGES.ERROR_PORT_ALREADY_OPEN:
-          return WEB_SERIAL_MESSAGES.ERROR_PORT_ALREADY_OPEN;
-        case WEB_SERIAL_MESSAGES.ERROR_PORT_OPEN_FAIL:
-          return WEB_SERIAL_MESSAGES.ERROR_PORT_OPEN_FAIL;
+        case this.portError.NO_SELECTED:
+          return this.portError.NO_SELECTED;
+        case this.portError.PORT_ALREADY_OPEN:
+          return this.portError.PORT_ALREADY_OPEN;
+        case this.portError.PORT_OPEN_FAIL:
+          return this.portError.PORT_OPEN_FAIL;
         default:
-          return WEB_SERIAL_MESSAGES.ERROR_UNKNOWN;
+          return this.portError.UNKNOWN;
       }
     } else {
-      return WEB_SERIAL_MESSAGES.ERROR_UNKNOWN;
+      return this.portError.UNKNOWN;
     }
   }
 
-  async startReading(onData: (data: string) => void): Promise<void> {
+  async read(onData: (data: string) => void): Promise<void> {
     if (!this.reader) throw new Error('SerialReader not initialized');
     await this.reader.start(onData);
   }
@@ -63,6 +66,8 @@ export class WebSerialService {
 
   async disConnect() {
     try {
+      await this.reader?.stop();
+      // await this.writer?.stop();
       await this.port?.close();
     } catch (error) {
       console.error('Error port close:', error);
