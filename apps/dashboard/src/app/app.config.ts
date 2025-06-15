@@ -15,7 +15,7 @@ import {
   webSerialFeatureKey,
   webSerialReducer,
 } from './shared/web-serial';
-import { xtermFeatureKey, xtermReducer } from './shared/xtterm';
+import { xtermFeatureKey, xtermReducer } from './shared/xterm';
 
 export const appConfig: ApplicationConfig = {
   providers: [
