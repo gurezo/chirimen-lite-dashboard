@@ -1,4 +1,4 @@
-
+import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,7 +6,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'choh-breadcomb',
-  imports: [MatToolbarModule, MatIconModule, MatDividerModule],
+  imports: [MatToolbarModule, MatIconModule, MatDividerModule, NgFor],
   templateUrl: './breadcomb.component.html',
 })
 export class BreadcombComponent implements OnInit {
