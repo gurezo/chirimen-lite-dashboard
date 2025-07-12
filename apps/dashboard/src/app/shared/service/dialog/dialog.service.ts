@@ -5,9 +5,9 @@ import { PinAssignComponent } from '../../../components';
 import {
   ExampleComponent,
   FileUploadComponent,
-  I2cdetectComponent,
   WifiSettingComponent,
 } from '../../../dialog';
+import { I2cdetectComponent } from '../../../i2cdetect/i2cdetect.component';
 
 @Injectable({
   providedIn: 'root',
