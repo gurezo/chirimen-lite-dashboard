@@ -1,8 +1,8 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { inject, Injectable } from '@angular/core';
+import { ChirimenSetupComponent } from '../../../chirimen-panel/chirimen-setup/chirimen-setup.component';
 import { PinAssignComponent } from '../../../components';
 import {
-  ChirimenSetupComponent,
   ExampleComponent,
   FileUploadComponent,
   I2cdetectComponent,
