@@ -2,9 +2,10 @@ import { Dialog } from '@angular/cdk/dialog';
 import { inject, Injectable } from '@angular/core';
 import { ChirimenSetupComponent } from '../../../chirimen-panel/chirimen-setup/chirimen-setup.component';
 import { PinAssignComponent } from '../../../components';
-import { FileUploadComponent, WifiSettingComponent } from '../../../dialog';
+import { FileUploadComponent } from '../../../dialog';
 import { ExampleComponent } from '../../../example/example.component';
 import { I2cdetectComponent } from '../../../i2cdetect/i2cdetect.component';
+import { WifiSettingComponent } from '../../../wifi/wifi-setting/wifi-setting.component';
 
 @Injectable({
   providedIn: 'root',
