@@ -6,4 +6,5 @@
  *  Wifi Info
  *  Reset Wifi
  *  Reboot
+ * list と 設定画面の分割
  */
