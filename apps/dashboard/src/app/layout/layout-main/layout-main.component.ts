@@ -11,8 +11,8 @@ import {
   TreeComponent,
 } from '../../components';
 import { HeaderComponent } from '../../components/header/header.component';
+import ConsoleComponent from '../../console/console.component';
 import EditorComponent from '../../editor/editor.component';
-import ConsoleComponent from '../../pages/console/console.component';
 import { WebSerialActions, WebSerialService } from '../../shared/web-serial';
 
 @Component({

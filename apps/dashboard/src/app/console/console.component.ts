@@ -3,11 +3,11 @@ import { AfterViewInit, Component, inject } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { Store } from '@ngrx/store';
 import { Terminal } from '@xterm/xterm';
-import { ConsoleToolBarComponent } from '../../components';
-import { xtermConsoleConfigOptions } from '../../shared/models';
-import { XtermService } from '../../shared/service';
-import { DialogService } from '../../shared/service/dialog/dialog.service';
-import { WebSerialService } from '../../shared/web-serial';
+import { ConsoleToolBarComponent } from '../components';
+import { xtermConsoleConfigOptions } from '../shared/models';
+import { XtermService } from '../shared/service';
+import { DialogService } from '../shared/service/dialog/dialog.service';
+import { WebSerialService } from '../shared/web-serial';
 
 @Component({
   selector: 'choh-console',
