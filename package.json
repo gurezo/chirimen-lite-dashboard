@@ -43,7 +43,7 @@
     "@angular-devkit/core": "20.1.1",
     "@angular-devkit/schematics": "20.1.1",
     "@angular/build": "20.1.1",
-    "@angular/cli": "~20.0.3",
+    "@angular/cli": "~20.1.0",
     "@angular/compiler-cli": "20.1.2",
     "@jest/globals": "^29.7.0",
     "@nx/angular": "21.3.0",
