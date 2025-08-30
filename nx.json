@@ -3,13 +3,8 @@
   "targetDefaults": {
     "build": {
       "cache": true,
-      "dependsOn": [
-        "^build"
-      ],
-      "inputs": [
-        "production",
-        "^production"
-      ]
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
     },
     "serve": {
       "cache": true
@@ -19,22 +14,14 @@
     },
     "test": {
       "cache": true,
-      "inputs": [
-        "default",
-        "^production"
-      ]
+      "inputs": ["default", "^production"]
     }
   },
   "defaultBase": "main",
   "namedInputs": {
     "sharedGlobals": [],
-    "default": [
-      "{projectRoot}/**/*",
-      "sharedGlobals"
-    ],
-    "production": [
-      "default"
-    ]
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "production": ["default"]
   },
   "generators": {
     "@nx/angular:component": {
@@ -92,6 +79,6 @@
     "@schematics/angular:resolver": {
       "typeSeparator": "."
     }
-  },
-  "nxCloudId": "6707cbee953d5a44ddca43d5"
+  }
+  // "nxCloudId": "6707cbee953d5a44ddca43d5"
 }
