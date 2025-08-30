@@ -16,11 +16,10 @@
         "outputPath": "dist/dashboard",
         "index": "apps/dashboard/src/index.html",
         "browser": "apps/dashboard/src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
+        "polyfills": ["zone.js"],
         "tsConfig": "apps/dashboard/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
+        "allowedCommonJsDependencies": ["@xterm/xterm"],
         "assets": [
           {
             "glob": "**/*",
@@ -43,9 +42,7 @@
           "node_modules/ngx-toastr/toastr.css",
           "apps/dashboard/src/styles.scss"
         ],
-        "scripts": [
-          "node_modules/@xterm/xterm/lib/xterm.js"
-        ]
+        "scripts": []
       },
       "configurations": {
         "production": {
@@ -90,10 +87,7 @@
     "test": {
       "executor": "@angular-builders/jest:run",
       "options": {
-        "polyfills": [
-          "zone.js",
-          "zone.js/testing"
-        ],
+        "polyfills": ["zone.js", "zone.js/testing"],
         "tsConfig": "apps/dashboard/tsconfig.spec.json",
         "configPath": "apps/dashboard/jest.config.ts"
       }
