@@ -11,7 +11,9 @@ export class WebSerialReader {
     let result = '';
     try {
       this.readableStreamClosed =
-        this.port.readable?.pipeTo(decoder.writable) ?? null;
+        this.port.readable?.pipeTo(
+          decoder.writable as WritableStream<Uint8Array>
+        ) ?? null;
       const inputStream = decoder.readable;
       this.reader = inputStream.getReader();
 
