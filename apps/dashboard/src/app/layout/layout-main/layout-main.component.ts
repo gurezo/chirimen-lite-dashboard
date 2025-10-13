@@ -3,12 +3,12 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
+import { ButtonComponent } from '@chirimen-lite-dashboard/ui';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import {
   BreadcombComponent,
-  ButtonComponent,
   PinAssignComponent,
   TreeComponent,
 } from '../../components';

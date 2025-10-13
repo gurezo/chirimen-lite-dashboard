@@ -1,6 +1,6 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { MatTable, MatTableModule } from '@angular/material/table';
-import { ButtonComponent } from '../components';
+import { ButtonComponent } from '@chirimen-lite-dashboard/ui';
 import { DialogService } from '../shared/service/dialog/dialog.service';
 
 export interface PeriodicElement {
