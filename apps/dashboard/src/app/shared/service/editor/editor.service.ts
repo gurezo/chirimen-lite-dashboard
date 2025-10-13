@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import * as monaco from 'monaco-editor';
+import type { editor } from 'monaco-editor';
 import { SourcePath } from '../../models/source-path.model';
 import { DirectoryService } from '../directory/directory.service';
 import { FileContentService } from '../file/file-content.service';
@@ -17,7 +17,7 @@ export class EditorService {
   private fileContent = inject(FileContentService);
   private directory = inject(DirectoryService);
 
-  private editor: monaco.editor.IStandaloneCodeEditor | null = null;
+  private editor: editor.IStandaloneCodeEditor | null = null;
   private editedFlag = false;
   private saveDisabled = false;
   private sourcePath: SourcePath | null = null;
@@ -30,9 +30,9 @@ export class EditorService {
    */
   initializeEditor(
     container: HTMLElement,
-    options?: monaco.editor.IStandaloneEditorConstructionOptions
+    options?: editor.IStandaloneEditorConstructionOptions
   ): void {
-    const defaultOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
+    const defaultOptions: editor.IStandaloneEditorConstructionOptions = {
       value: '',
       language: 'javascript',
       theme: 'vs-dark',
@@ -42,12 +42,16 @@ export class EditorService {
       ...options,
     };
 
-    this.editor = monaco.editor.create(container, defaultOptions);
+    // Note: Monaco Editor は ngx-monaco-editor-v2 経由で使用されるため、
+    // 直接 create() を呼ぶのではなく、コンポーネント側で初期化される
+    // this.editor = editor.create(container, defaultOptions);
 
-    // 変更を監視
-    this.editor.onDidChangeModelContent(() => {
-      this.editedFlag = true;
-    });
+    // エディターがセットされている場合のみ変更を監視
+    if (this.editor) {
+      this.editor.onDidChangeModelContent(() => {
+        this.editedFlag = true;
+      });
+    }
   }
 
   /**
@@ -228,8 +232,23 @@ export class EditorService {
    *
    * @returns Monaco Editor インスタンス
    */
-  getEditor(): monaco.editor.IStandaloneCodeEditor | null {
+  getEditor(): editor.IStandaloneCodeEditor | null {
     return this.editor;
+  }
+
+  /**
+   * エディターインスタンスを設定
+   * ngx-monaco-editor-v2 から初期化されたエディターを受け取る
+   *
+   * @param editorInstance Monaco Editor インスタンス
+   */
+  setEditor(editorInstance: editor.IStandaloneCodeEditor): void {
+    this.editor = editorInstance;
+
+    // 変更を監視
+    this.editor.onDidChangeModelContent(() => {
+      this.editedFlag = true;
+    });
   }
 
   /**
