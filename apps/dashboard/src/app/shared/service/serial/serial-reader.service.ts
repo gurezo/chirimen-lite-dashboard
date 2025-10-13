@@ -92,4 +92,33 @@ export class SerialReaderService {
   isActive(): boolean {
     return this.isReading;
   }
+
+  /**
+   * 1回だけ読み取る（非ストリーミング）
+   * porting/services/serial.service.ts の read() から移行
+   *
+   * @returns 読み取ったデータ
+   */
+  async readOnce(): Promise<Uint8Array> {
+    if (!this.reader) {
+      throw new Error('Reader not initialized. Call startReading() first.');
+    }
+    const { value, done } = await this.reader.read();
+    if (done) {
+      throw new Error('Read stream closed');
+    }
+    // 文字列をUint8Arrayに変換
+    return new TextEncoder().encode(value || '');
+  }
+
+  /**
+   * 1回だけ文字列として読み取る（非ストリーミング）
+   * porting/services/serial.service.ts の readString() から移行
+   *
+   * @returns 読み取った文字列
+   */
+  async readStringOnce(): Promise<string> {
+    const data = await this.readOnce();
+    return new TextDecoder('utf-8').decode(data);
+  }
 }

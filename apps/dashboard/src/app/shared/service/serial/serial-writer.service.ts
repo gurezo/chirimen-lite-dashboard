@@ -88,4 +88,36 @@ export class SerialWriterService {
   isReady(): boolean {
     return this.currentPort !== null && !this.isWriting;
   }
+
+  /**
+   * データを同期的に書き込む（即座に書き込み）
+   * porting/services/serial.service.ts の write() から移行
+   *
+   * @param data 書き込むデータ
+   */
+  async writeSync(data: string): Promise<void> {
+    if (!this.currentPort) {
+      throw new Error('SerialWriter not initialized. Call initialize() first.');
+    }
+
+    if (!this.currentPort.writable) {
+      throw new Error('Port is not writable');
+    }
+
+    const encoder = new TextEncoderStream();
+    const writableStreamClosed = encoder.readable.pipeTo(
+      this.currentPort.writable
+    );
+    const writer = encoder.writable.getWriter();
+
+    try {
+      await writer.write(data);
+      await writer.close();
+      await writableStreamClosed;
+    } catch (error) {
+      const errorMessage = this.errorHandler.handleWriteError(error);
+      console.error('Write error:', errorMessage);
+      throw new Error(errorMessage);
+    }
+  }
 }
