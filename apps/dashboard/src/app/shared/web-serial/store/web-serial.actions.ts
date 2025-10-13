@@ -1,12 +1,12 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 export const WebSerialActions = createActionGroup({
-  source: '[Web Searial]',
+  source: '[Web Serial]',
   events: {
     init: emptyProps(),
     onConnect: emptyProps(),
-    onConnectSuccess: props<{ isConnected: boolean }>(),
-    onConnectFail: props<{ isConnected: boolean }>(),
+    onConnectSuccess: props<{ isConnected: boolean; message: string }>(),
+    onConnectFail: props<{ isConnected: boolean; errorMessage: string }>(),
     onDisConnect: emptyProps(),
     sendData: props<{ sendData: string }>(),
     onSendSuccess: emptyProps(),

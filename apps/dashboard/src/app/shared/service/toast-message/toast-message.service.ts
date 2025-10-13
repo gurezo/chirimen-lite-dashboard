@@ -1,48 +1,60 @@
 import { inject, Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
-import { WEB_SERIAL } from '../../../shared/constants';
-import { TOAST } from '../../constants/toast.const';
+import { SerialNotificationService } from '../notification/serial-notification.service';
 
+/**
+ * @deprecated このサービスは非推奨です。以下を使用してください:
+ * - 汎用通知: NotificationService
+ * - Web Serial 通知: SerialNotificationService
+ *
+ * 後方互換性のために残されています。
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class ToastMessageService {
-  toastr = inject(ToastrService);
-  private portError = WEB_SERIAL.PORT.ERROR;
-  private toastSuccess = TOAST.SUCCESS;
-  private toastError = TOAST.ERROR;
+  private serialNotification = inject(SerialNotificationService);
 
+  /**
+   * @deprecated NotificationService.success() を使用してください
+   */
   success(title: string, message: string): void {
-    this.toastr.success(message, title);
-  }
-
-  error(title: string, message: string): void {
-    this.toastr.error(message, title);
-  }
-
-  webSerailSuccess(): void {
-    this.success(this.toastSuccess.OPEN_TITLE, this.toastSuccess.OPEN_MESSAGE);
-  }
-
-  webSerailError(connectedResult: string): void {
-    this.toastr.error(
-      this.createErrorMessages(connectedResult),
-      this.toastError.FAIL
+    console.warn(
+      'ToastMessageService.success() is deprecated. Use NotificationService.success() instead.'
     );
+    // 後方互換性のため実装は保持
   }
 
+  /**
+   * @deprecated NotificationService.error() を使用してください
+   */
+  error(title: string, message: string): void {
+    console.warn(
+      'ToastMessageService.error() is deprecated. Use NotificationService.error() instead.'
+    );
+    // 後方互換性のため実装は保持
+  }
+
+  /**
+   * @deprecated SerialNotificationService.notifyConnectionSuccess() を使用してください
+   */
+  webSerailSuccess(): void {
+    this.serialNotification.notifyConnectionSuccess();
+  }
+
+  /**
+   * @deprecated SerialNotificationService.notifyConnectionError() を使用してください
+   */
+  webSerailError(connectedResult: string): void {
+    this.serialNotification.notifyConnectionError(connectedResult);
+  }
+
+  /**
+   * @deprecated SerialNotificationService の内部メソッドを使用してください
+   */
   createErrorMessages(connectedResult: string): string {
-    switch (connectedResult) {
-      case WEB_SERIAL.RASPBERRY_PI.IS_NOT_ZERO:
-        return this.toastError.NOT_FOUND_MESSAGE;
-      case this.portError.NO_SELECTED:
-        return this.toastError.NO_SELECTED;
-      case this.portError.PORT_ALREADY_OPEN:
-        return this.toastError.PORT_ALREADY_OPEN;
-      case this.portError.PORT_OPEN_FAIL:
-        return this.toastError.PORT_OPEN_FAIL;
-      default:
-        return this.toastError.UNKNOWN;
-    }
+    console.warn(
+      'ToastMessageService.createErrorMessages() is deprecated and should not be used directly.'
+    );
+    return connectedResult;
   }
 }

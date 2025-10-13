@@ -18,3 +18,13 @@ export const selectReciveData = createSelector(
   selectWebSerialFeature,
   (state: WebSerialState) => state.receiveData
 );
+
+export const selectConnectionMessage = createSelector(
+  selectWebSerialFeature,
+  (state: WebSerialState) => state.connectionMessage
+);
+
+export const selectErrorMessage = createSelector(
+  selectWebSerialFeature,
+  (state: WebSerialState) => state.errorMessage
+);
