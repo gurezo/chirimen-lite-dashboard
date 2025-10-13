@@ -3,15 +3,18 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 // import { Store } from '@ngrx/store';
 import { catchError, from, map, switchMap } from 'rxjs';
 import { WEB_SERIAL } from '../../constants';
-import { ToastMessageService } from '../../service';
 import { WebSerialService } from '../service/web-serial.service';
 import { WebSerialActions } from './web-serial.actions';
 
+/**
+ * WebSerialEffects
+ * UI 通知は行わず、状態の更新のみを担当
+ * Component 側で状態を監視して通知を表示すること
+ */
 @Injectable()
 export class WebSerialEffects {
   actions$ = inject(Actions);
   service = inject(WebSerialService);
-  toastMessage = inject(ToastMessageService);
   // store = inject(Store);
 
   init$ = createEffect(
@@ -26,11 +29,15 @@ export class WebSerialEffects {
         from(this.service.connect()).pipe(
           map((connectedResult) => {
             if (connectedResult === WEB_SERIAL.PORT.SUCCESS.OPEN) {
-              this.toastMessage.webSerailSuccess();
-              return WebSerialActions.onConnectSuccess({ isConnected: true });
+              return WebSerialActions.onConnectSuccess({
+                isConnected: true,
+                message: connectedResult,
+              });
             } else {
-              this.toastMessage.webSerailError(connectedResult);
-              return WebSerialActions.onConnectFail({ isConnected: false });
+              return WebSerialActions.onConnectFail({
+                isConnected: false,
+                errorMessage: connectedResult,
+              });
             }
           })
         )
