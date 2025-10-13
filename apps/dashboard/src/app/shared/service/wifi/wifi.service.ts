@@ -296,10 +296,10 @@ network={
 
       // 新しい設定を保存
       const encoder = new TextEncoder();
-      const buffer = encoder.encode(configContent);
+      const uint8Array = encoder.encode(configContent);
 
       // base64 エンコードして送信
-      const base64 = this.arrayBufferToBase64(buffer);
+      const base64 = this.arrayBufferToBase64(uint8Array.buffer);
 
       // Ctrl+C でフォアグラウンドプロセスを停止
       await this.serial.write('\x03');
