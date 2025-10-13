@@ -2,6 +2,17 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 20.x.
 
+## 📚 リファクタリング履歴
+
+このプロジェクトは段階的なリファクタリングを経て、保守性と拡張性の高いアーキテクチャに進化しています。
+
+- **Step 1**: Serial サービスの責任分散（`memos/step1/`）
+- **Step 2**: 不要コードの削除（`memos/step2/`）
+- **Step 3**: 最終クリーンアップ（`memos/step3/`）
+- **Step 4**: porting/ と shared/ の統合（`memos/step4/`） ⭐ NEW
+
+詳細は各ステップの `README.md` を参照してください。
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.

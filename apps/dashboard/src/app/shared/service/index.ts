@@ -1,8 +1,15 @@
-// export * from './modal-dialog/modal-dialog.service';
+// Phase 1-5 で統合されたサービス
+export * from './auth';
+export * from './chirimen';
 export * from './dialog/dialog.service';
+export * from './directory';
+export * from './editor';
 export * from './example/example.service';
+export * from './file';
 export * from './icon/icon.service';
 export * from './notification/notification.service';
 export * from './notification/serial-notification.service';
 export * from './serial';
-export * from './terminal/terminal.service';
+export * from './system';
+export * from './terminal';
+export * from './wifi';

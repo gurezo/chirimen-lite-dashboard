@@ -1,34 +1,31 @@
-// For Example is this
-// SSID : Buffalo-G-95F0
-// address : 84:AF:EC:64:95:F1
-// channel : 5
-// frequency : 2.432 GHz (Channel 5)
-// quality : Quality=21/70  Signal level=-89 dBm
-// spec : IEEE 802.11i/WPA2 Version 1,TKIP,TKIP CCMPPSK
-
 /**
- * @deprecated Use WiFiInfo from './wifi.model' instead.
- * This interface will be removed in a future version.
+ * WiFi情報
  *
- * Migration:
- * - SSID → ssid (lowercase)
- * - Use WiFiInfo interface
+ * porting/types/wifi-info.ts と shared/models/wifi.models.ts を統合
+ * - essid → ssid に統一
+ * - channel: string → number に統一
  */
-export interface WiFiInformation {
-  SSID: string;
+export interface WiFiInfo {
+  /** SSID（ネットワーク名） */
+  ssid: string;
+  /** MACアドレス */
   address: string;
+  /** チャンネル番号 */
   channel: number;
+  /** 周波数 */
   frequency: string;
+  /** 品質（シグナルレベル） */
   quality: string;
+  /** セキュリティ仕様 */
   spec: string;
 }
 
 /**
- * @deprecated Use dummyWiFiInfo from './wifi.model' instead.
+ * WiFi情報のダミーデータ（テスト・開発用）
  */
-export const dummyWiFiInformation: WiFiInformation[] = [
+export const dummyWiFiInfo: WiFiInfo[] = [
   {
-    SSID: 'imajin-coffee',
+    ssid: 'imajin-coffee',
     address: 'F2:9E:28:74:E6:1F',
     channel: 1,
     frequency: '2.412 GHz (Channel 1)',
@@ -36,7 +33,7 @@ export const dummyWiFiInformation: WiFiInformation[] = [
     spec: 'IEEE 802.11i/WPA2 Version 1,CCMP,CCMPPSK unknown (8)',
   },
   {
-    SSID: 'pr400k-4fc052-1',
+    ssid: 'pr400k-4fc052-1',
     address: 'A4:12:42:84:FB:45',
     channel: 5,
     frequency: '2.432 GHz (Channel 5)',
@@ -44,7 +41,7 @@ export const dummyWiFiInformation: WiFiInformation[] = [
     spec: 'IEEE 802.11i/WPA2 Version 1,TKIP,CCMP TKIPPSK,TKIP,CCMP TKIPPSK',
   },
   {
-    SSID: 'pr400k-4fc052-2',
+    ssid: 'pr400k-4fc052-2',
     address: 'A6:12:42:84:FB:45',
     channel: 5,
     frequency: '2.432 GHz (Channel 5)',
@@ -52,7 +49,7 @@ export const dummyWiFiInformation: WiFiInformation[] = [
     spec: 'IEEE 802.11i/WPA2 Version 1,TKIP,CCMP TKIPPSK,TKIP,CCMP TKIPPSK',
   },
   {
-    SSID: 'imagineohta-pos',
+    ssid: 'imagineohta-pos',
     address: 'DC:A4:CA:BC:4C:8C',
     channel: 11,
     frequency: '2.462 GHz (Channel 11)',
@@ -60,7 +57,7 @@ export const dummyWiFiInformation: WiFiInformation[] = [
     spec: 'IEEE 802.11i/WPA2 Version 1,CCMP,CCMPPSK',
   },
   {
-    SSID: 'Gmansyu.ootamooru',
+    ssid: 'Gmansyu.ootamooru',
     address: 'CA:E9:0A:20:44:93',
     channel: 11,
     frequency: '2.462 GHz (Channel 11)',
@@ -68,7 +65,7 @@ export const dummyWiFiInformation: WiFiInformation[] = [
     spec: 'IEEE 802.11i/WPA2 Version 1,CCMP,CCMPPSK',
   },
   {
-    SSID: '',
+    ssid: '',
     address: 'F2:9E:28:74:E6:1F',
     channel: 1,
     frequency: '2.412 GHz (Channel 1)',
@@ -76,7 +73,7 @@ export const dummyWiFiInformation: WiFiInformation[] = [
     spec: 'IEEE 802.11i/WPA2 Version 1,CCMP,CCMPPSK unknown (8)',
   },
   {
-    SSID: '',
+    ssid: '',
     address: 'C6:9E:28:74:E6:1F',
     channel: 1,
     frequency: '2.412 GHz (Channel 1)',
@@ -84,7 +81,7 @@ export const dummyWiFiInformation: WiFiInformation[] = [
     spec: 'IEEE 802.11i/WPA2 Version 1,CCMP,',
   },
   {
-    SSID: 'ALPINE-439436',
+    ssid: 'ALPINE-439436',
     address: '58:16:D7:8C:97:6A',
     channel: 1,
     frequency: '2.412 GHz (Channel 1)',
@@ -92,7 +89,7 @@ export const dummyWiFiInformation: WiFiInformation[] = [
     spec: 'IEEE 802.11i/WPA2 Version 1,CCMP,CCMPPSK',
   },
   {
-    SSID: 'Panasonic PMX900-6f50.d204,',
+    ssid: 'Panasonic PMX900-6f50.d204,',
     address: 'FA:8F:CA:55:7A:DF',
     channel: 2,
     frequency: '2.417 GHz (Channel 2)',
@@ -100,7 +97,7 @@ export const dummyWiFiInformation: WiFiInformation[] = [
     spec: 'IEEE 802.11i/WPA2 Version 1,CCMP,CCMPPSK',
   },
   {
-    SSID: 'DIRECT-9C-EPSON-267A27',
+    ssid: 'DIRECT-9C-EPSON-267A27',
     address: '52:57:9C:26:FA:27',
     channel: 5,
     frequency: '2.432 GHz (Channel 5)',
@@ -108,7 +105,7 @@ export const dummyWiFiInformation: WiFiInformation[] = [
     spec: 'IEEE 802.11i/WPA2 Version 1,CCMP,CCMPPSK',
   },
   {
-    SSID: 'DIRECT-DR_6930_KQC01217',
+    ssid: 'DIRECT-DR_6930_KQC01217',
     address: 'BE:82:5D:7D:1C:5C',
     channel: 6,
     frequency: '2.437 GHz (Channel 6)',
@@ -116,7 +113,7 @@ export const dummyWiFiInformation: WiFiInformation[] = [
     spec: 'IEEE 802.11i/WPA2 Version 1,CCMP,CCMPPSK',
   },
   {
-    SSID: 'tsunami',
+    ssid: 'tsunami',
     address: 'BC:9F:E4:8A:A9:E0',
     channel: 6,
     frequency: '2.437 GHz (Channel 6)',
