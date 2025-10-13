@@ -1,7 +1,7 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { MatTable, MatTableModule } from '@angular/material/table';
-import { ButtonComponent } from '../../components';
-import { DialogService } from '../../shared/service/dialog/dialog.service';
+import { ButtonComponent } from '../components';
+import { DialogService } from '../shared/service/dialog/dialog.service';
 
 export interface PeriodicElement {
   runing: string;
@@ -17,11 +17,11 @@ const ELEMENT_DATA: PeriodicElement[] = [
 ];
 
 @Component({
-  selector: 'choh-chirimen-setup',
+  selector: 'choh-chirimen-panel',
   imports: [ButtonComponent, MatTable, MatTableModule],
-  templateUrl: './chirimen-setup.component.html',
+  templateUrl: './chirimen-panel.component.html',
 })
-export class ChirimenSetupComponent {
+export class ChirimenPanelComponent {
   displayedColumns: string[] = ['Now Running', 'App Name', 'Select'];
   dataSource = [...ELEMENT_DATA];
   private service = inject(DialogService);
