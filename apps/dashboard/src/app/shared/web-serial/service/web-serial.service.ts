@@ -1,73 +1,85 @@
 /// <reference types="@types/w3c-web-serial" />
 
-import { Injectable } from '@angular/core';
-import { WebSerialReader, WebSerialWriter } from '.';
+import { inject, Injectable } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { WEB_SERIAL } from '../../constants';
-import { isRaspberryPiZero } from '../../functions';
+import {
+  SerialConnectionService,
+  SerialErrorHandlerService,
+  SerialReaderService,
+  SerialValidatorService,
+  SerialWriterService,
+} from '../../service/serial';
 
+/**
+ * WebSerialService (Legacy Adapter)
+ *
+ * このサービスは後方互換性のために残されています。
+ * 内部では新しいサービス群を使用していますが、古いインターフェースを維持しています。
+ *
+ * @deprecated 新しいコードでは SerialConnectionService, SerialReaderService, SerialWriterService を直接使用してください。
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class WebSerialService {
-  private port: SerialPort | undefined;
-  private reader: WebSerialReader | null = null;
-  private writer: WebSerialWriter | null = null;
-  private portError = WEB_SERIAL.PORT.ERROR;
+  private connection = inject(SerialConnectionService);
+  private reader = inject(SerialReaderService);
+  private writer = inject(SerialWriterService);
+  private validator = inject(SerialValidatorService);
+  private errorHandler = inject(SerialErrorHandlerService);
+
   private portSuccess = WEB_SERIAL.PORT.SUCCESS;
-  private raspberryPi = WEB_SERIAL.RASPBERRY_PI;
 
   async connect(): Promise<string> {
-    try {
-      this.port = await navigator.serial.requestPort();
-      await this.port.open({ baudRate: 115200 });
+    const result = await this.connection.connect();
 
-      const isPiZero = await isRaspberryPiZero(this.port);
-
-      if (isPiZero) {
-        this.reader = new WebSerialReader(this.port);
-        this.writer = new WebSerialWriter(this.port);
-
-        return this.portSuccess.OPEN;
-      } else {
-        return this.raspberryPi.IS_NOT_ZERO;
-      }
-    } catch (error) {
-      return this.connectError(error);
+    if ('error' in result) {
+      return result.error;
     }
+
+    const { port } = result;
+
+    // デバイス検証
+    const isValid = await this.validator.isSupportedDevice(port);
+    if (!isValid) {
+      await this.connection.disconnect();
+      return this.errorHandler.getRaspberryPiZeroError();
+    }
+
+    // Writer を初期化
+    this.writer.initialize(port);
+
+    // Reader を開始
+    this.reader.startReading(port);
+
+    return this.portSuccess.OPEN;
   }
 
   connectError(error: unknown): string {
-    if (error instanceof DOMException) {
-      switch (error.message) {
-        case this.portError.NO_SELECTED:
-          return this.portError.NO_SELECTED;
-        case this.portError.PORT_ALREADY_OPEN:
-          return this.portError.PORT_ALREADY_OPEN;
-        case this.portError.PORT_OPEN_FAIL:
-          return this.portError.PORT_OPEN_FAIL;
-        default:
-          return this.portError.UNKNOWN;
-      }
-    } else {
-      return this.portError.UNKNOWN;
-    }
+    return this.errorHandler.handleConnectionError(error);
   }
 
   async read(): Promise<string> {
-    if (!this.reader) throw new Error('SerialReader not initialized');
-    return await this.reader.start();
+    if (!this.reader.isActive()) {
+      throw new Error('SerialReader not initialized');
+    }
+    // Observable から最初の値を取得
+    return await firstValueFrom(this.reader.data$);
   }
 
   async send(data: string): Promise<void> {
-    if (!this.writer) throw new Error('SerialWriter not initialized');
+    if (!this.writer.isReady()) {
+      throw new Error('SerialWriter not initialized');
+    }
     await this.writer.write(data);
   }
 
   async disConnect() {
     try {
-      await this.reader?.stop();
-      // await this.writer?.stop();
-      await this.port?.close();
+      await this.reader.stopReading();
+      this.writer.dispose();
+      await this.connection.disconnect();
     } catch (error) {
       console.error('Error port close:', error);
     }

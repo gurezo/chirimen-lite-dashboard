@@ -5,7 +5,6 @@ import { Store } from '@ngrx/store';
 import { Terminal } from '@xterm/xterm';
 import { ConsoleToolBarComponent } from '../../components';
 import { xtermConsoleConfigOptions } from '../../shared/models';
-import { XtermService } from '../../shared/service';
 import { DialogService } from '../../shared/service/dialog/dialog.service';
 import { WebSerialService } from '../../shared/web-serial';
 
@@ -28,7 +27,6 @@ import { WebSerialService } from '../../shared/web-serial';
 export default class ConsoleComponent implements AfterViewInit {
   store = inject(Store);
   service = inject(WebSerialService);
-  xtermService = inject(XtermService);
   dialogService = inject(DialogService);
   dialog = inject(Dialog);
 
@@ -72,6 +70,20 @@ export default class ConsoleComponent implements AfterViewInit {
     this.xterminal.reset();
     this.xterminal.writeln('$ ');
 
-    this.xterminal.onKey((e) => this.xtermService.onKey(this.xterminal, e));
+    // キー入力処理（XtermService から移植）
+    this.xterminal.onKey((e) => this.onKey(e));
+  }
+
+  private onKey(e: { domEvent: KeyboardEvent }) {
+    const ev = e.domEvent;
+    const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey;
+
+    if (ev.code === 'Enter') {
+      this.xterminal.write('\r\n$ ');
+    } else if (ev.code === 'Backspace') {
+      this.xterminal.write('\b \b');
+    } else if (printable) {
+      this.xterminal.write(ev.key);
+    }
   }
 }
