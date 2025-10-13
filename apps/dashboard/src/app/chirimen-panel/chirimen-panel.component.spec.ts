@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ChirimenSetupComponent } from './chirimen-setup.component';
+import { ChirimenPanelComponent } from './chirimen-panel.component';
 
-describe('ChirimenSetupComponent', () => {
-  let component: ChirimenSetupComponent;
-  let fixture: ComponentFixture<ChirimenSetupComponent>;
+describe('ChirimenPanelComponent', () => {
+  let component: ChirimenPanelComponent;
+  let fixture: ComponentFixture<ChirimenPanelComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChirimenSetupComponent],
+      imports: [ChirimenPanelComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ChirimenSetupComponent);
+    fixture = TestBed.createComponent(ChirimenPanelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

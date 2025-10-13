@@ -1,6 +1,6 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { inject, Injectable } from '@angular/core';
-import { ChirimenSetupComponent } from '../../../chirimen-panel/chirimen-setup/chirimen-setup.component';
+import { ChirimenPanelComponent } from '../../../chirimen-panel/chirimen-panel.component';
 import { PinAssignComponent } from '../../../components';
 import { FileUploadComponent } from '../../../dialog';
 import { ExampleComponent } from '../../../example/example.component';
@@ -38,7 +38,7 @@ export class DialogService {
   }
 
   openSetupChirimenDialog() {
-    this.dialog.open(ChirimenSetupComponent, {
+    this.dialog.open(ChirimenPanelComponent, {
       height: '320px',
       width: '420px',
       panelClass: 'my-dialog',
