@@ -2,10 +2,10 @@ import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { ButtonComponent } from '@chirimen-lite-dashboard/ui';
 import { BehaviorSubject, forkJoin } from 'rxjs';
-import { ExampleListComponent } from '../components';
-import { ExampleItem } from '../shared/models';
 import { DialogService } from '../shared/service/dialog/dialog.service';
-import { ExampleDialogService } from './example.dialog.service';
+import { ExampleListComponent } from './components/example-list/example-list.component';
+import { ExampleItem } from './models/example.item.model';
+import { ExampleDialogService } from './services/example.dialog.service';
 
 @Component({
   selector: 'choh-example',
