@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable } from 'rxjs';
-import { ExampleService } from '../../shared/service';
 import { convertExampleJsonToList } from '../functions/convert';
 import { ExampleItem } from '../models/example.item.model';
+import { ExampleService } from './example.service';
 
 @Injectable({
   providedIn: 'root',

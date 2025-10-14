@@ -1,5 +1,5 @@
 // Phase 1-5 で統合されたサービス
-export * from '../../example/services/example.service';
+export * from '@chirimen-lite-dashboard/lib-example';
 export * from './auth';
 export * from './chirimen';
 export * from './dialog/dialog.service';

@@ -1,0 +1,22 @@
+{
+  "name": "lib-example",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/example/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": [],
+  "implicitDependencies": [],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/example/jest.config.ts",
+        "tsConfig": "libs/example/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
