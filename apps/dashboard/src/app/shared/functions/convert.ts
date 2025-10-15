@@ -1,5 +1,4 @@
-import { ExampleItem } from '../models/example.item.model';
-import { ExampleJson } from '../models/example.model';
+import { ExampleItem, ExampleJson } from '../models';
 
 export function convertExampleJsonToList(
   jsonList: ExampleJson[]

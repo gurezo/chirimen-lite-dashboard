@@ -1,4 +1,6 @@
 export * from './command.models';
+export * from './example.item.model';
+export * from './example.model';
 export * from './file-list.model';
 export * from './file-tree.model';
 export * from './file.info.models';
