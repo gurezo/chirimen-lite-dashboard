@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ExampleItem } from '@app/example/models/example.item.model';
+import { ExampleItem } from '../../shared/models';
 import { ExampleItemComponent } from '../example-item/example-item.component';
 
 @Component({
