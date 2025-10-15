@@ -3,8 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ButtonComponent } from '@chirimen-lite-dashboard/ui';
-import { WifiInfoComponent } from '../../components';
+import { ButtonComponent, WifiInfoComponent } from '../../components';
 import { dummyWiFiInformation } from '../../shared/models';
 import { DialogService } from '../../shared/service/dialog/dialog.service';
 
