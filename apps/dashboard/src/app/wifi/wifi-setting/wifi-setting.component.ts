@@ -4,8 +4,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ButtonComponent, WifiInfoComponent } from '../../components';
+import { I2cdetectDialogService } from '../../i2cdetect/i2cdetect.dialog.service';
 import { dummyWiFiInformation } from '../../shared/models';
-import { DialogService } from '../../shared/service/dialog/dialog.service';
 
 @Component({
   selector: 'choh-wifi-setting',
@@ -21,7 +21,7 @@ import { DialogService } from '../../shared/service/dialog/dialog.service';
 })
 export class WifiSettingComponent {
   wifiInfoList = dummyWiFiInformation;
-  private service = inject(DialogService);
+  private service = inject(I2cdetectDialogService);
 
   closeModal(): void {
     this.service.closeDialog();

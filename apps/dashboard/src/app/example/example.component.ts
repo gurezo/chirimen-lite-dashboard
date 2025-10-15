@@ -2,9 +2,9 @@ import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { BehaviorSubject, forkJoin } from 'rxjs';
 import { ButtonComponent, ExampleListComponent } from '../components';
+import { I2cdetectDialogService } from '../i2cdetect/i2cdetect.dialog.service';
 import { ExampleItem } from '../shared/models';
-import { DialogService } from '../shared/service/dialog/dialog.service';
-import { ExampleDialogService } from './example.dialog.service';
+import { ExampleDataService } from './example.data.service';
 
 @Component({
   selector: 'choh-example',
@@ -12,8 +12,8 @@ import { ExampleDialogService } from './example.dialog.service';
   templateUrl: './example.component.html',
 })
 export class ExampleComponent implements OnInit {
-  private service = inject(DialogService);
-  private exampleDialogService = inject(ExampleDialogService);
+  private service = inject(I2cdetectDialogService);
+  private exampleDialogService = inject(ExampleDataService);
 
   exampleSubject = new BehaviorSubject<
     [ExampleItem[], ExampleItem[], ExampleItem[]]

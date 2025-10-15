@@ -1,7 +1,7 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { ButtonComponent } from '../components';
-import { DialogService } from '../shared/service/dialog/dialog.service';
+import { ChirimenPanelDialogService } from './chirimen-panel.dialog.service';
 
 export interface PeriodicElement {
   runing: string;
@@ -24,7 +24,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class ChirimenPanelComponent {
   displayedColumns: string[] = ['Now Running', 'App Name', 'Select'];
   dataSource = [...ELEMENT_DATA];
-  private service = inject(DialogService);
+  private service = inject(ChirimenPanelDialogService);
 
   @ViewChild(MatTable) table: MatTable<PeriodicElement> =
     {} as MatTable<PeriodicElement>;

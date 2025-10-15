@@ -1,12 +1,15 @@
-import { Dialog } from '@angular/cdk/dialog';
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { Store } from '@ngrx/store';
 import { Terminal } from '@xterm/xterm';
+import { ChirimenPanelDialogService } from '../../chirimen-panel/chirimen-panel.dialog.service';
 import { ConsoleToolBarComponent } from '../../components';
+import { FileUploadDialogService } from '../../dialog/file-upload/file-upload.dialog.service';
+import { ExampleDialogService } from '../../example/example.dialog.service';
+import { I2cdetectDialogService } from '../../i2cdetect/i2cdetect.dialog.service';
 import { xtermConsoleConfigOptions } from '../../shared/models';
-import { DialogService } from '../../shared/service/dialog/dialog.service';
 import { WebSerialService } from '../../shared/web-serial';
+import { WifiDialogService } from '../../wifi/wifi-setting/services/wi-fi.dialog.service';
 
 @Component({
   selector: 'choh-console',
@@ -16,7 +19,7 @@ import { WebSerialService } from '../../shared/web-serial';
       (eventWiFiSetting)="openWifiSettingDialog()"
       (eventCreateFile)="createFile()"
       (eventGetExample)="openExampleFrameDialog()"
-      (eventSetupChirimen)="openSetupChirimenDialog()"
+      (eventSetupChirimen)="openChirimenPanelDialog()"
       (eventI2CDetect)="openI2CDetectDialog()"
       (eventFileUpload)="openFileUploadDialog()"
     />
@@ -27,8 +30,12 @@ import { WebSerialService } from '../../shared/web-serial';
 export default class ConsoleComponent implements AfterViewInit {
   store = inject(Store);
   service = inject(WebSerialService);
-  dialogService = inject(DialogService);
-  dialog = inject(Dialog);
+  dialogService = inject(I2cdetectDialogService);
+  exampleDialogService = inject(ExampleDialogService);
+  chirimenPanelDialogService = inject(ChirimenPanelDialogService);
+  wifiDialogService = inject(WifiDialogService);
+  fileUploadDialogService = inject(FileUploadDialogService);
+  i2cdetectDialogService = inject(I2cdetectDialogService);
 
   label = 'connect';
   xterminal = new Terminal(xtermConsoleConfigOptions);
@@ -39,24 +46,24 @@ export default class ConsoleComponent implements AfterViewInit {
   }
 
   openWifiSettingDialog() {
-    this.dialogService.openWifiSettingDialog();
+    this.wifiDialogService.openDialog();
   }
 
   createFile() {}
 
   openExampleFrameDialog() {
-    this.dialogService.openExampleFrameDialog();
+    this.exampleDialogService.openDialog();
   }
 
-  openSetupChirimenDialog() {
-    this.dialogService.openSetupChirimenDialog();
+  openChirimenPanelDialog() {
+    this.chirimenPanelDialogService.openDialog();
   }
   openI2CDetectDialog() {
-    this.dialogService.openI2CDetectDialog();
+    this.i2cdetectDialogService.openDialog();
   }
 
   openFileUploadDialog() {
-    this.dialogService.openFileUploadDialog();
+    this.fileUploadDialogService.openDialog();
   }
 
   private configTerminal() {
