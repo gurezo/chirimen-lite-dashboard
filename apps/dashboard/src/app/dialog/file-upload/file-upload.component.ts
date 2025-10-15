@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ButtonComponent } from '@chirimen-lite-dashboard/ui';
+import { ButtonComponent } from '../../components';
 import { DialogService } from '../../shared/service/dialog/dialog.service';
 
 @Component({

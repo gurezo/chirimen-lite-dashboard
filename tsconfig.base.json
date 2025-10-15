@@ -11,10 +11,9 @@
     "lib": ["ES2022", "dom", "dom.iterable"],
     "typeRoots": ["node_modules/@types", "@types/jest"],
     "skipLibCheck": true,
-    "baseUrl": ".",
+    "baseUrl": "src",
     "paths": {
       "@app/*": ["apps/dashboard/src/app/*"],
-      "@chirimen-lite-dashboard/ui": ["libs/ui/src/index.ts"],
       "@shared/*": ["apps/dashboard/src/app/shared/*"]
     }
   }
