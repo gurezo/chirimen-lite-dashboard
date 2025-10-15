@@ -1,9 +1,9 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { inject, Injectable } from '@angular/core';
-import { ExampleComponent } from '@chirimen-lite-dashboard/lib-example';
 import { ChirimenPanelComponent } from '../../../chirimen-panel/chirimen-panel.component';
 import { PinAssignComponent } from '../../../components';
 import { FileUploadComponent } from '../../../dialog';
+import { ExampleComponent } from '../../../example/example.component';
 import { I2cdetectComponent } from '../../../i2cdetect/i2cdetect.component';
 import { WifiSettingComponent } from '../../../wifi/wifi-setting/wifi-setting.component';
 
