@@ -1,17 +1,17 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { inject, Injectable } from '@angular/core';
-import { ExampleComponent } from './example.component';
+import { FileUploadComponent } from './file-upload.component';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ExampleDialogService {
+export class FileUploadDialogService {
   dialog = inject(Dialog);
 
   openDialog() {
-    this.dialog.open(ExampleComponent, {
-      height: '480px',
-      width: '720px',
+    this.dialog.open(FileUploadComponent, {
+      height: '300px',
+      width: '500px',
       panelClass: 'my-dialog',
     });
   }

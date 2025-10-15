@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DialogService } from './dialog.service';
+import { WifiDialogService } from './wi-fi.dialog.service';
 
-describe('DialogService', () => {
-  let service: DialogService;
+describe('WifiDialogService', () => {
+  let service: WifiDialogService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(DialogService);
+    service = TestBed.inject(WifiDialogService);
   });
 
   it('should be created', () => {

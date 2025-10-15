@@ -1,17 +1,17 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { inject, Injectable } from '@angular/core';
-import { ExampleComponent } from './example.component';
+import { ChirimenPanelComponent } from './chirimen-panel.component';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ExampleDialogService {
+export class ChirimenPanelDialogService {
   dialog = inject(Dialog);
 
   openDialog() {
-    this.dialog.open(ExampleComponent, {
-      height: '480px',
-      width: '720px',
+    this.dialog.open(ChirimenPanelComponent, {
+      height: '320px',
+      width: '420px',
       panelClass: 'my-dialog',
     });
   }

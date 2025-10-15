@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ButtonComponent } from '../components';
-import { DialogService } from '../shared/service/dialog/dialog.service';
+import { I2cdetectDialogService } from './i2cdetect.dialog.service';
 
 @Component({
   selector: 'choh-i2cdetect',
@@ -8,7 +8,7 @@ import { DialogService } from '../shared/service/dialog/dialog.service';
   templateUrl: './i2cdetect.component.html',
 })
 export class I2cdetectComponent {
-  private service = inject(DialogService);
+  private service = inject(I2cdetectDialogService);
   i2cDevices = `
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
 00:                         -- -- -- -- -- -- -- --
