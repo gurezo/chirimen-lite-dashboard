@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ExampleItem } from '../../shared/models';
+import { ExampleItem } from '../../models/example.item.model';
 
 @Component({
   selector: 'choh-example-item',

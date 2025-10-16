@@ -1,10 +1,11 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { BehaviorSubject, forkJoin } from 'rxjs';
-import { ButtonComponent, ExampleListComponent } from '../components';
+import { ButtonComponent } from '../components';
 import { I2cdetectDialogService } from '../i2cdetect/i2cdetect.dialog.service';
-import { ExampleItem } from '../shared/models';
-import { ExampleDataService } from './example.data.service';
+import { ExampleListComponent } from './components/example-list/example-list.component';
+import { ExampleItem } from './models/example.item.model';
+import { ExampleDataService } from './services/example.data.service';
 
 @Component({
   selector: 'choh-example',
