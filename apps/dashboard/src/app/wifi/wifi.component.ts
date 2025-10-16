@@ -3,12 +3,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ButtonComponent, WifiInfoComponent } from '../../components';
-import { I2cdetectDialogService } from '../../i2cdetect/i2cdetect.dialog.service';
-import { dummyWiFiInformation } from '../../shared/models';
+import { ButtonComponent } from '../components';
+import { dummyWiFiInformation } from '../shared/models';
+import { WifiInfoComponent } from './components/wifi-info/wifi-info.component';
+import { WifiDialogService } from './services/wi-fi.dialog.service';
 
 @Component({
-  selector: 'choh-wifi-setting',
+  selector: 'choh-wifi',
   imports: [
     ButtonComponent,
     WifiInfoComponent,
@@ -17,11 +18,11 @@ import { dummyWiFiInformation } from '../../shared/models';
     MatInputModule,
     ReactiveFormsModule,
   ],
-  templateUrl: './wifi-setting.component.html',
+  templateUrl: './wifi.component.html',
 })
-export class WifiSettingComponent {
+export class WifiComponent {
   wifiInfoList = dummyWiFiInformation;
-  private service = inject(I2cdetectDialogService);
+  service = inject(WifiDialogService);
 
   closeModal(): void {
     this.service.closeDialog();

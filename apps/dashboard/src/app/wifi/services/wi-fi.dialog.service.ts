@@ -1,6 +1,6 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { inject, Injectable } from '@angular/core';
-import { WifiSettingComponent } from '../wifi-setting.component';
+import { WifiComponent } from '../wifi.component';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +9,7 @@ export class WifiDialogService {
   dialog = inject(Dialog);
 
   openDialog() {
-    this.dialog.open(WifiSettingComponent, {
+    this.dialog.open(WifiComponent, {
       width: '600px',
       panelClass: 'my-dialog',
     });
