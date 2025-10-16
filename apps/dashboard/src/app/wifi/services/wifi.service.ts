@@ -1,8 +1,12 @@
 import { Injectable, inject } from '@angular/core';
-import { WiFiInfo } from '../../models/wifi.model';
-import { ParserUtils } from '../../utils/parser.utils';
-import { FileContentService } from '../file/file-content.service';
-import { SerialFacadeService } from '../serial/serial-facade.service';
+import { FileContentService } from '../../shared/service/file/file-content.service';
+import { SerialFacadeService } from '../../shared/service/serial/serial-facade.service';
+import {
+  parseWifiIfconfigOutput,
+  parseWifiIwconfigOutput,
+  parseWifiIwlistOutput,
+} from '../functions';
+import { WiFiInfo } from '../models/wifi.model';
 
 /**
  * WiFi サービス
@@ -41,9 +45,8 @@ export class WiFiService {
         10000
       );
 
-      const { ipInfo, ipaddr } =
-        ParserUtils.parseIfconfigOutput(ifconfigOutput);
-      const wlInfo = ParserUtils.parseIwconfigOutput(iwconfigOutput);
+      const { ipInfo, ipaddr } = parseWifiIfconfigOutput(ifconfigOutput);
+      const wlInfo = parseWifiIwconfigOutput(iwconfigOutput);
 
       return { ipInfo, wlInfo, ipaddr };
     } catch (error: unknown) {
@@ -67,7 +70,7 @@ export class WiFiService {
       );
 
       const lines = output.split('\n');
-      const wifiInfos = ParserUtils.parseIwlistOutput(output);
+      const wifiInfos = parseWifiIwlistOutput(output);
 
       return { rawData: lines, wifiInfos };
     } catch (error: unknown) {

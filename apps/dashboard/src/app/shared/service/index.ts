@@ -12,4 +12,3 @@ export * from './notification/serial-notification.service';
 export * from './serial';
 export * from './system';
 export * from './terminal';
-export * from './wifi';

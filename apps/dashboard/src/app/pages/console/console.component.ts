@@ -9,7 +9,7 @@ import { ExampleDialogService } from '../../example/services/example.dialog.serv
 import { I2cdetectDialogService } from '../../i2cdetect/i2cdetect.dialog.service';
 import { xtermConsoleConfigOptions } from '../../shared/models';
 import { WebSerialService } from '../../shared/web-serial';
-import { WifiDialogService } from '../../wifi/wifi-setting/services/wi-fi.dialog.service';
+import { WifiDialogService } from '../../wifi/services/wi-fi.dialog.service';
 
 @Component({
   selector: 'choh-console',
