@@ -1,5 +1,5 @@
-import LayoutMainComponent from './layout-main/layout-main.component';
+import LayoutComponent from './layout.component';
 
-const layouts = [LayoutMainComponent];
+const layouts = [LayoutComponent];
 
-export { LayoutMainComponent, layouts };
+export { LayoutComponent, layouts };

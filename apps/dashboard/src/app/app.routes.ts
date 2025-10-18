@@ -4,7 +4,7 @@ import { browserCheckGuard } from './shared/guards';
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./layout/layout-main/layout-main.component'),
+    loadComponent: () => import('./layout/layout.component'),
     canActivate: [browserCheckGuard],
   },
   {

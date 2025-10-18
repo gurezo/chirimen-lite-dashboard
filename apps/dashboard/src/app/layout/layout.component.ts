@@ -6,24 +6,22 @@ import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import {
-  BreadcombComponent,
-  ButtonComponent,
-  PinAssignComponent,
-  TreeComponent,
-} from '../../components';
-import { HeaderComponent } from '../../components/header/header.component';
-import ConsoleComponent from '../../console/console.component';
-import EditorComponent from '../../editor/editor.component';
-import { SerialNotificationService } from '../../shared/service';
+import { ButtonComponent } from '../components';
+import ConsoleComponent from '../console/console.component';
+import EditorComponent from '../editor/editor.component';
+import { SerialNotificationService } from '../shared/service';
 import {
   selectConnectionMessage,
   selectErrorMessage,
   WebSerialActions,
-} from '../../shared/web-serial';
+} from '../shared/web-serial';
+import { BreadcombComponent } from './components/breadcomb/breadcomb.component';
+import { HeaderComponent } from './components/header/header.component';
+import { PinAssignComponent } from './components/pin-assign/pin-assign.component';
+import { TreeComponent } from './components/tree/tree.component';
 
 @Component({
-  selector: 'choh-layout-main',
+  selector: 'choh-layout',
   imports: [
     AsyncPipe,
     BreadcombComponent,
@@ -40,9 +38,9 @@ import {
     PinAssignComponent,
     TreeComponent,
   ],
-  templateUrl: './layout-main.component.html',
+  templateUrl: './layout.component.html',
 })
-export default class LayoutMainComponent implements OnInit, OnDestroy {
+export default class LayoutComponent implements OnInit, OnDestroy {
   private store = inject(Store);
   private serialNotification = inject(SerialNotificationService);
 
