@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ButtonComponent } from '../components';
+import { ButtonComponent } from '@libs-ui';
 import { I2cdetectDialogService } from './i2cdetect.dialog.service';
 
 @Component({
