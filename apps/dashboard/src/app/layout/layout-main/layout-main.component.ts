@@ -13,7 +13,7 @@ import {
   TreeComponent,
 } from '../../components';
 import { HeaderComponent } from '../../components/header/header.component';
-import ConsoleComponent from '../../pages/console/console.component';
+import ConsoleComponent from '../../console/console.component';
 import EditorComponent from '../../pages/editor/editor.component';
 import { SerialNotificationService } from '../../shared/service';
 import {

@@ -1,6 +1,5 @@
 export * from './breadcomb/breadcomb.component';
 export * from './button/button.component';
-export * from './console-tool-bar/console-tool-bar.component';
 export * from './editor-tool-bar/editor-tool-bar.component';
 export * from './header/header.component';
 export * from './pin-assign/pin-assign.component';

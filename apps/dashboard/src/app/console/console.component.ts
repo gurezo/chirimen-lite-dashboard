@@ -2,14 +2,14 @@ import { AfterViewInit, Component, inject } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { Store } from '@ngrx/store';
 import { Terminal } from '@xterm/xterm';
-import { ChirimenPanelDialogService } from '../../chirimen-panel/chirimen-panel.dialog.service';
-import { ConsoleToolBarComponent } from '../../components';
-import { FileUploadDialogService } from '../../dialog/file-upload/file-upload.dialog.service';
-import { ExampleDialogService } from '../../example/services/example.dialog.service';
-import { I2cdetectDialogService } from '../../i2cdetect/i2cdetect.dialog.service';
-import { xtermConsoleConfigOptions } from '../../shared/models';
-import { WebSerialService } from '../../shared/web-serial';
-import { WifiDialogService } from '../../wifi/services/wi-fi.dialog.service';
+import { ChirimenPanelDialogService } from '../chirimen-panel/chirimen-panel.dialog.service';
+import { FileUploadDialogService } from '../dialog/file-upload/file-upload.dialog.service';
+import { ExampleDialogService } from '../example/services/example.dialog.service';
+import { I2cdetectDialogService } from '../i2cdetect/i2cdetect.dialog.service';
+import { xtermConsoleConfigOptions } from '../shared/models';
+import { WebSerialService } from '../shared/web-serial';
+import { WifiDialogService } from '../wifi/services/wi-fi.dialog.service';
+import { ConsoleToolBarComponent } from './components/console-tool-bar/console-tool-bar.component';
 
 @Component({
   selector: 'choh-console',
