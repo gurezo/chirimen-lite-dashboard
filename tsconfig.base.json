@@ -11,10 +11,11 @@
     "lib": ["ES2022", "dom", "dom.iterable"],
     "typeRoots": ["node_modules/@types", "@types/jest"],
     "skipLibCheck": true,
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
       "@app/*": ["apps/dashboard/src/app/*"],
-      "@shared/*": ["apps/dashboard/src/app/shared/*"]
+      "@shared/*": ["apps/dashboard/src/app/shared/*"],
+      "@libs-ui": ["libs/shared/ui/src/index.ts"]
     }
   }
 }
