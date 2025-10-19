@@ -3,12 +3,12 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
+import { EditorComponent } from '@libs-editor';
 import { ButtonComponent } from '@libs-ui';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import ConsoleComponent from '../console/console.component';
-import EditorComponent from '../editor/editor.component';
 import { SerialNotificationService } from '../shared/service';
 import {
   selectConnectionMessage,
