@@ -1,8 +1,8 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { DialogService } from '@libs-dialogs';
 import { ButtonComponent } from '@libs-ui';
 import { BehaviorSubject, forkJoin } from 'rxjs';
-import { DialogService } from '../shared/services/dialogs/dialog.service';
 import { ExampleListComponent } from './components/example-list/example-list.component';
 import { ExampleItem } from './models/example.item.model';
 import { ExampleDataService } from './services/example.data.service';

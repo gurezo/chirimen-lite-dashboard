@@ -33,6 +33,11 @@
           "codeCoverage": true
         }
       }
+    },
+    "@nx/angular:package": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
     }
   },
   "defaultBase": "main",
@@ -107,6 +112,11 @@
     "@nx/angular:library": {
       "linter": "eslint",
       "unitTestRunner": "jest"
+    }
+  },
+  "release": {
+    "version": {
+      "preVersionCommand": "pnpm dlx nx run-many -t build"
     }
   }
 }
