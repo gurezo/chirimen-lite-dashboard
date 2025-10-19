@@ -1,7 +1,7 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { MatTable, MatTableModule } from '@angular/material/table';
+import { DialogService } from '@libs-dialogs';
 import { ButtonComponent } from '@libs-ui';
-import { DialogService } from '../shared/services/dialogs/dialog.service';
 
 export interface PeriodicElement {
   runing: string;

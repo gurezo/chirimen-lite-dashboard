@@ -14,8 +14,9 @@
     "baseUrl": ".",
     "paths": {
       "@app/*": ["apps/dashboard/src/app/*"],
-      "@shared/*": ["apps/dashboard/src/app/shared/*"],
-      "@libs-ui": ["libs/shared/ui/src/index.ts"]
+      "@libs-dialogs": ["libs/shared/dialogs/src/index.ts"],
+      "@libs-ui": ["libs/shared/ui/src/index.ts"],
+      "@shared/*": ["apps/dashboard/src/app/shared/*"]
     }
   }
 }

@@ -3,9 +3,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { DialogService } from '@libs-dialogs';
 import { ButtonComponent } from '@libs-ui';
 import { dummyWiFiInformation } from '../shared/models';
-import { DialogService } from '../shared/services/dialogs/dialog.service';
 import { WifiInfoComponent } from './components/wifi-info/wifi-info.component';
 
 @Component({
