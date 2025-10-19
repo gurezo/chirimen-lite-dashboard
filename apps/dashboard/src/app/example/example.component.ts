@@ -2,10 +2,10 @@ import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { ButtonComponent } from '@libs-ui';
 import { BehaviorSubject, forkJoin } from 'rxjs';
-import { I2cdetectDialogService } from '../i2cdetect/i2cdetect.dialog.service';
 import { ExampleListComponent } from './components/example-list/example-list.component';
 import { ExampleItem } from './models/example.item.model';
 import { ExampleDataService } from './services/example.data.service';
+import { ExampleDialogService } from './services/example.dialog.service';
 
 @Component({
   selector: 'choh-example',
@@ -13,8 +13,8 @@ import { ExampleDataService } from './services/example.data.service';
   templateUrl: './example.component.html',
 })
 export class ExampleComponent implements OnInit {
-  private service = inject(I2cdetectDialogService);
-  private exampleDialogService = inject(ExampleDataService);
+  private exampleDialogService = inject(ExampleDialogService);
+  private exampleDataService = inject(ExampleDataService);
 
   exampleSubject = new BehaviorSubject<
     [ExampleItem[], ExampleItem[], ExampleItem[]]
@@ -23,13 +23,13 @@ export class ExampleComponent implements OnInit {
 
   ngOnInit(): void {
     this.example$ = forkJoin([
-      this.exampleDialogService.getGPIOExampleList(),
-      this.exampleDialogService.getI2CExampleList(),
-      this.exampleDialogService.getRemoteExampleList(),
+      this.exampleDataService.getGPIOExampleList(),
+      this.exampleDataService.getI2CExampleList(),
+      this.exampleDataService.getRemoteExampleList(),
     ]);
   }
 
   closeModal(): void {
-    this.service.closeDialog();
+    this.exampleDialogService.closeDialog();
   }
 }

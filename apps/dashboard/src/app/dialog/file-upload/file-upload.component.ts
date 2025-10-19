@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ButtonComponent } from '@libs-ui';
-import { I2cdetectDialogService } from '../../i2cdetect/i2cdetect.dialog.service';
+import { FileUploadDialogService } from './file-upload.dialog.service';
 
 @Component({
   selector: 'choh-file-upload',
@@ -9,7 +9,7 @@ import { I2cdetectDialogService } from '../../i2cdetect/i2cdetect.dialog.service
   templateUrl: './file-upload.component.html',
 })
 export class FileUploadComponent {
-  private service = inject(I2cdetectDialogService);
+  private service = inject(FileUploadDialogService);
   private fb = inject(FormBuilder);
   uploadForm: FormGroup;
 
