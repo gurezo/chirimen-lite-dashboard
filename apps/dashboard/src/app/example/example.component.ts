@@ -2,10 +2,10 @@ import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { ButtonComponent } from '@libs-ui';
 import { BehaviorSubject, forkJoin } from 'rxjs';
+import { DialogService } from '../shared/services/dialogs/dialog.service';
 import { ExampleListComponent } from './components/example-list/example-list.component';
 import { ExampleItem } from './models/example.item.model';
 import { ExampleDataService } from './services/example.data.service';
-import { ExampleDialogService } from './services/example.dialog.service';
 
 @Component({
   selector: 'choh-example',
@@ -13,7 +13,7 @@ import { ExampleDialogService } from './services/example.dialog.service';
   templateUrl: './example.component.html',
 })
 export class ExampleComponent implements OnInit {
-  private exampleDialogService = inject(ExampleDialogService);
+  private dialogService = inject(DialogService);
   private exampleDataService = inject(ExampleDataService);
 
   exampleSubject = new BehaviorSubject<
@@ -30,6 +30,6 @@ export class ExampleComponent implements OnInit {
   }
 
   closeModal(): void {
-    this.exampleDialogService.closeDialog();
+    this.dialogService.close();
   }
 }

@@ -1,7 +1,3 @@
-// Phase 1-5 で統合されたサービス
-export * from '../../example/services/example.service';
-export * from '../../i2cdetect/i2cdetect.dialog.service';
-export * from './auth';
 export * from './chirimen';
 export * from './directory';
 export * from './editor';

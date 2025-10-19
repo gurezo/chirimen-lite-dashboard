@@ -2,13 +2,14 @@ import { AfterViewInit, Component, inject } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { Store } from '@ngrx/store';
 import { Terminal } from '@xterm/xterm';
-import { ChirimenPanelDialogService } from '../chirimen-panel/chirimen-panel.dialog.service';
-import { FileUploadDialogService } from '../dialog/file-upload/file-upload.dialog.service';
-import { ExampleDialogService } from '../example/services/example.dialog.service';
-import { I2cdetectDialogService } from '../i2cdetect/i2cdetect.dialog.service';
+import { ChirimenPanelComponent } from '../chirimen-panel/chirimen-panel.component';
+import { FileUploadComponent } from '../dialog/file-upload/file-upload.component';
+import { ExampleComponent } from '../example/example.component';
+import { I2cdetectComponent } from '../i2cdetect/i2cdetect.component';
 import { xtermConsoleConfigOptions } from '../shared/models';
+import { DialogService } from '../shared/services/dialogs/dialog.service';
 import { WebSerialService } from '../shared/web-serial';
-import { WifiDialogService } from '../wifi/services/wi-fi.dialog.service';
+import { WifiComponent } from '../wifi/wifi.component';
 import { ConsoleToolBarComponent } from './components/console-tool-bar/console-tool-bar.component';
 
 @Component({
@@ -30,12 +31,7 @@ import { ConsoleToolBarComponent } from './components/console-tool-bar/console-t
 export default class ConsoleComponent implements AfterViewInit {
   store = inject(Store);
   service = inject(WebSerialService);
-  dialogService = inject(I2cdetectDialogService);
-  exampleDialogService = inject(ExampleDialogService);
-  chirimenPanelDialogService = inject(ChirimenPanelDialogService);
-  wifiDialogService = inject(WifiDialogService);
-  fileUploadDialogService = inject(FileUploadDialogService);
-  i2cdetectDialogService = inject(I2cdetectDialogService);
+  dialogService = inject(DialogService);
 
   label = 'connect';
   xterminal = new Terminal(xtermConsoleConfigOptions);
@@ -46,24 +42,44 @@ export default class ConsoleComponent implements AfterViewInit {
   }
 
   openWifiSettingDialog() {
-    this.wifiDialogService.openDialog();
+    this.dialogService.open(WifiComponent, {
+      width: '600px',
+      panelClass: 'my-dialog',
+    });
   }
 
   createFile() {}
 
   openExampleFrameDialog() {
-    this.exampleDialogService.openDialog();
+    this.dialogService.open(ExampleComponent, {
+      height: '480px',
+      width: '720px',
+      panelClass: 'my-dialog',
+    });
   }
 
   openChirimenPanelDialog() {
-    this.chirimenPanelDialogService.openDialog();
+    this.dialogService.open(ChirimenPanelComponent, {
+      height: '320px',
+      width: '420px',
+      panelClass: 'my-dialog',
+    });
   }
+
   openI2CDetectDialog() {
-    this.i2cdetectDialogService.openDialog();
+    this.dialogService.open(I2cdetectComponent, {
+      height: '320px',
+      width: '420px',
+      panelClass: 'my-dialog',
+    });
   }
 
   openFileUploadDialog() {
-    this.fileUploadDialogService.openDialog();
+    this.dialogService.open(FileUploadComponent, {
+      height: '300px',
+      width: '500px',
+      panelClass: 'my-dialog',
+    });
   }
 
   private configTerminal() {

@@ -5,8 +5,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ButtonComponent } from '@libs-ui';
 import { dummyWiFiInformation } from '../shared/models';
+import { DialogService } from '../shared/services/dialogs/dialog.service';
 import { WifiInfoComponent } from './components/wifi-info/wifi-info.component';
-import { WifiDialogService } from './services/wi-fi.dialog.service';
 
 @Component({
   selector: 'choh-wifi',
@@ -22,9 +22,9 @@ import { WifiDialogService } from './services/wi-fi.dialog.service';
 })
 export class WifiComponent {
   wifiInfoList = dummyWiFiInformation;
-  service = inject(WifiDialogService);
+  dialogService = inject(DialogService);
 
   closeModal(): void {
-    this.service.closeDialog();
+    this.dialogService.close();
   }
 }
