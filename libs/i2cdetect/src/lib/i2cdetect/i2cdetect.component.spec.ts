@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { I2cdetectComponent } from './i2cdetect.component';
 
 describe('I2cdetectComponent', () => {

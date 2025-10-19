@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { I2cdetectDialogService } from '@libs-i2cdetect';
 import { ButtonComponent } from '@libs-ui';
-import { I2cdetectDialogService } from '../../i2cdetect/i2cdetect.dialog.service';
 
 @Component({
   selector: 'choh-file-upload',
