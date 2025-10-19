@@ -1,8 +1,8 @@
 export default {
   displayName: 'libs-i2cdetect',
-  preset: '../../../jest.preset.js',
+  preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../coverage/libs/shared/i2cdetect',
+  coverageDirectory: '../../coverage/libs/i2cdetect',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
