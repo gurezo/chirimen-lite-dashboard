@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
-import { EditorToolBarComponent } from './components/editor-tool-bar/editor-tool-bar.component';
-import { MonacoEditorService } from './services';
+import { EditorToolBarComponent } from '../components/editor-tool-bar/editor-tool-bar.component';
+import { MonacoEditorService } from '../services';
 
 @Component({
   selector: 'choh-editor',
