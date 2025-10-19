@@ -1,12 +1,12 @@
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { DialogService } from '@libs-dialogs';
+import { I2cdetectComponent } from '@libs-i2cdetect';
 import { Store } from '@ngrx/store';
 import { Terminal } from '@xterm/xterm';
 import { ChirimenPanelComponent } from '../chirimen-panel/chirimen-panel.component';
 import { FileUploadComponent } from '../dialog/file-upload/file-upload.component';
 import { ExampleComponent } from '../example/example.component';
-import { I2cdetectComponent } from '../i2cdetect/i2cdetect.component';
 import { xtermConsoleConfigOptions } from '../shared/models';
 import { WebSerialService } from '../shared/web-serial';
 import { WifiComponent } from '../wifi/wifi.component';
