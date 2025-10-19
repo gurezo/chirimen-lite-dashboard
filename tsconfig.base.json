@@ -14,9 +14,8 @@
     "baseUrl": ".",
     "paths": {
       "@app/*": ["apps/dashboard/src/app/*"],
-      "@libs-i2cdetect": ["libs/i2cdetect/src/index.ts"],
-      "@libs-ui": ["libs/shared/ui/src/index.ts"],
-      "@shared/*": ["apps/dashboard/src/app/shared/*"]
+      "@shared/*": ["apps/dashboard/src/app/shared/*"],
+      "@libs-ui": ["libs/shared/ui/src/index.ts"]
     }
   }
 }
