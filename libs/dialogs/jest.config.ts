@@ -1,8 +1,8 @@
 export default {
   displayName: 'dialogs',
-  preset: '../../../jest.preset.js',
+  preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../coverage/libs/shared/dialogs',
+  coverageDirectory: '../../coverage/libs/dialogs',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
