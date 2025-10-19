@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
+import { ChirimenPanelComponent } from '@libs-chirimen-panel';
 import { DialogService } from '@libs-dialogs';
 import { I2cdetectComponent } from '@libs-i2cdetect';
 import { Store } from '@ngrx/store';
 import { Terminal } from '@xterm/xterm';
-import { ChirimenPanelComponent } from '../chirimen-panel/chirimen-panel.component';
 import { FileUploadComponent } from '../dialog/file-upload/file-upload.component';
 import { ExampleComponent } from '../example/example.component';
 import { xtermConsoleConfigOptions } from '../shared/models';
