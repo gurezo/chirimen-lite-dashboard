@@ -1,0 +1,12 @@
+{
+  "name": "@libs-i2cdetect",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^20.3.0",
+    "@angular/core": "^20.3.0"
+  },
+  "dependencies": {
+    "@libs-ui": "file:../../dist/libs/shared/ui"
+  },
+  "sideEffects": false
+}
