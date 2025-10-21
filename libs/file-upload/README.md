@@ -1,10 +1,7 @@
-# chirimen-panel
+# file-upload
 
 This library was generated with [Nx](https://nx.dev).
 
 ## Running unit tests
 
-Run `nx test chirimen-panel` to execute the unit tests.
-
-
-
+Run `nx test file-upload` to execute the unit tests.
