@@ -5,10 +5,10 @@ import { DialogService } from '@libs-dialogs';
 import { ExampleComponent } from '@libs-example';
 import { FileUploadComponent } from '@libs-file-upload';
 import { I2cdetectComponent } from '@libs-i2cdetect';
+import { WebSerialService } from '@libs-web-serial';
 import { Store } from '@ngrx/store';
 import { Terminal } from '@xterm/xterm';
 import { xtermConsoleConfigOptions } from '../shared/models';
-import { WebSerialService } from '../shared/web-serial';
 import { WifiComponent } from '../wifi/wifi.component';
 import { ConsoleToolBarComponent } from './components/console-tool-bar/console-tool-bar.component';
 
