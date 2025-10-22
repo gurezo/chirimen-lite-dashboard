@@ -5,10 +5,10 @@ import { DialogService } from '@libs-dialogs';
 import { ExampleComponent } from '@libs-example';
 import { FileUploadComponent } from '@libs-file-upload';
 import { I2cdetectComponent } from '@libs-i2cdetect';
+import { SerialFacadeService } from '@libs-web-serial';
 import { Store } from '@ngrx/store';
 import { Terminal } from '@xterm/xterm';
 import { xtermConsoleConfigOptions } from '../shared/models';
-import { WebSerialService } from '../shared/web-serial';
 import { WifiComponent } from '../wifi/wifi.component';
 import { ConsoleToolBarComponent } from './components/console-tool-bar/console-tool-bar.component';
 
@@ -26,11 +26,11 @@ import { ConsoleToolBarComponent } from './components/console-tool-bar/console-t
     />
     <div id="consoleDom" class="mt-2"></div>
   `,
-  providers: [WebSerialService],
+  providers: [SerialFacadeService],
 })
 export default class ConsoleComponent implements AfterViewInit {
   store = inject(Store);
-  service = inject(WebSerialService);
+  service = inject(SerialFacadeService);
   dialogService = inject(DialogService);
 
   label = 'connect';
