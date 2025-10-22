@@ -1,8 +1,9 @@
+/* eslint-disable */
 export default {
-  displayName: 'chirimen-panel',
+  displayName: 'libs-web-serial',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/libs/chirimen-panel',
+  coverageDirectory: '../../coverage/libs/web-serial',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

@@ -2,6 +2,11 @@ import { provideHttpClient } from '@angular/common/http';
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
+import {
+  WebSerialEffects,
+  webSerialFeatureKey,
+  webSerialReducer,
+} from '@libs-web-serial';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
 import { provideStore } from '@ngrx/store';
@@ -10,11 +15,6 @@ import { provideMonacoEditor } from 'ngx-monaco-editor-v2';
 import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
 import { monacoConfig } from './shared/constants';
-import {
-  WebSerialEffects,
-  webSerialFeatureKey,
-  webSerialReducer,
-} from './shared/web-serial';
 import { xtermFeatureKey, xtermReducer } from './shared/xterm';
 
 export const appConfig: ApplicationConfig = {

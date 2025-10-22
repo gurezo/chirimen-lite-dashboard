@@ -5,16 +5,16 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
 import { EditorComponent } from '@libs-editor';
 import { ButtonComponent } from '@libs-ui';
+import {
+  selectConnectionMessage,
+  selectErrorMessage,
+  WebSerialActions,
+} from '@libs-web-serial';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import ConsoleComponent from '../console/console.component';
 import { SerialNotificationService } from '../shared/service';
-import {
-  selectConnectionMessage,
-  selectErrorMessage,
-  WebSerialActions,
-} from '../shared/web-serial';
 import { BreadcombComponent } from './components/breadcomb/breadcomb.component';
 import { HeaderComponent } from './components/header/header.component';
 import { PinAssignComponent } from './components/pin-assign/pin-assign.component';
