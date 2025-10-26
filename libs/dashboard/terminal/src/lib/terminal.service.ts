@@ -25,6 +25,7 @@ export class TerminalService {
 
   private terminal: Terminal | null = null;
   private dataSubscription: Subscription | null = null;
+  private currentPort: SerialPort | null = null;
 
   /**
    * ターミナルを初期化
@@ -54,6 +55,7 @@ export class TerminalService {
     }
 
     const { port } = connectResult;
+    this.currentPort = port;
 
     // デバイス検証
     const isValid = await this.validator.isSupportedDevice(port);
@@ -65,17 +67,11 @@ export class TerminalService {
       };
     }
 
-    // Reader と Writer を初期化
-    this.writer.initialize(port);
-
     // Serial からのデータを Terminal に書き込む
-    this.dataSubscription = this.reader.data$.subscribe({
-      next: (data) => this.writeToTerminal(data),
-      error: (error) => this.writeToTerminal(`\r\nError: ${error}\r\n`),
+    this.dataSubscription = this.reader.read(port).subscribe({
+      next: (data: string) => this.writeToTerminal(data),
+      error: (error: unknown) => this.writeToTerminal(`\r\nError: ${error}\r\n`),
     });
-
-    // 読み取り開始
-    this.reader.startReading(port);
 
     return { success: true, message: 'Connected successfully' };
   }
@@ -84,10 +80,9 @@ export class TerminalService {
    * Serial から切断
    */
   async disconnect(): Promise<void> {
-    await this.reader.stopReading();
-    this.writer.dispose();
     this.dataSubscription?.unsubscribe();
     this.dataSubscription = null;
+    this.currentPort = null;
     await this.connection.disconnect();
   }
 
@@ -96,10 +91,19 @@ export class TerminalService {
    * @param data 送信データ
    */
   async sendToSerial(data: string): Promise<void> {
-    if (!this.writer.isReady()) {
-      throw new Error('Serial writer not ready');
+    if (!this.currentPort) {
+      throw new Error('Serial port not connected');
     }
-    await this.writer.write(data);
+    
+    this.writer.write(this.currentPort, data).subscribe({
+      next: () => {
+        // 書き込み成功
+      },
+      error: (error: unknown) => {
+        console.error('Failed to send data:', error);
+        this.writeToTerminal(`\r\nWrite Error: ${error}\r\n`);
+      }
+    });
   }
 
   /**
