@@ -2,11 +2,13 @@ import { provideHttpClient } from '@angular/common/http';
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
+import { monacoConfig } from '@libs-editor';
 import {
   WebSerialEffects,
   webSerialFeatureKey,
   webSerialReducer,
 } from '@libs-web-serial';
+import { xtermFeatureKey, xtermReducer } from '@libs-xterm';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
 import { provideStore } from '@ngrx/store';
@@ -14,8 +16,6 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideMonacoEditor } from 'ngx-monaco-editor-v2';
 import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
-import { monacoConfig } from '@dashboard/constants';
-import { xtermFeatureKey, xtermReducer } from '@dashboard/xterm-store';
 
 export const appConfig: ApplicationConfig = {
   providers: [
