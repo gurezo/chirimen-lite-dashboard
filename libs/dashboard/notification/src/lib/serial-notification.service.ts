@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { WEB_SERIAL, TOAST } from '@dashboard/constants';
+import { TOAST, WEB_SERIAL } from '@dashboard/constants';
 import { NotificationService } from './notification.service';
 
 /**
@@ -74,4 +74,3 @@ export class SerialNotificationService {
     }
   }
 }
-

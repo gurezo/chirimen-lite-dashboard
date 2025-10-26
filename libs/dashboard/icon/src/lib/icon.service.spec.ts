@@ -14,4 +14,3 @@ describe('IconService', () => {
     expect(service).toBeTruthy();
   });
 });
-

@@ -4,8 +4,8 @@ import { CanActivateFn } from '@angular/router';
 import { browserCheckGuard } from './browser-check.guard';
 
 describe('browserCheckGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => browserCheckGuard(...guardParameters));
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() => browserCheckGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -15,4 +15,3 @@ describe('browserCheckGuard', () => {
     expect(executeGuard).toBeTruthy();
   });
 });
-
