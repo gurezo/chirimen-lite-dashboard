@@ -20,6 +20,11 @@ export const WEB_SERIAL = {
   },
   RASPBERRY_PI: {
     IS_NOT_ZERO: 'Web Serial is not Raspbeyy Pi Zero',
+    UNSUPPORTED_DEVICE: 'サポートされていないデバイスです。Raspberry Pi Zero以外のデバイスは接続できません。',
+  } as const,
+  ERROR: {
+    CONNECTION_FAILED: '接続に失敗しました',
+    NO_PORT_SELECTED: 'ポートが選択されませんでした',
   } as const,
   READ: {
     ERROR: {
