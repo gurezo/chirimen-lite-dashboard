@@ -1,0 +1,36 @@
+{
+  "name": "libs-dashboard-terminal",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/dashboard/terminal/src",
+  "prefix": "choh",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/dashboard/terminal/ng-package.json",
+        "tsConfig": "libs/dashboard/terminal/tsconfig.lib.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/dashboard/terminal/tsconfig.lib.prod.json"
+        },
+        "development": {}
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/dashboard/terminal/jest.config.ts",
+        "tsConfig": "libs/dashboard/terminal/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
