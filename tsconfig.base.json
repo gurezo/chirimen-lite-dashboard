@@ -37,8 +37,7 @@
       "@libs-file-upload": ["libs/file-upload/src/index.ts"],
       "@libs-i2cdetect": ["libs/i2cdetect/src/index.ts"],
       "@libs-ui": ["libs/shared/ui/src/index.ts"],
-      "@libs-web-serial": ["libs/web-serial/src/index.ts"],
-      "@shared/*": ["apps/dashboard/src/app/shared/*"]
+      "@libs-web-serial": ["libs/web-serial/src/index.ts"]
     }
   }
 }
