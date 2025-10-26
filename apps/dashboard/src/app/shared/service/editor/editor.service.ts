@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
+import { FileContentService } from '@libs-file-manager';
 import type { editor } from 'monaco-editor';
 import { SourcePath } from '../../models/source-path.model';
 import { DirectoryService } from '../directory/directory.service';
-import { FileContentService } from '../file/file-content.service';
 
 /**
  * エディターサービス

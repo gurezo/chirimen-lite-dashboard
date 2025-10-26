@@ -1,6 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { FileListItem } from '../../models/file-list.model';
-import { FileListService } from '../file/file-list.service';
+import { FileListItem, FileListService } from '@libs-file-manager';
 import { SerialFacadeService } from '../serial/serial-facade.service';
 
 /**
