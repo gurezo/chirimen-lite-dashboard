@@ -36,9 +36,21 @@ export class WebSerialEffects {
             } else {
               return WebSerialActions.onConnectFail({
                 isConnected: false,
-                errorMessage: WEB_SERIAL.RASPBERRY_PI.IS_NOT_ZERO,
+                errorMessage: 'サポートされていないデバイスです。Raspberry Pi Zero以外のデバイスは接続できません。',
               });
             }
+          }),
+          catchError((error) => {
+            let errorMessage = '接続に失敗しました';
+            if (error.message.includes('No port selected')) {
+              errorMessage = 'ポートが選択されませんでした';
+            } else if (error.message.includes('not a Raspberry Pi Zero')) {
+              errorMessage = 'サポートされていないデバイスです。Raspberry Pi Zero以外のデバイスは接続できません。';
+            }
+            return [WebSerialActions.onConnectFail({
+              isConnected: false,
+              errorMessage: errorMessage,
+            })];
           })
         )
       )

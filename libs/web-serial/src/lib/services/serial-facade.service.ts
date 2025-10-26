@@ -70,7 +70,7 @@ export class SerialFacadeService {
       const isValid = await this.validator.isSupportedDevice(port);
       if (!isValid) {
         await this.connection.disconnect();
-        console.error('Unsupported device detected - not a Raspberry Pi Zero');
+        console.warn('Unsupported device detected - not a Raspberry Pi Zero. Connection cancelled.');
         return false;
       }
 
