@@ -49,4 +49,3 @@ describe('NotificationService', () => {
     expect(toastrSpy.warning).toHaveBeenCalledWith('Message', 'Title');
   });
 });
-
