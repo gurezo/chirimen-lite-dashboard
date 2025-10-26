@@ -24,6 +24,7 @@
       "@dashboard/icon": ["libs/dashboard/icon/src/index.ts"],
       "@dashboard/models": ["libs/dashboard/models/src/index.ts"],
       "@dashboard/notification": ["libs/dashboard/notification/src/index.ts"],
+      "@dashboard/system": ["libs/dashboard/system/src/index.ts"],
       "@dashboard/utils": ["libs/dashboard/utils/src/index.ts"],
       "@libs-chirimen-panel": ["libs/chirimen-panel/src/index.ts"],
       "@libs-dialogs": ["libs/dialogs/src/index.ts"],
