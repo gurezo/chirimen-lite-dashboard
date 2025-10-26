@@ -13,7 +13,6 @@ export class SerialNotificationService {
   notifyConnectionSuccess(): void {
     this.toastr.success('Web Serial接続が成功しました', '接続成功', {
       timeOut: 3000,
-      positionClass: 'toast-top-right',
     });
   }
 
@@ -27,7 +26,6 @@ export class SerialNotificationService {
       '接続エラー',
       {
         timeOut: 5000,
-        positionClass: 'toast-top-right',
       }
     );
   }
@@ -38,7 +36,6 @@ export class SerialNotificationService {
   notifyDisconnection(): void {
     this.toastr.info('Web Serial接続が切断されました', '切断', {
       timeOut: 3000,
-      positionClass: 'toast-top-right',
     });
   }
 
@@ -52,7 +49,6 @@ export class SerialNotificationService {
       'デバイス検出',
       {
         timeOut: 3000,
-        positionClass: 'toast-top-right',
       }
     );
   }
