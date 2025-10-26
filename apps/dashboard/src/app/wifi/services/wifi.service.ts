@@ -1,12 +1,12 @@
 import { Injectable, inject } from '@angular/core';
-import { FileContentService } from '@libs-file-manager';
-import { SerialFacadeService } from '../../shared/service/serial/serial-facade.service';
+import { FileContentService } from '@dashboard/file';
+import { SerialFacadeService } from '@dashboard/serial';
 import {
   parseWifiIfconfigOutput,
   parseWifiIwconfigOutput,
   parseWifiIwlistOutput,
 } from '../functions';
-import { WiFiInfo } from '../models/wifi.model';
+import { WiFiInfo } from '@dashboard/models';
 
 /**
  * WiFi サービス

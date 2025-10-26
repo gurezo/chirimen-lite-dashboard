@@ -14,7 +14,7 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideMonacoEditor } from 'ngx-monaco-editor-v2';
 import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
-import { monacoConfig } from './shared/constants';
+import { monacoConfig } from '@dashboard/constants';
 import { xtermFeatureKey, xtermReducer } from './shared/xterm';
 
 export const appConfig: ApplicationConfig = {
