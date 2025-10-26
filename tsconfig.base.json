@@ -15,6 +15,7 @@
     "paths": {
       "@app/*": ["apps/dashboard/src/app/*"],
       "@dashboard/auth": ["libs/dashboard/auth/src/index.ts"],
+      "@dashboard/chirimen": ["libs/dashboard/chirimen/src/index.ts"],
       "@dashboard/constants": ["libs/dashboard/constants/src/index.ts"],
       "@dashboard/directory": ["libs/dashboard/directory/src/index.ts"],
       "@dashboard/editor": ["libs/dashboard/editor/src/index.ts"],
