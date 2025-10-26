@@ -14,6 +14,7 @@
     "baseUrl": ".",
     "paths": {
       "@app/*": ["apps/dashboard/src/app/*"],
+      "@dashboard/models": ["libs/dashboard/models/src/index.ts"],
       "@libs-chirimen-panel": ["libs/chirimen-panel/src/index.ts"],
       "@libs-dialogs": ["libs/dialogs/src/index.ts"],
       "@libs-editor": ["libs/editor/src/index.ts"],
