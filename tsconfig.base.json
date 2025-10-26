@@ -16,6 +16,7 @@
       "@app/*": ["apps/dashboard/src/app/*"],
       "@dashboard/auth": ["libs/dashboard/auth/src/index.ts"],
       "@dashboard/constants": ["libs/dashboard/constants/src/index.ts"],
+      "@dashboard/directory": ["libs/dashboard/directory/src/index.ts"],
       "@dashboard/file": ["libs/dashboard/file/src/index.ts"],
       "@dashboard/guards": ["libs/dashboard/guards/src/index.ts"],
       "@dashboard/icon": ["libs/dashboard/icon/src/index.ts"],
