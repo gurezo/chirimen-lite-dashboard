@@ -1,13 +1,15 @@
 /// <reference types="@types/w3c-web-serial" />
 
 import { inject, Injectable } from '@angular/core';
+import {
+  SerialConnectionService,
+  SerialErrorHandlerService,
+  SerialReaderService,
+  SerialValidatorService,
+  SerialWriterService,
+} from '@dashboard/serial';
 import { Terminal } from '@xterm/xterm';
 import { Subscription } from 'rxjs';
-import { SerialConnectionService } from '@dashboard/serial';
-import { SerialErrorHandlerService } from '@dashboard/serial';
-import { SerialReaderService } from '@dashboard/serial';
-import { SerialValidatorService } from '@dashboard/serial';
-import { SerialWriterService } from '@dashboard/serial';
 
 /**
  * ターミナルサービス
@@ -70,7 +72,8 @@ export class TerminalService {
     // Serial からのデータを Terminal に書き込む
     this.dataSubscription = this.reader.read(port).subscribe({
       next: (data: string) => this.writeToTerminal(data),
-      error: (error: unknown) => this.writeToTerminal(`\r\nError: ${error}\r\n`),
+      error: (error: unknown) =>
+        this.writeToTerminal(`\r\nError: ${error}\r\n`),
     });
 
     return { success: true, message: 'Connected successfully' };
@@ -94,7 +97,7 @@ export class TerminalService {
     if (!this.currentPort) {
       throw new Error('Serial port not connected');
     }
-    
+
     this.writer.write(this.currentPort, data).subscribe({
       next: () => {
         // 書き込み成功
@@ -102,7 +105,7 @@ export class TerminalService {
       error: (error: unknown) => {
         console.error('Failed to send data:', error);
         this.writeToTerminal(`\r\nWrite Error: ${error}\r\n`);
-      }
+      },
     });
   }
 
@@ -150,4 +153,3 @@ export class TerminalService {
     return this.terminal;
   }
 }
-
