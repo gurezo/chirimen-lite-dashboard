@@ -15,7 +15,7 @@ import { provideMonacoEditor } from 'ngx-monaco-editor-v2';
 import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
 import { monacoConfig } from '@dashboard/constants';
-import { xtermFeatureKey, xtermReducer } from './shared/xterm';
+import { xtermFeatureKey, xtermReducer } from '@dashboard/xterm-store';
 
 export const appConfig: ApplicationConfig = {
   providers: [
