@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { DialogService } from '@libs-dialogs';
 import { ButtonComponent } from '@libs-ui';
-import { dummyWiFiInformation } from '../shared/models';
+import { dummyWiFiInformation } from '@dashboard/models';
 import { WifiInfoComponent } from './components/wifi-info/wifi-info.component';
 
 @Component({

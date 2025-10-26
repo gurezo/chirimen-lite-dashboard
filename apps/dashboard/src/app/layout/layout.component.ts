@@ -14,7 +14,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import ConsoleComponent from '../console/console.component';
-import { SerialNotificationService } from '../shared/service';
+import { SerialNotificationService } from '@dashboard/notification';
 import { BreadcombComponent } from './components/breadcomb/breadcomb.component';
 import { HeaderComponent } from './components/header/header.component';
 import { PinAssignComponent } from './components/pin-assign/pin-assign.component';
