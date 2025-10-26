@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { IconService } from '@dashboard/icon';
+import { IconService } from '@libs-shared';
 
 @Component({
   selector: 'choh-root',
