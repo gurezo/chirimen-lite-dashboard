@@ -27,4 +27,10 @@ export class WifiComponent {
   closeModal(): void {
     this.dialogService.close();
   }
+
+  onSubmit(event: Event): void {
+    event.preventDefault();
+    // TODO: Implement WiFi configuration logic
+    console.log('WiFi configuration form submitted');
+  }
 }
