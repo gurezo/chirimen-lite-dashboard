@@ -26,20 +26,17 @@ export class TerminalLoopService {
   /**
    * ターミナルループを開始
    *
+   * @param port SerialPort インスタンス
    * @param callback データ受信時のコールバック関数
    */
-  async startLoop(callback: (data: Uint8Array) => void): Promise<void> {
-    if (!this.reader.isActive()) {
-      throw new Error('Serial reader is not active');
-    }
-
+  async startLoop(port: SerialPort, callback: (data: Uint8Array) => void): Promise<void> {
     this.isRunning = true;
     this.terminalCallback = callback;
 
     try {
-      // data$ Observable を購読してデータを処理
-      const subscription = this.reader.data$.subscribe({
-        next: (data) => {
+      // read() Observable を購読してデータを処理
+      const subscription = this.reader.read(port).subscribe({
+        next: (data: string) => {
           if (!this.isRunning) {
             subscription.unsubscribe();
             return;
@@ -58,7 +55,7 @@ export class TerminalLoopService {
             this.terminalCallback(encoder.encode(data));
           }
         },
-        error: (error) => {
+        error: (error: unknown) => {
           console.error('Terminal loop error:', error);
           this.stopLoop();
         },
