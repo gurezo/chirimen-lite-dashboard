@@ -15,6 +15,7 @@
     "paths": {
       "@app/*": ["apps/dashboard/src/app/*"],
       "@dashboard/constants": ["libs/dashboard/constants/src/index.ts"],
+      "@dashboard/guards": ["libs/dashboard/guards/src/index.ts"],
       "@dashboard/models": ["libs/dashboard/models/src/index.ts"],
       "@dashboard/utils": ["libs/dashboard/utils/src/index.ts"],
       "@libs-chirimen-panel": ["libs/chirimen-panel/src/index.ts"],
