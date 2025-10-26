@@ -14,7 +14,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import ConsoleComponent from '../console/console.component';
-import { SerialNotificationService } from '@dashboard/notification';
+// import { SerialNotificationService } from '@libs-web-serial';
 import { BreadcombComponent } from './components/breadcomb/breadcomb.component';
 import { HeaderComponent } from './components/header/header.component';
 import { PinAssignComponent } from './components/pin-assign/pin-assign.component';
@@ -42,7 +42,7 @@ import { TreeComponent } from './components/tree/tree.component';
 })
 export default class LayoutComponent implements OnInit, OnDestroy {
   private store = inject(Store);
-  private serialNotification = inject(SerialNotificationService);
+  // private serialNotification = inject(SerialNotificationService);
 
   isSerialConnected = false;
 
@@ -59,7 +59,7 @@ export default class LayoutComponent implements OnInit, OnDestroy {
         .select(selectConnectionMessage)
         .pipe(filter((message) => message !== ''))
         .subscribe(() => {
-          this.serialNotification.notifyConnectionSuccess();
+          // this.serialNotification.notifyConnectionSuccess();
         })
     );
 
@@ -69,7 +69,7 @@ export default class LayoutComponent implements OnInit, OnDestroy {
         .select(selectErrorMessage)
         .pipe(filter((message) => message !== ''))
         .subscribe((errorMessage) => {
-          this.serialNotification.notifyConnectionError(errorMessage);
+          // this.serialNotification.notifyConnectionError(errorMessage);
         })
     );
   }
