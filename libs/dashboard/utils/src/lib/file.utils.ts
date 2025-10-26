@@ -186,5 +186,16 @@ export class FileUtils {
 
     return `${(bytes / Math.pow(k, i)).toFixed(2)} ${units[i]}`;
   }
+
+  /**
+   * パスをエスケープ
+   *
+   * @param path エスケープするパス
+   * @returns エスケープされたパス
+   */
+  static escapePath(path: string): string {
+    const jsonString = JSON.stringify(String(path));
+    return jsonString.replace(/^"/, `$$'`).replace(/"$/, `'`);
+  }
 }
 
