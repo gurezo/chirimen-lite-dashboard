@@ -13,4 +13,3 @@ export const xtermConsoleConfigOptions: XtermConsoleConfigOptions = {
     background: 'bkack',
   },
 };
-

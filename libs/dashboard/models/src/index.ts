@@ -7,4 +7,4 @@ export * from './lib/source-path.model';
 export * from './lib/web-serial.models';
 export * from './lib/wifi.model';
 export * from './lib/wifi.models';
-export * from './lib/xterm.models';
+// xterm.models has been moved to @libs-xterm

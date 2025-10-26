@@ -1,2 +1,2 @@
 export * from './lib/terminal-loop.service';
-export * from './lib/terminal.service';
+// TerminalService has been moved to @libs-xterm
