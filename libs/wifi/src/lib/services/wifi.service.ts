@@ -5,8 +5,8 @@ import {
   parseWifiIfconfigOutput,
   parseWifiIwconfigOutput,
   parseWifiIwlistOutput,
-} from '../functions';
-import { WiFiInfo } from '@dashboard/models';
+} from '../functions/wifi-parser';
+import { WiFiInfo } from '../models/wifi.model';
 
 /**
  * WiFi サービス
