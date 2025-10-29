@@ -5,6 +5,5 @@ export * from './lib/file.info.models';
 export * from './lib/file.manager.message.models';
 export * from './lib/source-path.model';
 export * from './lib/web-serial.models';
-export * from './lib/wifi.model';
-export * from './lib/wifi.models';
+// wifi.model and wifi.models have been moved to @libs-wifi
 // xterm.models has been moved to @libs-xterm

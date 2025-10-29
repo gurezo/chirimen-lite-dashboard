@@ -39,6 +39,7 @@
       "@libs-shared": ["libs/shared/ui/src/index.ts"],
       "@libs-ui": ["libs/shared/ui/src/index.ts"],
       "@libs-web-serial": ["libs/web-serial/src/index.ts"],
+      "@libs-wifi": ["libs/wifi/src/index.ts"],
       "@libs-xterm": ["libs/xterm/src/index.ts"]
     }
   }

@@ -6,10 +6,10 @@ import { ExampleComponent } from '@libs-example';
 import { FileUploadComponent } from '@libs-file-upload';
 import { I2cdetectComponent } from '@libs-i2cdetect';
 import { SerialFacadeService } from '@libs-web-serial';
+import { WifiComponent } from '@libs-wifi';
 import { xtermConsoleConfigOptions } from '@libs-xterm';
 import { Store } from '@ngrx/store';
 import { Terminal } from '@xterm/xterm';
-import { WifiComponent } from '../wifi/wifi.component';
 import { ConsoleToolBarComponent } from './components/console-tool-bar/console-tool-bar.component';
 
 @Component({
