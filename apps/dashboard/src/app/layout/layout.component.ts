@@ -3,7 +3,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
-import ConsoleComponent from '@libs-console';
+import { ConsoleComponent } from '@libs-console';
 import { EditorComponent } from '@libs-editor';
 import { ButtonComponent } from '@libs-ui';
 import {
