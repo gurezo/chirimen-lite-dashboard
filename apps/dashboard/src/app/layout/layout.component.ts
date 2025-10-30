@@ -3,6 +3,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
+import ConsoleComponent from '@libs-console';
 import { EditorComponent } from '@libs-editor';
 import { ButtonComponent } from '@libs-ui';
 import {
@@ -14,7 +15,6 @@ import {
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import ConsoleComponent from '../console/console.component';
 import { BreadcombComponent } from './components/breadcomb/breadcomb.component';
 import { HeaderComponent } from './components/header/header.component';
 import { PinAssignComponent } from './components/pin-assign/pin-assign.component';
