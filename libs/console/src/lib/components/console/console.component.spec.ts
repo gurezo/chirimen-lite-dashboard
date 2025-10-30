@@ -20,3 +20,4 @@ describe('ConsoleComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+

@@ -19,3 +19,4 @@ describe('ConsoleToolBarComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+

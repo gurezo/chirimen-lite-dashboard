@@ -1,8 +1,8 @@
 export default {
-  displayName: 'chirimen-panel',
+  displayName: 'console',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/libs/chirimen-panel',
+  coverageDirectory: '../../coverage/libs/console',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
@@ -19,7 +19,4 @@ export default {
     'jest-preset-angular/build/serializers/html-comment',
   ],
 };
-
-
-
 

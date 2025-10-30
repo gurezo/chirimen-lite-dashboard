@@ -16,3 +16,4 @@ export class ConsoleToolBarComponent {
   @Output() eventI2CDetect = new EventEmitter<void>();
   @Output() eventFileUpload = new EventEmitter<void>();
 }
+
