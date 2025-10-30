@@ -10,7 +10,7 @@ import { WifiComponent } from '@libs-wifi';
 import { xtermConsoleConfigOptions } from '@libs-xterm';
 import { Store } from '@ngrx/store';
 import { Terminal } from '@xterm/xterm';
-import { ConsoleToolBarComponent } from '../console-tool-bar/console-tool-bar.component';
+import { ConsoleToolBarComponent } from './components/console-tool-bar/console-tool-bar.component';
 
 @Component({
   selector: 'choh-console',
@@ -93,7 +93,6 @@ export default class ConsoleComponent implements AfterViewInit {
     this.xterminal.reset();
     this.xterminal.writeln('$ ');
 
-    // キー入力処理（XtermService から移植）
     this.xterminal.onKey((e) => this.onKey(e));
   }
 
@@ -110,4 +109,5 @@ export default class ConsoleComponent implements AfterViewInit {
     }
   }
 }
+
 
