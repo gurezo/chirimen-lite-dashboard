@@ -1,12 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { provideRouter } from '@angular/router';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  provideRouter,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
 
 import { unsupportedBrowserGuard } from './unsupported-browser.guard';
 
 describe('unsupportedBrowserGuard', () => {
-  const executeGuard = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) =>
+  const executeGuard = (
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ) =>
     TestBed.runInInjectionContext(() => unsupportedBrowserGuard(route, state));
 
   let router: Router;
@@ -45,7 +51,8 @@ describe('unsupportedBrowserGuard', () => {
 
     it('Chromeの場合はホームページへリダイレクトしてfalseを返す', () => {
       Object.defineProperty(window.navigator, 'userAgent', {
-        value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        value:
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         writable: true,
         configurable: true,
       });
@@ -58,7 +65,8 @@ describe('unsupportedBrowserGuard', () => {
 
     it('Edgeの場合はホームページへリダイレクトしてfalseを返す', () => {
       Object.defineProperty(window.navigator, 'userAgent', {
-        value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
+        value:
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
         writable: true,
         configurable: true,
       });
@@ -71,7 +79,8 @@ describe('unsupportedBrowserGuard', () => {
 
     it('Operaの場合はホームページへリダイレクトしてfalseを返す', () => {
       Object.defineProperty(window.navigator, 'userAgent', {
-        value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 OPR/106.0.0.0',
+        value:
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 OPR/106.0.0.0',
         writable: true,
         configurable: true,
       });
@@ -96,7 +105,8 @@ describe('unsupportedBrowserGuard', () => {
 
     it('Firefoxの場合はtrueを返す', () => {
       Object.defineProperty(window.navigator, 'userAgent', {
-        value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0',
+        value:
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0',
         writable: true,
         configurable: true,
       });
@@ -109,7 +119,8 @@ describe('unsupportedBrowserGuard', () => {
 
     it('Safariの場合はtrueを返す', () => {
       Object.defineProperty(window.navigator, 'userAgent', {
-        value: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
+        value:
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
         writable: true,
         configurable: true,
       });
@@ -121,4 +132,3 @@ describe('unsupportedBrowserGuard', () => {
     });
   });
 });
-
