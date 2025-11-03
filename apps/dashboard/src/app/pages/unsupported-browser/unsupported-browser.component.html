@@ -6,7 +6,8 @@
     Chrome, Edge, Opera などの最新のブラウザを使用してください。
   </h3>
 
-  <a href="https://caniuse.com/web-serial" class="w-full max-w-4xl">
+  @defer (on immediate) {
+  <a href="https://caniuse.com/web-serial" class="w-full max-w-4xl fade-in">
     <div class="w-full aspect-[3/2]">
       <iframe
         class="border-none w-full h-full overflow-auto"
@@ -14,4 +15,9 @@
       ></iframe>
     </div>
   </a>
+  } @loading (minimum 300ms) {
+  <div class="flex justify-center items-center w-full max-w-4xl aspect-[3/2]">
+    <mat-progress-spinner mode="indeterminate" diameter="80" />
+  </div>
+  }
 </div>
