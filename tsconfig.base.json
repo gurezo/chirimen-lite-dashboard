@@ -24,7 +24,6 @@
       "@dashboard/system": ["libs/dashboard/system/src/index.ts"],
       "@dashboard/terminal": ["libs/dashboard/terminal/src/index.ts"],
       "@dashboard/utils": ["libs/dashboard/utils/src/index.ts"],
-      "@dashboard/xterm-store": ["libs/dashboard/xterm-store/src/index.ts"],
       "@libs-chirimen-panel": ["libs/chirimen-panel/src/index.ts"],
       "@libs-dialogs": ["libs/dialogs/src/index.ts"],
       "@libs-editor": ["libs/editor/src/index.ts"],
