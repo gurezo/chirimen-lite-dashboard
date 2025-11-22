@@ -20,7 +20,6 @@
       "@dashboard/file": ["libs/dashboard/file/src/index.ts"],
       "@dashboard/guards": ["libs/dashboard/guards/src/index.ts"],
       "@dashboard/models": ["libs/dashboard/models/src/index.ts"],
-      "@dashboard/notification": ["libs/dashboard/notification/src/index.ts"],
       "@dashboard/serial": ["libs/dashboard/serial/src/index.ts"],
       "@dashboard/system": ["libs/dashboard/system/src/index.ts"],
       "@dashboard/terminal": ["libs/dashboard/terminal/src/index.ts"],
