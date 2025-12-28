@@ -2,15 +2,9 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/spec",
-    "types": [
-      "vitest/globals",
-      "@testing-library/jest-dom",
-      "node"
-    ],
-    "moduleResolution": "bundler"
+    "types": ["vitest/globals", "@testing-library/jest-dom", "node"],
+    "moduleResolution": "bundler",
+    "isolatedModules": true
   },
-  "include": [
-    "src/**/*.spec.ts",
-    "src/**/*.d.ts"
-  ]
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }
