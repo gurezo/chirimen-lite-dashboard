@@ -91,11 +91,11 @@
       "executor": "@angular-devkit/build-angular:extract-i18n"
     },
     "test": {
-      "executor": "@angular-builders/jest:run",
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "polyfills": ["zone.js", "zone.js/testing"],
-        "tsConfig": "apps/dashboard/tsconfig.spec.json",
-        "configPath": "apps/dashboard/jest.config.ts"
+        "command": "vitest run --config apps/dashboard/vitest.config.ts",
+        "cwd": "{workspaceRoot}"
       }
     }
   }
