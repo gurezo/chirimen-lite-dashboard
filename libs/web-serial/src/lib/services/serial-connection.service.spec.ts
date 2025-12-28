@@ -1,15 +1,16 @@
 import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 import { SerialConnectionService } from './serial-connection.service';
 import { SerialErrorHandlerService } from './serial-error-handler.service';
 
 describe('SerialConnectionService', () => {
   let service: SerialConnectionService;
-  let errorHandlerSpy: jasmine.SpyObj<SerialErrorHandlerService>;
+  let errorHandlerSpy: ReturnType<typeof vi.mocked<SerialErrorHandlerService>>;
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('SerialErrorHandlerService', [
-      'handleConnectionError',
-    ]);
+    const spy = {
+      handleConnectionError: vi.fn(),
+    };
 
     TestBed.configureTestingModule({
       providers: [
@@ -19,9 +20,7 @@ describe('SerialConnectionService', () => {
     });
 
     service = TestBed.inject(SerialConnectionService);
-    errorHandlerSpy = TestBed.inject(
-      SerialErrorHandlerService
-    ) as jasmine.SpyObj<SerialErrorHandlerService>;
+    errorHandlerSpy = vi.mocked(TestBed.inject(SerialErrorHandlerService));
   });
 
   it('should be created', () => {

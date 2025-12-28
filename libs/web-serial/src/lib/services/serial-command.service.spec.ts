@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 import {
   CommandExecutionConfig,
   SerialCommandService,
@@ -23,7 +24,7 @@ describe('SerialCommandService', () => {
         timeout: 1000,
       };
 
-      const writeFunction = jest.fn().mockResolvedValue(undefined);
+      const writeFunction = vi.fn().mockResolvedValue(undefined);
       const commandPromise = service.executeCommand(
         'ls',
         config,
@@ -46,7 +47,7 @@ describe('SerialCommandService', () => {
         timeout: 100,
       };
 
-      const writeFunction = jest.fn().mockResolvedValue(undefined);
+      const writeFunction = vi.fn().mockResolvedValue(undefined);
 
       await expect(
         service.executeCommand('ls', config, writeFunction)
@@ -59,7 +60,7 @@ describe('SerialCommandService', () => {
         timeout: 1000,
       };
 
-      const writeFunction = jest
+      const writeFunction = vi
         .fn()
         .mockRejectedValue(new Error('Write failed'));
 
@@ -76,7 +77,7 @@ describe('SerialCommandService', () => {
         timeout: 1000,
       };
 
-      const writeFunction = jest.fn().mockResolvedValue(undefined);
+      const writeFunction = vi.fn().mockResolvedValue(undefined);
       service.executeCommand('ls', config, writeFunction);
 
       const result = service.processInput('pi@raspberrypi:');
@@ -96,7 +97,7 @@ describe('SerialCommandService', () => {
         timeout: 1000,
       };
 
-      const writeFunction = jest.fn().mockResolvedValue(undefined);
+      const writeFunction = vi.fn().mockResolvedValue(undefined);
       const commandPromise = service.executeCommand(
         'ls',
         config,
@@ -116,7 +117,7 @@ describe('SerialCommandService', () => {
         timeout: 1000,
       };
 
-      const writeFunction = jest.fn().mockResolvedValue(undefined);
+      const writeFunction = vi.fn().mockResolvedValue(undefined);
       const command1 = service.executeCommand('ls', config, writeFunction);
       const command2 = service.executeCommand('pwd', config, writeFunction);
 
@@ -135,7 +136,7 @@ describe('SerialCommandService', () => {
         timeout: 1000,
       };
 
-      const writeFunction = jest.fn().mockResolvedValue(undefined);
+      const writeFunction = vi.fn().mockResolvedValue(undefined);
 
       expect(service.getPendingCommandCount()).toBe(0);
 

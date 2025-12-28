@@ -1,15 +1,16 @@
 import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 import { SerialErrorHandlerService } from './serial-error-handler.service';
 import { SerialWriterService } from './serial-writer.service';
 
 describe('SerialWriterService', () => {
   let service: SerialWriterService;
-  let errorHandlerSpy: jasmine.SpyObj<SerialErrorHandlerService>;
+  let errorHandlerSpy: ReturnType<typeof vi.mocked<SerialErrorHandlerService>>;
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('SerialErrorHandlerService', [
-      'handleWriteError',
-    ]);
+    const spy = {
+      handleWriteError: vi.fn(),
+    };
 
     TestBed.configureTestingModule({
       providers: [
@@ -19,9 +20,7 @@ describe('SerialWriterService', () => {
     });
 
     service = TestBed.inject(SerialWriterService);
-    errorHandlerSpy = TestBed.inject(
-      SerialErrorHandlerService
-    ) as jasmine.SpyObj<SerialErrorHandlerService>;
+    errorHandlerSpy = vi.mocked(TestBed.inject(SerialErrorHandlerService));
   });
 
   it('should be created', () => {
@@ -33,7 +32,7 @@ describe('SerialWriterService', () => {
   });
 
   it('should throw error when writing without initialization', async () => {
-    await expectAsync(service.write('test')).toBeRejectedWithError(
+    await expect(service.write('test')).rejects.toThrow(
       'SerialWriter not initialized. Call initialize() first.'
     );
   });

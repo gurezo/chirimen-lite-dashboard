@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 import { SerialCommandService } from './serial-command.service';
 import { SerialConnectionService } from './serial-connection.service';
 import { SerialErrorHandlerService } from './serial-error-handler.service';
@@ -7,19 +8,19 @@ import { SerialReaderService } from './serial-reader.service';
 import { SerialValidatorService } from './serial-validator.service';
 import { SerialWriterService } from './serial-writer.service';
 
-jest.mock('./serial-connection.service');
-jest.mock('./serial-reader.service');
-jest.mock('./serial-writer.service');
-jest.mock('./serial-command.service');
-jest.mock('./serial-error-handler.service');
-jest.mock('./serial-validator.service');
+vi.mock('./serial-connection.service');
+vi.mock('./serial-reader.service');
+vi.mock('./serial-writer.service');
+vi.mock('./serial-command.service');
+vi.mock('./serial-error-handler.service');
+vi.mock('./serial-validator.service');
 
 describe('SerialFacadeService', () => {
   let service: SerialFacadeService;
-  let mockConnection: jest.Mocked<SerialConnectionService>;
-  let mockReader: jest.Mocked<SerialReaderService>;
-  let mockWriter: jest.Mocked<SerialWriterService>;
-  let mockCommand: jest.Mocked<SerialCommandService>;
+  let mockConnection: ReturnType<typeof vi.mocked<SerialConnectionService>>;
+  let mockReader: ReturnType<typeof vi.mocked<SerialReaderService>>;
+  let mockWriter: ReturnType<typeof vi.mocked<SerialWriterService>>;
+  let mockCommand: ReturnType<typeof vi.mocked<SerialCommandService>>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -35,18 +36,10 @@ describe('SerialFacadeService', () => {
     });
 
     service = TestBed.inject(SerialFacadeService);
-    mockConnection = TestBed.inject(
-      SerialConnectionService
-    ) as jest.Mocked<SerialConnectionService>;
-    mockReader = TestBed.inject(
-      SerialReaderService
-    ) as jest.Mocked<SerialReaderService>;
-    mockWriter = TestBed.inject(
-      SerialWriterService
-    ) as jest.Mocked<SerialWriterService>;
-    mockCommand = TestBed.inject(
-      SerialCommandService
-    ) as jest.Mocked<SerialCommandService>;
+    mockConnection = vi.mocked(TestBed.inject(SerialConnectionService));
+    mockReader = vi.mocked(TestBed.inject(SerialReaderService));
+    mockWriter = vi.mocked(TestBed.inject(SerialWriterService));
+    mockCommand = vi.mocked(TestBed.inject(SerialCommandService));
   });
 
   it('should be created', () => {
@@ -56,9 +49,9 @@ describe('SerialFacadeService', () => {
   describe('connect', () => {
     it('should connect successfully', async () => {
       const mockPort = {} as SerialPort;
-      mockConnection.connect = jest.fn().mockResolvedValue({ port: mockPort });
-      mockWriter.initialize = jest.fn();
-      mockReader.startReading = jest.fn().mockResolvedValue(undefined);
+      mockConnection.connect = vi.fn().mockResolvedValue({ port: mockPort });
+      mockWriter.initialize = vi.fn();
+      mockReader.startReading = vi.fn().mockResolvedValue(undefined);
 
       const result = await service.connect(115200);
 
@@ -69,7 +62,7 @@ describe('SerialFacadeService', () => {
     });
 
     it('should return false on connection error', async () => {
-      mockConnection.connect = jest
+      mockConnection.connect = vi
         .fn()
         .mockResolvedValue({ error: 'Connection failed' });
 
@@ -81,10 +74,10 @@ describe('SerialFacadeService', () => {
 
   describe('disconnect', () => {
     it('should disconnect properly', async () => {
-      mockReader.stopReading = jest.fn().mockResolvedValue(undefined);
-      mockWriter.dispose = jest.fn();
-      mockCommand.cancelAllCommands = jest.fn();
-      mockConnection.disconnect = jest.fn().mockResolvedValue(undefined);
+      mockReader.stopReading = vi.fn().mockResolvedValue(undefined);
+      mockWriter.dispose = vi.fn();
+      mockCommand.cancelAllCommands = vi.fn();
+      mockConnection.disconnect = vi.fn().mockResolvedValue(undefined);
 
       await service.disconnect();
 
@@ -97,7 +90,7 @@ describe('SerialFacadeService', () => {
 
   describe('write', () => {
     it('should write data', async () => {
-      mockWriter.writeSync = jest.fn().mockResolvedValue(undefined);
+      mockWriter.writeSync = vi.fn().mockResolvedValue(undefined);
 
       await service.write('test data');
 
@@ -108,7 +101,7 @@ describe('SerialFacadeService', () => {
   describe('executeCommand', () => {
     it('should execute command', async () => {
       const expectedResult = 'command output';
-      mockCommand.executeCommand = jest.fn().mockResolvedValue(expectedResult);
+      mockCommand.executeCommand = vi.fn().mockResolvedValue(expectedResult);
 
       const result = await service.executeCommand(
         'ls',
@@ -123,7 +116,7 @@ describe('SerialFacadeService', () => {
 
   describe('isConnected', () => {
     it('should return connection status', () => {
-      mockConnection.isConnected = jest.fn().mockReturnValue(true);
+      mockConnection.isConnected = vi.fn().mockReturnValue(true);
 
       const result = service.isConnected();
 
