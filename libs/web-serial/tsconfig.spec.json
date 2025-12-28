@@ -2,13 +2,11 @@
   "extends": "./tsconfig.lib.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "module": "commonjs",
+    "module": "preserve",
     "target": "es2015",
-    "types": ["vitest/globals", "@testing-library/jest-dom", "node"]
+    "types": ["vitest/globals", "@testing-library/jest-dom", "node"],
+    "moduleResolution": "bundler",
+    "isolatedModules": true
   },
-  "include": [
-    "src/**/*.spec.ts",
-    "src/**/*.test.ts",
-    "src/test-setup.ts"
-  ]
+  "include": ["src/**/*.spec.ts", "src/**/*.test.ts", "src/test-setup.ts"]
 }
