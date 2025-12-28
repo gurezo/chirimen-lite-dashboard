@@ -5,6 +5,7 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
+import { vi } from 'vitest';
 
 import { unsupportedBrowserGuard } from './unsupported-browser.guard';
 
@@ -16,7 +17,7 @@ describe('unsupportedBrowserGuard', () => {
     TestBed.runInInjectionContext(() => unsupportedBrowserGuard(route, state));
 
   let router: Router;
-  let navigateSpy: jest.SpyInstance;
+  let navigateSpy: ReturnType<typeof vi.spyOn>;
   let route: ActivatedRouteSnapshot;
   let state: RouterStateSnapshot;
 
@@ -25,7 +26,7 @@ describe('unsupportedBrowserGuard', () => {
       providers: [provideRouter([])],
     });
     router = TestBed.inject(Router);
-    navigateSpy = jest.spyOn(router, 'navigate');
+    navigateSpy = vi.spyOn(router, 'navigate');
     route = {} as ActivatedRouteSnapshot;
     state = {} as RouterStateSnapshot;
   });
