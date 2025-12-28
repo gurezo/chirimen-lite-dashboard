@@ -12,7 +12,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      reportsDirectory: resolve(__dirname, '../../../coverage/libs/dashboard/terminal'),
+      reportsDirectory: resolve(__dirname, '../../coverage/libs/xterm'),
     },
     include: [resolve(__dirname, './src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}')],
   },
