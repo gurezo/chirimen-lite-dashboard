@@ -22,11 +22,11 @@
       "defaultConfiguration": "production"
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/editor/jest.config.ts",
-        "tsConfig": "libs/editor/tsconfig.spec.json"
+        "command": "vitest run --config libs/editor/vitest.config.ts",
+        "cwd": "{workspaceRoot}"
       }
     },
     "lint": {
