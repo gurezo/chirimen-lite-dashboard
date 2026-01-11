@@ -1,9 +1,8 @@
 /// <reference types="@types/w3c-web-serial" />
 
 import { inject, Injectable } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
 import { createSerialClient, SerialClient } from '@gurezo/web-serial-rxjs';
-import { RASPBERRY_PI_ZERO_INFO } from '../constants/web.serial.const';
+import { firstValueFrom } from 'rxjs';
 import { SerialErrorHandlerService } from './serial-error-handler.service';
 
 /**
@@ -26,10 +25,7 @@ export class SerialConnectionService {
     baudRate = 115200
   ): Promise<{ port: SerialPort } | { error: string }> {
     try {
-      this.client = createSerialClient({
-        baudRate,
-        filters: [RASPBERRY_PI_ZERO_INFO],
-      });
+      this.client = createSerialClient({ baudRate });
 
       await firstValueFrom(this.client.connect());
 
