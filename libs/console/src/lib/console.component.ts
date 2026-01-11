@@ -48,7 +48,9 @@ export default class ConsoleComponent implements AfterViewInit {
     });
   }
 
-  createFile() {}
+  createFile(): void {
+    // TODO: Implement create file logic
+  }
 
   openExampleFrameDialog() {
     this.dialogService.open(ExampleComponent, {
@@ -109,5 +111,3 @@ export default class ConsoleComponent implements AfterViewInit {
     }
   }
 }
-
-

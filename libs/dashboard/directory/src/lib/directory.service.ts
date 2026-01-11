@@ -109,7 +109,7 @@ export class DirectoryService {
    */
   async createDirectory(
     dirName: string,
-    recursive: boolean = false
+    recursive = false
   ): Promise<void> {
     try {
       const flag = recursive ? '-p ' : '';
@@ -133,7 +133,7 @@ export class DirectoryService {
    */
   async removeDirectory(
     dirName: string,
-    recursive: boolean = false
+    recursive = false
   ): Promise<void> {
     try {
       const command = recursive
@@ -244,4 +244,3 @@ export class DirectoryService {
     return trimmed;
   }
 }
-

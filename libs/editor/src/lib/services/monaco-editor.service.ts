@@ -4,12 +4,11 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class MonacoEditorService {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private editor: any;
   private editedFlag = false;
   private saveDisabled = false;
   private sourcePath: { fileName?: string; dir?: string } = {};
-
-  constructor() {}
 
   /**
    * ngx-monaco-editor-v2 を使った処理を実装する
@@ -23,6 +22,7 @@ export class MonacoEditorService {
   // TODO: ファイルパスのパンくず
 
   initMonacoEditor(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     monaco: any,
     container: HTMLElement,
     jsSrc: string,

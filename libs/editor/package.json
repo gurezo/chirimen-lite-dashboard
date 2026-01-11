@@ -2,8 +2,14 @@
   "name": "@libs-editor",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": "^20.3.0",
-    "@angular/core": "^20.3.0"
+    "@angular/core": "21.0.6",
+    "@angular/material": "21.0.5",
+    "ngx-monaco-editor-v2": "^18.1.0",
+    "@angular/forms": "21.0.6",
+    "@dashboard/directory": "0.0.1",
+    "@dashboard/file": "0.0.1",
+    "@dashboard/models": "0.0.1",
+    "monaco-editor": "^0.50.0"
   },
   "sideEffects": false
 }

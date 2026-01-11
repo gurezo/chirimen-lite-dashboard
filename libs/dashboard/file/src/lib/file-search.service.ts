@@ -93,7 +93,7 @@ export class FileSearchService {
    * @param lineCount 取得する行数（デフォルト: 10）
    * @returns 行の配列
    */
-  async getFileHead(path: string, lineCount: number = 10): Promise<string[]> {
+  async getFileHead(path: string, lineCount = 10): Promise<string[]> {
     try {
       const result = await this.serial.executeCommand(
         `head -n ${lineCount} ${FileUtils.escapePath(path)}`,
@@ -116,7 +116,7 @@ export class FileSearchService {
    * @param lineCount 取得する行数（デフォルト: 10）
    * @returns 行の配列
    */
-  async getFileTail(path: string, lineCount: number = 10): Promise<string[]> {
+  async getFileTail(path: string, lineCount = 10): Promise<string[]> {
     try {
       const result = await this.serial.executeCommand(
         `tail -n ${lineCount} ${FileUtils.escapePath(path)}`,

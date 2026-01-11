@@ -30,7 +30,7 @@ network={
    * @param password パスワード
    * @returns WiFi 設定スクリプト
    */
-  static generateLegacyWifiSetupScript(ssid: string, password: string): string {
+  static generateLegacyWifiSetupScript(_ssid: string, _password: string): string {
     return `#!/bin/sh
 set -eu
 
@@ -93,10 +93,9 @@ fi`;
    * @returns ifconfig コマンド文字列
    */
   static generateInterfaceCommand(
-    interfaceName: string = 'wlan0',
+    interfaceName = 'wlan0',
     action: 'up' | 'down' = 'up'
   ): string {
     return `sudo ifconfig ${interfaceName} ${action}`;
   }
 }
-

@@ -90,7 +90,7 @@ export class LoginService {
   /**
    * ログイン状態をチェック
    */
-  private async checkLoginStatus(config: LoginConfig): Promise<boolean> {
+  private async checkLoginStatus(_config: LoginConfig): Promise<boolean> {
     try {
       const response = await this.waitForPattern('\n', ':', 1000);
       return response.includes('pi@');
@@ -158,7 +158,7 @@ export class LoginService {
   private async waitForPattern(
     writeData: string,
     pattern: string,
-    timeoutMs: number = 30000
+    timeoutMs = 30000
   ): Promise<string> {
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
@@ -199,4 +199,3 @@ export class LoginService {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
-
