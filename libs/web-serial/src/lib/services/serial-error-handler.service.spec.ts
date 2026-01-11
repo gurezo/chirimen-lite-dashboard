@@ -1,5 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { WEB_SERIAL } from '../../constants';
+import {
+  SerialError,
+  SerialErrorCode,
+} from '@gurezo/web-serial-rxjs';
 import { SerialErrorHandlerService } from './serial-error-handler.service';
 
 describe('SerialErrorHandlerService', () => {
@@ -17,16 +20,28 @@ describe('SerialErrorHandlerService', () => {
   });
 
   describe('handleConnectionError', () => {
-    it('should handle DOMException with NO_SELECTED message', () => {
-      const error = new DOMException(WEB_SERIAL.PORT.ERROR.NO_SELECTED);
+    it('should handle SerialError with NO_PORT_SELECTED code', () => {
+      const error = new SerialError(SerialErrorCode.NO_PORT_SELECTED);
       const result = service.handleConnectionError(error);
-      expect(result).toBe(WEB_SERIAL.PORT.ERROR.NO_SELECTED);
+      expect(result).toContain('No port selected');
+    });
+
+    it('should handle SerialError with PORT_ALREADY_OPEN code', () => {
+      const error = new SerialError(SerialErrorCode.PORT_ALREADY_OPEN);
+      const result = service.handleConnectionError(error);
+      expect(result).toContain('already open');
+    });
+
+    it('should handle DOMException with NO_SELECTED message', () => {
+      const error = new DOMException("Failed to execute 'requestPort' on 'Serial': No port selected by the user.");
+      const result = service.handleConnectionError(error);
+      expect(result).toContain('No port selected');
     });
 
     it('should handle DOMException with PORT_ALREADY_OPEN message', () => {
-      const error = new DOMException(WEB_SERIAL.PORT.ERROR.PORT_ALREADY_OPEN);
+      const error = new DOMException("Failed to execute 'open' on 'SerialPort': The port is already open.");
       const result = service.handleConnectionError(error);
-      expect(result).toBe(WEB_SERIAL.PORT.ERROR.PORT_ALREADY_OPEN);
+      expect(result).toContain('already open');
     });
 
     it('should handle generic Error', () => {
@@ -38,14 +53,14 @@ describe('SerialErrorHandlerService', () => {
     it('should handle unknown error type', () => {
       const error = 'string error';
       const result = service.handleConnectionError(error);
-      expect(result).toBe(WEB_SERIAL.PORT.ERROR.UNKNOWN);
+      expect(result).toBe('Unknown error');
     });
   });
 
   describe('getRaspberryPiZeroError', () => {
     it('should return Raspberry Pi Zero error message', () => {
       const result = service.getRaspberryPiZeroError();
-      expect(result).toBe(WEB_SERIAL.RASPBERRY_PI.IS_NOT_ZERO);
+      expect(result).toBe('Web Serial is not Raspberry Pi Zero');
     });
   });
 
