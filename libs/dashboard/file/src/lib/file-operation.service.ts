@@ -60,7 +60,7 @@ export class FileOperationService {
   async moveFile(
     fromPath: string,
     toPath: string,
-    useSudo: boolean = false
+    useSudo = false
   ): Promise<FileOperationResult> {
     try {
       const sudoPrefix = useSudo ? 'sudo ' : '';
@@ -92,7 +92,7 @@ export class FileOperationService {
   async copyFile(
     fromPath: string,
     toPath: string,
-    useSudo: boolean = false
+    useSudo = false
   ): Promise<FileOperationResult> {
     try {
       const sudoPrefix = useSudo ? 'sudo ' : '';
@@ -270,7 +270,7 @@ export class FileOperationService {
    */
   async createDirectory(
     path: string,
-    recursive: boolean = false
+    recursive = false
   ): Promise<FileOperationResult> {
     try {
       const flag = recursive ? '-p ' : '';
@@ -300,7 +300,7 @@ export class FileOperationService {
    */
   async removeDirectory(
     path: string,
-    recursive: boolean = false
+    recursive = false
   ): Promise<FileOperationResult> {
     try {
       const command = recursive

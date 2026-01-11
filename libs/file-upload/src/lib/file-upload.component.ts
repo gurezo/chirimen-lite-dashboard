@@ -17,8 +17,9 @@ export class FileUploadComponent {
     this.uploadForm = this.fb.group({ file: [null] });
   }
 
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
+  onFileSelected(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const file = target.files?.[0];
     if (file) {
       this.uploadForm.patchValue({ file });
     }

@@ -2,8 +2,12 @@
   "name": "@libs-example",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": "^20.3.0",
-    "@angular/core": "^20.3.0"
+    "@angular/common": "21.0.6",
+    "@angular/core": "21.0.6",
+    "@angular/material": "21.0.5",
+    "@libs-dialogs": "0.0.1",
+    "@libs-ui": "0.0.1",
+    "rxjs": "~7.8.1"
   },
   "sideEffects": false
 }

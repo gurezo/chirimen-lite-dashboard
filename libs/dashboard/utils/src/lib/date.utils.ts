@@ -45,7 +45,7 @@ export class DateUtils {
    * @param timezone タイムゾーン（デフォルト: 'Asia/Tokyo'）
    * @returns timedatectl コマンド文字列
    */
-  static generateTimezoneCommand(timezone: string = 'Asia/Tokyo'): string {
+  static generateTimezoneCommand(timezone = 'Asia/Tokyo'): string {
     return `sudo timedatectl set-timezone ${timezone}`;
   }
 

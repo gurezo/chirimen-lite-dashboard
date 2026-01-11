@@ -15,15 +15,15 @@ export type FileType =
   | 'named pipe'
   | 'symbolic link';
 
-export namespace FileType {
-  export const REGULAR_FILE: FileType = 'regular file';
-  export const DIRECTORY: FileType = 'directory';
-  export const CHARACTER_DEVICE_FILE: FileType = 'character device file';
-  export const BLOCK_DEVICE_FILE: FileType = 'block device file';
-  export const LOCAL_SOCKET_FILE: FileType = 'local socket file';
-  export const NAMED_PIPE: FileType = 'named pipe';
-  export const SYMBOLIC_LINK: FileType = 'symbolic link';
-}
+export const FileTypeConstants = {
+  REGULAR_FILE: 'regular file' as FileType,
+  DIRECTORY: 'directory' as FileType,
+  CHARACTER_DEVICE_FILE: 'character device file' as FileType,
+  BLOCK_DEVICE_FILE: 'block device file' as FileType,
+  LOCAL_SOCKET_FILE: 'local socket file' as FileType,
+  NAMED_PIPE: 'named pipe' as FileType,
+  SYMBOLIC_LINK: 'symbolic link' as FileType,
+} as const;
 
 export interface FileTreeNode {
   /** ファイル名 */
@@ -37,4 +37,3 @@ export interface FileTreeNode {
   /** 展開されているかどうか（UI状態） */
   isExpanded: boolean;
 }
-

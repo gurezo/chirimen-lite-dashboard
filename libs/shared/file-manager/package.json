@@ -2,8 +2,8 @@
   "name": "@libs-file-manager",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": "^20.3.0",
-    "@angular/core": "^20.3.0"
+    "@angular/core": "21.0.6",
+    "@libs-web-serial": "0.0.1"
   },
   "sideEffects": false
 }

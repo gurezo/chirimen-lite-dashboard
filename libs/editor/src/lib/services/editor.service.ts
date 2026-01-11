@@ -29,21 +29,20 @@ export class EditorService {
    * @param options エディターオプション
    */
   initializeEditor(
-    container: HTMLElement,
-    options?: editor.IStandaloneEditorConstructionOptions
+    _container: HTMLElement,
+    _options?: editor.IStandaloneEditorConstructionOptions
   ): void {
-    const defaultOptions: editor.IStandaloneEditorConstructionOptions = {
-      value: '',
-      language: 'javascript',
-      theme: 'vs-dark',
-      automaticLayout: true,
-      minimap: { enabled: false },
-      fontSize: 14,
-      ...options,
-    };
-
     // Note: Monaco Editor は ngx-monaco-editor-v2 経由で使用されるため、
     // 直接 create() を呼ぶのではなく、コンポーネント側で初期化される
+    // const defaultOptions: editor.IStandaloneEditorConstructionOptions = {
+    //   value: '',
+    //   language: 'javascript',
+    //   theme: 'vs-dark',
+    //   automaticLayout: true,
+    //   minimap: { enabled: false },
+    //   fontSize: 14,
+    //   ...options,
+    // };
     // this.editor = editor.create(container, defaultOptions);
 
     // エディターがセットされている場合のみ変更を監視
@@ -98,7 +97,7 @@ export class EditorService {
    * @param forceOption 強制保存フラグ
    * @returns 保存したテキスト、保存しない場合は null
    */
-  async saveSource(forceOption: boolean = false): Promise<string | null> {
+  async saveSource(forceOption = false): Promise<string | null> {
     try {
       if (!this.editor) {
         throw new Error('Editor is not initialized');

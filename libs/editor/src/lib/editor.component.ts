@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { EditorToolBarComponent } from './components/editor-tool-bar/editor-tool-bar.component';
@@ -18,7 +18,7 @@ import { MonacoEditorService } from './services';
   `,
   providers: [MonacoEditorService],
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent {
   private monaca = inject(MonacoEditorService);
   editorOptions = {
     theme: 'vs-dark',
@@ -28,7 +28,7 @@ export class EditorComponent implements OnInit {
 
   // code: string = 'function x() {\nconsole.log("Hello world!");\n}';
 
-  code: string = `
+  code = `
     onload = async function () {
       window.addEventListener("message", receiveMessage, false);
       portWritelnWaitfor = window.opener.portWritelnWaitfor;
@@ -45,11 +45,11 @@ export class EditorComponent implements OnInit {
     const sleep = (msec) => new Promise((resolve) => setTimeout(resolve, msec));
 `;
 
-  ngOnInit(): void {
-    // let line = editor.getPosition();
-    // console.log(line);
+  saveFile(): void {
+    // TODO: Implement save file logic
   }
 
-  saveFile(): void {}
-  formatFile(): void {}
+  formatFile(): void {
+    // TODO: Implement format file logic
+  }
 }

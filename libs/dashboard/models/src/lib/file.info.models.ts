@@ -30,15 +30,15 @@ type FileType =
   | 'symbolic link';
 
 /**
- * @deprecated Use FileType namespace from './file-tree.model' instead.
+ * @deprecated Use FileTypeConstants from './file-tree.model' instead.
  */
-module FileType {
-  export const REGULAR_FILE: FileType = 'regular file';
-  export const DIRECTORY: FileType = 'directory';
-  export const CHARACTER_DEVICE_FILE: FileType = 'character device file';
-  export const BLOCK_DEVICE_FILE: FileType = 'block device file';
-  export const LOCAL_SOCKET_FILE: FileType = 'local socket file';
-  export const NAMED_PIPE: FileType = 'named pipe';
-  export const SYMBOLIC_LINK: FileType = 'symbolic link';
-}
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const FileTypeConstants = {
+  REGULAR_FILE: 'regular file' as FileType,
+  DIRECTORY: 'directory' as FileType,
+  CHARACTER_DEVICE_FILE: 'character device file' as FileType,
+  BLOCK_DEVICE_FILE: 'block device file' as FileType,
+  LOCAL_SOCKET_FILE: 'local socket file' as FileType,
+  NAMED_PIPE: 'named pipe' as FileType,
+  SYMBOLIC_LINK: 'symbolic link' as FileType,
+} as const;

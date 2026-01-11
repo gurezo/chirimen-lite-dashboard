@@ -2,8 +2,18 @@
   "name": "@libs-console",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": "^20.3.0",
-    "@angular/core": "^20.3.0"
+    "@angular/core": "21.0.6",
+    "@angular/material": "21.0.5",
+    "@libs-chirimen-panel": "0.0.1",
+    "@libs-dialogs": "0.0.1",
+    "@libs-example": "0.0.1",
+    "@libs-file-upload": "0.0.1",
+    "@libs-i2cdetect": "0.0.1",
+    "@libs-web-serial": "0.0.1",
+    "@libs-wifi": "0.0.1",
+    "@libs-xterm": "0.0.1",
+    "@ngrx/store": "21.0.1",
+    "@xterm/xterm": "^5.5.0"
   },
   "sideEffects": false
 }

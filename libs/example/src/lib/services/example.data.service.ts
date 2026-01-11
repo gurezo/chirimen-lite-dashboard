@@ -13,21 +13,21 @@ export class ExampleDataService {
   getGPIOExampleList(): Observable<ExampleItem[]> {
     return this.jsonService.getJsonArray('./assets/json/gpio.json').pipe(
       map((json) => convertExampleJsonToList(json)),
-      catchError((error) => [])
+      catchError(() => [])
     );
   }
 
   getI2CExampleList(): Observable<ExampleItem[]> {
     return this.jsonService.getJsonArray('./assets/json/i2c.json').pipe(
       map((json) => convertExampleJsonToList(json)),
-      catchError((error) => [])
+      catchError(() => [])
     );
   }
 
   getRemoteExampleList(): Observable<ExampleItem[]> {
     return this.jsonService.getJsonArray('./assets/json/remote.json').pipe(
       map((json) => convertExampleJsonToList(json)),
-      catchError((error) => [])
+      catchError(() => [])
     );
   }
 }

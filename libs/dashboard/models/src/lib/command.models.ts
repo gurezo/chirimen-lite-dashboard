@@ -7,8 +7,8 @@ const wiFiSetup = `\
 #!/bin/sh
 set -eu
 
-SSID=\$1
-PASSWORD=\$2
+SSID=$1
+PASSWORD=$2
 DEBIAN_VERSION=$(cut -d . -f 1 /etc/debian_version)
 
 if [ "$DEBIAN_VERSION" -le 11 ]; then
@@ -113,4 +113,3 @@ export const UseCommandWifi = {
 } as const;
 export type UseCommandWifi =
   (typeof UseCommandWifi)[keyof typeof UseCommandWifi];
-

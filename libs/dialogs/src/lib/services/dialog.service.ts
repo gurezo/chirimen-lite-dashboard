@@ -5,7 +5,7 @@ export interface DialogConfig {
   height?: string;
   width?: string;
   panelClass?: string;
-  data?: any;
+  data?: unknown;
   disableClose?: boolean;
   autoFocus?: boolean;
 }

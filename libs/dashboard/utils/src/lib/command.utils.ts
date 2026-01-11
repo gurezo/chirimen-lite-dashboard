@@ -24,7 +24,7 @@ export class CommandUtils {
    * @param useSudo sudo を使用するか
    * @returns sudo プレフィックス（使用する場合は 'sudo '、しない場合は ''）
    */
-  static getSudoPrefix(useSudo: boolean = false): string {
+  static getSudoPrefix(useSudo = false): string {
     return useSudo ? 'sudo ' : '';
   }
 

@@ -83,8 +83,8 @@ export class FileListService {
    * @returns ツリー構造の文字列
    */
   async getDirectoryTree(
-    path: string = '.',
-    depth: number = 2
+    path = '.',
+    depth = 2
   ): Promise<string> {
     try {
       const command = `tree -L ${depth} ${this.escapePath(path)}`;
