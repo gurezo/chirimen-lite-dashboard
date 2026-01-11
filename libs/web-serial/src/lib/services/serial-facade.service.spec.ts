@@ -49,22 +49,22 @@ describe('SerialFacadeService', () => {
   describe('connect', () => {
     it('should connect successfully', async () => {
       const mockPort = {} as SerialPort;
+      const mockValidator = vi.mocked(TestBed.inject(SerialValidatorService));
       mockConnection.connect = vi.fn().mockResolvedValue({ port: mockPort });
-      mockWriter.initialize = vi.fn();
-      mockReader.startReading = vi.fn().mockResolvedValue(undefined);
+      mockConnection.isConnected = vi.fn().mockReturnValue(false);
+      mockValidator.isSupportedDevice = vi.fn().mockResolvedValue(true);
 
       const result = await service.connect(115200);
 
       expect(result).toBe(true);
       expect(mockConnection.connect).toHaveBeenCalledWith(115200);
-      expect(mockWriter.initialize).toHaveBeenCalledWith(mockPort);
-      expect(mockReader.startReading).toHaveBeenCalledWith(mockPort);
     });
 
     it('should return false on connection error', async () => {
       mockConnection.connect = vi
         .fn()
         .mockResolvedValue({ error: 'Connection failed' });
+      mockConnection.isConnected = vi.fn().mockReturnValue(false);
 
       const result = await service.connect(115200);
 
@@ -74,15 +74,12 @@ describe('SerialFacadeService', () => {
 
   describe('disconnect', () => {
     it('should disconnect properly', async () => {
-      mockReader.stopReading = vi.fn().mockResolvedValue(undefined);
-      mockWriter.dispose = vi.fn();
       mockCommand.cancelAllCommands = vi.fn();
       mockConnection.disconnect = vi.fn().mockResolvedValue(undefined);
+      mockConnection.isConnected = vi.fn().mockReturnValue(true);
 
       await service.disconnect();
 
-      expect(mockReader.stopReading).toHaveBeenCalled();
-      expect(mockWriter.dispose).toHaveBeenCalled();
       expect(mockCommand.cancelAllCommands).toHaveBeenCalled();
       expect(mockConnection.disconnect).toHaveBeenCalled();
     });
@@ -90,11 +87,14 @@ describe('SerialFacadeService', () => {
 
   describe('write', () => {
     it('should write data', async () => {
-      mockWriter.writeSync = vi.fn().mockResolvedValue(undefined);
+      const mockPort = {} as SerialPort;
+      mockConnection.isConnected = vi.fn().mockReturnValue(true);
+      (service as any).currentPort = mockPort;
+      mockWriter.write = vi.fn().mockReturnValue(Promise.resolve());
 
       await service.write('test data');
 
-      expect(mockWriter.writeSync).toHaveBeenCalledWith('test data');
+      expect(mockWriter.write).toHaveBeenCalledWith(mockPort, 'test data');
     });
   });
 
