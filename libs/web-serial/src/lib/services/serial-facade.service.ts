@@ -50,7 +50,7 @@ export class SerialFacadeService {
    * @param baudRate ボーレート (デフォルト: 115200)
    * @returns 接続成功の場合 true、失敗の場合 false
    */
-  async connect(baudRate: number = 115200): Promise<boolean> {
+  async connect(baudRate = 115200): Promise<boolean> {
     try {
       // 既存の接続があれば切断
       if (this.isConnected()) {
@@ -145,7 +145,7 @@ export class SerialFacadeService {
   async executeCommand(
     cmd: string,
     prompt: string,
-    timeout: number = 10000
+    timeout = 10000
   ): Promise<string> {
     const config: CommandExecutionConfig = { prompt, timeout };
     return this.command.executeCommand(cmd, config, (data) => this.write(data));
@@ -242,7 +242,7 @@ export class SerialFacadeService {
   async portWritelnWaitfor(
     cmd: string,
     prompt: string,
-    timeout: number = 10000
+    timeout = 10000
   ): Promise<string> {
     return this.executeCommand(cmd, prompt, timeout);
   }

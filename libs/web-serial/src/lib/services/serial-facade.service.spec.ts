@@ -18,7 +18,6 @@ vi.mock('./serial-validator.service');
 describe('SerialFacadeService', () => {
   let service: SerialFacadeService;
   let mockConnection: ReturnType<typeof vi.mocked<SerialConnectionService>>;
-  let mockReader: ReturnType<typeof vi.mocked<SerialReaderService>>;
   let mockWriter: ReturnType<typeof vi.mocked<SerialWriterService>>;
   let mockCommand: ReturnType<typeof vi.mocked<SerialCommandService>>;
 
@@ -37,7 +36,6 @@ describe('SerialFacadeService', () => {
 
     service = TestBed.inject(SerialFacadeService);
     mockConnection = vi.mocked(TestBed.inject(SerialConnectionService));
-    mockReader = vi.mocked(TestBed.inject(SerialReaderService));
     mockWriter = vi.mocked(TestBed.inject(SerialWriterService));
     mockCommand = vi.mocked(TestBed.inject(SerialCommandService));
   });
@@ -89,6 +87,7 @@ describe('SerialFacadeService', () => {
     it('should write data', async () => {
       const mockPort = {} as SerialPort;
       mockConnection.isConnected = vi.fn().mockReturnValue(true);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (service as any).currentPort = mockPort;
       mockWriter.write = vi.fn().mockReturnValue(Promise.resolve());
 

@@ -18,10 +18,11 @@ export class SerialReaderService {
 
   /**
    * データを読み取る
-   * @param port SerialPort (後方互換性のため保持、実際には使用しない)
+   * @param _port SerialPort (後方互換性のため保持、実際には使用しない)
    * @returns Observable<string>
    */
-  read(port: SerialPort): Observable<string> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  read(_port: SerialPort): Observable<string> {
     const client = this.connection.getClient();
     if (!client || !client.connected) {
       return throwError(() => new Error('Serial port not connected'));

@@ -107,7 +107,7 @@ export class SerialCommandService {
    * すべての待機中のコマンドをキャンセル
    */
   cancelAllCommands(): void {
-    for (const [commandId, command] of this.pendingCommands) {
+    for (const [, command] of this.pendingCommands) {
       clearTimeout(command.timeoutId);
       command.reject(new Error('All commands cancelled'));
     }
@@ -134,7 +134,7 @@ export class SerialCommandService {
   async waitForPattern(
     writeData: string,
     pattern: string,
-    timeoutMs: number = 30000
+    timeoutMs = 30000
   ): Promise<string> {
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {

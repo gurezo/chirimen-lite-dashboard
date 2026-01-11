@@ -18,11 +18,11 @@ export class SerialWriterService {
 
   /**
    * データを書き込む
-   * @param port SerialPort (後方互換性のため保持、実際には使用しない)
+   * @param _port SerialPort (後方互換性のため保持、実際には使用しない)
    * @param data 書き込むデータ
    * @returns Observable<void>
    */
-  write(port: SerialPort, data: string): Observable<void> {
+  write(_port: SerialPort, data: string): Observable<void> {
     const client = this.connection.getClient();
     if (!client || !client.connected) {
       return throwError(() => new Error('Serial port not connected'));
