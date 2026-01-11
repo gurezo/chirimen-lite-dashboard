@@ -7,7 +7,7 @@
     "@angular/core": "^21.0.0",
     "@ngrx/effects": "^21.0.0",
     "@ngrx/store": "^21.0.0",
-    "@gurezo/web-serial-rxjs": "^0.1.0",
+    "@gurezo/web-serial-rxjs": "^0.1.8",
     "rxjs": "~7.8.1",
     "ngx-toastr": "^19.0.0"
   }
