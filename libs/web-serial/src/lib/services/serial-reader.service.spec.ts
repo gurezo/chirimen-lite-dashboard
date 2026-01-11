@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 import { vi } from 'vitest';
 import { SerialConnectionService } from './serial-connection.service';
 import { SerialErrorHandlerService } from './serial-error-handler.service';
@@ -7,7 +7,6 @@ import { SerialReaderService } from './serial-reader.service';
 
 describe('SerialReaderService', () => {
   let service: SerialReaderService;
-  let errorHandlerSpy: ReturnType<typeof vi.mocked<SerialErrorHandlerService>>;
   let connectionSpy: ReturnType<typeof vi.mocked<SerialConnectionService>>;
 
   beforeEach(() => {
@@ -29,7 +28,6 @@ describe('SerialReaderService', () => {
     });
 
     service = TestBed.inject(SerialReaderService);
-    errorHandlerSpy = vi.mocked(TestBed.inject(SerialErrorHandlerService));
     connectionSpy = vi.mocked(TestBed.inject(SerialConnectionService));
   });
 

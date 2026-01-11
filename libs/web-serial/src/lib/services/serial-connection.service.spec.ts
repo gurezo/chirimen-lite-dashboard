@@ -32,7 +32,6 @@ vi.mock('@gurezo/web-serial-rxjs', () => {
 
 describe('SerialConnectionService', () => {
   let service: SerialConnectionService;
-  let errorHandlerSpy: ReturnType<typeof vi.mocked<SerialErrorHandlerService>>;
 
   beforeEach(() => {
     const spy = {
@@ -47,7 +46,6 @@ describe('SerialConnectionService', () => {
     });
 
     service = TestBed.inject(SerialConnectionService);
-    errorHandlerSpy = vi.mocked(TestBed.inject(SerialErrorHandlerService));
   });
 
   it('should be created', () => {

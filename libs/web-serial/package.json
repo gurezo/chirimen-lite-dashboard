@@ -4,9 +4,11 @@
   "main": "index.js",
   "types": "index.d.ts",
   "peerDependencies": {
-    "@angular/core": "^20.0.0",
-    "@ngrx/effects": "^20.0.0",
-    "@ngrx/store": "^20.0.0",
-    "rxjs": "~7.8.1"
+    "@angular/core": "^21.0.0",
+    "@ngrx/effects": "^21.0.0",
+    "@ngrx/store": "^21.0.0",
+    "@gurezo/web-serial-rxjs": "^0.1.0",
+    "rxjs": "~7.8.1",
+    "ngx-toastr": "^19.0.0"
   }
 }
