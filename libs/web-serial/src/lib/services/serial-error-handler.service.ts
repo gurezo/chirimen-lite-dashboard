@@ -40,18 +40,22 @@ export class SerialErrorHandlerService {
    */
   private getErrorMessage(code: SerialErrorCode): string {
     switch (code) {
-      case SerialErrorCode.NO_PORT_SELECTED:
+      case SerialErrorCode.OPERATION_CANCELLED:
         return "Failed to execute 'requestPort' on 'Serial': No port selected by the user.";
       case SerialErrorCode.PORT_ALREADY_OPEN:
         return "Failed to execute 'open' on 'SerialPort': The port is already open.";
-      case SerialErrorCode.CONNECTION_FAILED:
+      case SerialErrorCode.PORT_OPEN_FAILED:
         return '接続に失敗しました';
-      case SerialErrorCode.DEVICE_NOT_SUPPORTED:
+      case SerialErrorCode.PORT_NOT_AVAILABLE:
         return 'サポートされていないデバイスです。Raspberry Pi Zero以外のデバイスは接続できません。';
-      case SerialErrorCode.READ_ERROR:
+      case SerialErrorCode.READ_FAILED:
         return 'Read error: Failed to read from serial port';
-      case SerialErrorCode.WRITE_ERROR:
+      case SerialErrorCode.WRITE_FAILED:
         return 'Write error: Failed to write to serial port';
+      case SerialErrorCode.CONNECTION_LOST:
+        return '接続が切断されました';
+      case SerialErrorCode.PORT_NOT_OPEN:
+        return 'シリアルポートが開かれていません';
       default:
         return 'Unknown error';
     }
