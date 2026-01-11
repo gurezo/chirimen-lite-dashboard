@@ -29,6 +29,7 @@
     "@ngrx/store-devtools": "21.0.1",
     "@types/w3c-web-serial": "1.0.6",
     "@xterm/xterm": "^5.5.0",
+    "@gurezo/web-serial-rxjs": "0.1.5",
     "monaco-editor": "^0.50.0",
     "ngx-monaco-editor-v2": "^18.1.0",
     "ngx-toastr": "^19.0.0",
