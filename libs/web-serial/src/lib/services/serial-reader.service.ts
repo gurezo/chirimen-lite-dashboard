@@ -1,7 +1,8 @@
 /// <reference types="@types/w3c-web-serial" />
 
 import { inject, Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { map, Observable, throwError } from 'rxjs';
+import { SerialConnectionService } from './serial-connection.service';
 import { SerialErrorHandlerService } from './serial-error-handler.service';
 
 /**
@@ -13,51 +14,31 @@ import { SerialErrorHandlerService } from './serial-error-handler.service';
 })
 export class SerialReaderService {
   private errorHandler = inject(SerialErrorHandlerService);
+  private connection = inject(SerialConnectionService);
 
   /**
-   * データを読み取る（元の実装方式）
-   * @param port SerialPort
+   * データを読み取る
+   * @param port SerialPort (後方互換性のため保持、実際には使用しない)
    * @returns Observable<string>
    */
   read(port: SerialPort): Observable<string> {
-    if (!port) {
+    const client = this.connection.getClient();
+    if (!client || !client.connected) {
       return throwError(() => new Error('Serial port not connected'));
     }
 
-    const reader = port.readable?.getReader();
     const decoder = new TextDecoder();
 
-    if (!reader) {
-      return throwError(() => new Error('Serial port not connected'));
+    try {
+      return client.getReadStream().pipe(
+        map((uint8Array: Uint8Array) => {
+          return decoder.decode(uint8Array, { stream: true });
+        })
+      );
+    } catch (error) {
+      const errorMessage = this.errorHandler.handleReadError(error);
+      return throwError(() => new Error(errorMessage));
     }
-
-    return new Observable<string>((observer) => {
-      const readChunk = () => {
-        reader
-          .read()
-          .then(({ value, done }) => {
-            if (done) {
-              observer.complete();
-              reader.releaseLock();
-              return;
-            }
-            const chunk = decoder.decode(value);
-            observer.next(chunk);
-            readChunk();
-          })
-          .catch((error) => {
-            const errorMessage = this.errorHandler.handleReadError(error);
-            observer.error(errorMessage);
-            reader.releaseLock();
-          });
-      };
-
-      readChunk();
-
-      return () => {
-        reader.releaseLock();
-      };
-    });
   }
 
   /**
