@@ -76,7 +76,7 @@ export class SerialConnectionService {
    * @returns SerialPort または undefined
    */
   getPort(): SerialPort | undefined {
-    return this.client?.currentPort;
+    return this.client?.currentPort ?? undefined;
   }
 
   /**
