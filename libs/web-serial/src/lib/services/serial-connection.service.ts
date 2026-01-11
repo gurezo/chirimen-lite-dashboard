@@ -1,6 +1,8 @@
 /// <reference types="@types/w3c-web-serial" />
 
 import { inject, Injectable } from '@angular/core';
+import { createSerialClient, SerialClient } from '@gurezo/web-serial-rxjs';
+import { RASPBERRY_PI_ZERO_INFO } from '../constants/web.serial.const';
 import { SerialErrorHandlerService } from './serial-error-handler.service';
 
 /**
@@ -12,7 +14,7 @@ import { SerialErrorHandlerService } from './serial-error-handler.service';
 })
 export class SerialConnectionService {
   private errorHandler = inject(SerialErrorHandlerService);
-  private port: SerialPort | undefined;
+  private client: SerialClient | undefined;
 
   /**
    * Serial ポートに接続
@@ -23,10 +25,21 @@ export class SerialConnectionService {
     baudRate = 115200
   ): Promise<{ port: SerialPort } | { error: string }> {
     try {
-      this.port = await navigator.serial.requestPort();
-      await this.port.open({ baudRate });
+      this.client = createSerialClient({
+        filter: RASPBERRY_PI_ZERO_INFO,
+      });
 
-      return { port: this.port };
+      await this.client.connect({ baudRate });
+
+      const port = this.client.currentPort;
+      if (!port) {
+        const errorMessage = this.errorHandler.handleConnectionError(
+          new Error('Port is not available after connection')
+        );
+        return { error: errorMessage };
+      }
+
+      return { port };
     } catch (error) {
       const errorMessage = this.errorHandler.handleConnectionError(error);
       return { error: errorMessage };
@@ -38,8 +51,10 @@ export class SerialConnectionService {
    */
   async disconnect(): Promise<void> {
     try {
-      await this.port?.close();
-      this.port = undefined;
+      if (this.client) {
+        await this.client.disconnect();
+        this.client = undefined;
+      }
     } catch (error) {
       console.error('Error closing port:', error);
       throw error;
@@ -51,7 +66,7 @@ export class SerialConnectionService {
    * @returns 接続中かどうか
    */
   isConnected(): boolean {
-    return this.port !== undefined;
+    return this.client?.connected ?? false;
   }
 
   /**
@@ -59,6 +74,14 @@ export class SerialConnectionService {
    * @returns SerialPort または undefined
    */
   getPort(): SerialPort | undefined {
-    return this.port;
+    return this.client?.currentPort;
+  }
+
+  /**
+   * SerialClient インスタンスを取得（内部使用）
+   * @returns SerialClient または undefined
+   */
+  getClient(): SerialClient | undefined {
+    return this.client;
   }
 }
