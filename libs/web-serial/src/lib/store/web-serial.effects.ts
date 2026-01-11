@@ -2,9 +2,16 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 // import { Store } from '@ngrx/store';
 import { catchError, from, map, switchMap } from 'rxjs';
-import { WEB_SERIAL } from '../constants/web.serial.const';
 import { SerialFacadeService } from '../services/serial-facade.service';
 import { WebSerialActions } from './web-serial.actions';
+
+// エラーメッセージ定数
+const ERROR_MESSAGES = {
+  CONNECTION_SUCCESS: 'Web Serial Open Success',
+  CONNECTION_FAILED: '接続に失敗しました',
+  NO_PORT_SELECTED: 'ポートが選択されませんでした',
+  UNSUPPORTED_DEVICE: 'サポートされていないデバイスです。Raspberry Pi Zero以外のデバイスは接続できません。',
+} as const;
 
 /**
  * WebSerialEffects
@@ -31,21 +38,24 @@ export class WebSerialEffects {
             if (success) {
               return WebSerialActions.onConnectSuccess({
                 isConnected: true,
-                message: WEB_SERIAL.PORT.SUCCESS.OPEN,
+                message: ERROR_MESSAGES.CONNECTION_SUCCESS,
               });
             } else {
               return WebSerialActions.onConnectFail({
                 isConnected: false,
-                errorMessage: WEB_SERIAL.RASPBERRY_PI.UNSUPPORTED_DEVICE,
+                errorMessage: ERROR_MESSAGES.UNSUPPORTED_DEVICE,
               });
             }
           }),
           catchError((error) => {
-            let errorMessage: string = WEB_SERIAL.ERROR.CONNECTION_FAILED;
+            let errorMessage: string = ERROR_MESSAGES.CONNECTION_FAILED;
             if (error.message.includes('No port selected')) {
-              errorMessage = WEB_SERIAL.ERROR.NO_PORT_SELECTED;
-            } else if (error.message.includes('not a Raspberry Pi Zero')) {
-              errorMessage = WEB_SERIAL.RASPBERRY_PI.UNSUPPORTED_DEVICE;
+              errorMessage = ERROR_MESSAGES.NO_PORT_SELECTED;
+            } else if (
+              error.message.includes('not a Raspberry Pi Zero') ||
+              error.message.includes('not supported')
+            ) {
+              errorMessage = ERROR_MESSAGES.UNSUPPORTED_DEVICE;
             }
             return [WebSerialActions.onConnectFail({
               isConnected: false,
