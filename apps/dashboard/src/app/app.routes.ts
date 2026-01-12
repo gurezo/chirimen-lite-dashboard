@@ -9,8 +9,7 @@ export const routes: Routes = [
   },
   {
     path: 'unsupported-browser',
-    loadComponent: () =>
-      import('./pages/unsupported-browser/unsupported-browser.component'),
+    loadComponent: () => import('@libs-unsupported-browser'),
     canActivate: [unsupportedBrowserGuard],
   },
   {

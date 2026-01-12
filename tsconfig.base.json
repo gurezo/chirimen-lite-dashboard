@@ -36,7 +36,8 @@
       "@libs-web-serial": ["libs/web-serial/src/index.ts"],
       "@libs-wifi": ["libs/wifi/src/index.ts"],
       "@libs-xterm": ["libs/xterm/src/index.ts"],
-      "@libs-page-not-found": ["libs/page-not-found/src/index.ts"]
+      "@libs-page-not-found": ["libs/page-not-found/src/index.ts"],
+      "@libs-unsupported-browser": ["libs/unsupported-browser/src/index.ts"]
     }
   }
 }
