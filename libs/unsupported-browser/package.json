@@ -2,7 +2,8 @@
   "name": "@libs-unsupported-browser",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/core": "21.0.6"
+    "@angular/core": "21.0.6",
+    "@angular/material": "21.0.5"
   },
   "sideEffects": false
 }
