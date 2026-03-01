@@ -2,8 +2,8 @@
   "name": "@libs-console",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/core": "21.0.6",
-    "@angular/material": "21.0.5",
+    "@angular/core": "21.1.6",
+    "@angular/material": "21.1.6",
     "@libs-chirimen-panel": "0.0.1",
     "@libs-dialogs": "0.0.1",
     "@libs-example": "0.0.1",

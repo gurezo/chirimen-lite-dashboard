@@ -4,7 +4,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "peerDependencies": {
-    "@angular/core": "21.0.6",
+    "@angular/core": "21.1.6",
     "@ngrx/effects": "21.0.1",
     "@ngrx/store": "21.0.1",
     "@xterm/xterm": "^5.0.0",

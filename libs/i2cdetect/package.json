@@ -2,7 +2,7 @@
   "name": "@libs-i2cdetect",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/core": "21.0.6",
+    "@angular/core": "21.1.6",
     "@libs-dialogs": "0.0.1",
     "@libs-ui": "0.0.1",
     "@dashboard/serial": "0.0.1"
