@@ -1,11 +1,1 @@
-{
-  "mcpServers": {
-    "nx-mcp": {
-      "url": "http://localhost:9172/sse"
-    },
-    "angular-cli": {
-      "command": "npx",
-      "args": ["-y", "@angular/cli", "mcp"]
-    }
-  }
-}
+{"mcpServers":{"nx-mcp":{"command":"npx","args":["nx","mcp"]},"angular-cli":{"command":"npx","args":["-y","@angular/cli","mcp"]}}}
