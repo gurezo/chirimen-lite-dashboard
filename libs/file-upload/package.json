@@ -2,8 +2,8 @@
   "name": "@libs-file-upload",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/core": "21.0.6",
-    "@angular/forms": "21.0.6",
+    "@angular/core": "21.1.6",
+    "@angular/forms": "21.1.6",
     "@libs-dialogs": "0.0.1",
     "@libs-ui": "0.0.1"
   },
