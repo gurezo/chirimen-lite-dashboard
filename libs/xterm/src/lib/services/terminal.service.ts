@@ -1,5 +1,3 @@
-/// <reference types="@types/w3c-web-serial" />
-
 import { inject, Injectable } from '@angular/core';
 import {
   SerialConnectionService,
