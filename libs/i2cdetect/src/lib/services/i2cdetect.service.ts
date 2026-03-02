@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { SerialFacadeService } from '@dashboard/serial';
+import { SerialFacadeService } from '@libs-web-serial';
 
 /**
  * I2C デバイス検出サービス

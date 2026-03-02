@@ -4,7 +4,7 @@
   "peerDependencies": {
     "@angular/common": "^21.0.0",
     "@angular/core": "^21.0.0",
-    "@dashboard/serial": "^0.0.1",
+    "@libs-web-serial": "^0.0.1",
     "@dashboard/utils": "^0.0.1",
     "@dashboard/models": "0.0.1"
   },

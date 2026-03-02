@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { FileListItem } from '@dashboard/models';
 import { ParserUtils, FileUtils } from '@dashboard/utils';
-import { SerialFacadeService } from '@dashboard/serial';
+import { SerialFacadeService } from '@libs-web-serial';
 
 /**
  * ファイルリストサービス

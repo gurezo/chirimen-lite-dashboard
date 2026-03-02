@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { ParserUtils, FileUtils } from '@dashboard/utils';
-import { SerialFacadeService } from '@dashboard/serial';
+import { SerialFacadeService } from '@libs-web-serial';
 
 /**
  * ディレクトリ情報

@@ -7,7 +7,7 @@ import {
   SerialReaderService,
   SerialValidatorService,
   SerialWriterService,
-} from '@dashboard/serial';
+} from '@libs-web-serial';
 import { Terminal } from '@xterm/xterm';
 import { Subscription } from 'rxjs';
 

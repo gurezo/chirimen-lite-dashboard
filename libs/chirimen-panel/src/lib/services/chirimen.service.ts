@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { FileListService } from '@dashboard/file';
 import { FileListItem } from '@dashboard/models';
-import { SerialFacadeService } from '@dashboard/serial';
+import { SerialFacadeService } from '@libs-web-serial';
 import { I2cdetectService } from '@libs-i2cdetect';
 
 /**

@@ -18,7 +18,6 @@
       "@dashboard/file": ["libs/dashboard/file/src/index.ts"],
       "@dashboard/guards": ["libs/dashboard/guards/src/index.ts"],
       "@dashboard/models": ["libs/dashboard/models/src/index.ts"],
-      "@dashboard/serial": ["libs/dashboard/serial/src/index.ts"],
       "@dashboard/utils": ["libs/dashboard/utils/src/index.ts"],
       "@libs-chirimen-panel": ["libs/chirimen-panel/src/index.ts"],
       "@libs-dialogs": ["libs/dialogs/src/index.ts"],

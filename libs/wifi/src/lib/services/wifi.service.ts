@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { FileContentService } from '@dashboard/file';
-import { SerialFacadeService } from '@dashboard/serial';
+import { SerialFacadeService } from '@libs-web-serial';
 import {
   parseWifiIfconfigOutput,
   parseWifiIwconfigOutput,
