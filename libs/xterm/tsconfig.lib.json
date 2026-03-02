@@ -5,7 +5,7 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
-    "types": []
+    "types": ["w3c-web-serial"]
   },
   "exclude": [
     "src/**/*.spec.ts",
