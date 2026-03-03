@@ -1,12 +1,12 @@
 // Services
 export * from './lib/services/serial-command.service';
-export * from './lib/services/serial-connection.service';
-export * from './lib/services/serial-error-handler.service';
 export * from './lib/services/serial-facade.service';
 export * from './lib/services/serial-notification.service';
-export * from './lib/services/serial-reader.service';
+export * from './lib/services/serial-transport.service';
 export * from './lib/services/serial-validator.service';
-export * from './lib/services/serial-writer.service';
+
+// Utils
+export * from './lib/utils/serial-error-messages';
 
 // Store
 export * from './lib/store/web-serial.actions';
