@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { FileListItem } from '@dashboard/models';
+import { FileListItem } from '@dashboard/utils';
 import { ParserUtils, FileUtils } from '@dashboard/utils';
 import { SerialFacadeService } from '@libs-web-serial';
 

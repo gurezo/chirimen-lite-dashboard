@@ -11,4 +11,3 @@ export interface FileListItem {
   /** ディレクトリかどうか */
   isDirectory: boolean;
 }
-
