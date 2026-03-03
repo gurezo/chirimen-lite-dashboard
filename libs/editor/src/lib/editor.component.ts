@@ -1,17 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
-import { EditorToolBarComponent } from './components/editor-tool-bar/editor-tool-bar.component';
 import { MonacoEditorService } from './services';
 
 @Component({
   selector: 'choh-editor',
-  imports: [FormsModule, MonacoEditorModule, EditorToolBarComponent],
+  imports: [FormsModule, MonacoEditorModule],
   template: `
-    <choh-editor-tool-bar
-      (eventSaveFile)="saveFile()"
-      (eventFormatFile)="formatFile()"
-    />
     <div>
       <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="code" />
     </div>
@@ -44,12 +39,4 @@ export class EditorComponent {
     };
     const sleep = (msec) => new Promise((resolve) => setTimeout(resolve, msec));
 `;
-
-  saveFile(): void {
-    // TODO: Implement save file logic
-  }
-
-  formatFile(): void {
-    // TODO: Implement format file logic
-  }
 }
