@@ -7,14 +7,13 @@ import {
 } from '@angular/router';
 import { vi } from 'vitest';
 
-import { unsupportedBrowserGuard } from './unsupported-browser.guard';
+import { browserCheckGuard } from './browser-check.guard';
 
-describe('unsupportedBrowserGuard', () => {
+describe('browserCheckGuard', () => {
   const executeGuard = (
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ) =>
-    TestBed.runInInjectionContext(() => unsupportedBrowserGuard(route, state));
+    state: RouterStateSnapshot,
+  ) => TestBed.runInInjectionContext(() => browserCheckGuard(route, state));
 
   let router: Router;
   let navigateSpy: ReturnType<typeof vi.spyOn>;
@@ -36,7 +35,7 @@ describe('unsupportedBrowserGuard', () => {
   });
 
   it('should be created', () => {
-    expect(unsupportedBrowserGuard).toBeTruthy();
+    expect(browserCheckGuard).toBeTruthy();
   });
 
   describe('対応ブラウザの場合', () => {
@@ -50,7 +49,7 @@ describe('unsupportedBrowserGuard', () => {
       });
     });
 
-    it('Chromeの場合はホームページへリダイレクトしてfalseを返す', () => {
+    it('Chromeの場合はページ遷移を許可してtrueを返す', () => {
       Object.defineProperty(window.navigator, 'userAgent', {
         value:
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -60,11 +59,11 @@ describe('unsupportedBrowserGuard', () => {
 
       const result = executeGuard(route, state);
 
-      expect(result).toBe(false);
-      expect(navigateSpy).toHaveBeenCalledWith(['/']);
+      expect(result).toBe(true);
+      expect(navigateSpy).not.toHaveBeenCalled();
     });
 
-    it('Edgeの場合はホームページへリダイレクトしてfalseを返す', () => {
+    it('Edgeの場合はページ遷移を許可してtrueを返す', () => {
       Object.defineProperty(window.navigator, 'userAgent', {
         value:
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
@@ -74,11 +73,11 @@ describe('unsupportedBrowserGuard', () => {
 
       const result = executeGuard(route, state);
 
-      expect(result).toBe(false);
-      expect(navigateSpy).toHaveBeenCalledWith(['/']);
+      expect(result).toBe(true);
+      expect(navigateSpy).not.toHaveBeenCalled();
     });
 
-    it('Operaの場合はホームページへリダイレクトしてfalseを返す', () => {
+    it('Operaの場合はページ遷移を許可してtrueを返す', () => {
       Object.defineProperty(window.navigator, 'userAgent', {
         value:
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 OPR/106.0.0.0',
@@ -88,8 +87,8 @@ describe('unsupportedBrowserGuard', () => {
 
       const result = executeGuard(route, state);
 
-      expect(result).toBe(false);
-      expect(navigateSpy).toHaveBeenCalledWith(['/']);
+      expect(result).toBe(true);
+      expect(navigateSpy).not.toHaveBeenCalled();
     });
   });
 
@@ -104,7 +103,7 @@ describe('unsupportedBrowserGuard', () => {
       });
     });
 
-    it('Firefoxの場合はtrueを返す', () => {
+    it('Firefoxの場合はサポート外ページへリダイレクトしてfalseを返す', () => {
       Object.defineProperty(window.navigator, 'userAgent', {
         value:
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0',
@@ -114,11 +113,11 @@ describe('unsupportedBrowserGuard', () => {
 
       const result = executeGuard(route, state);
 
-      expect(result).toBe(true);
-      expect(navigateSpy).not.toHaveBeenCalled();
+      expect(result).toBe(false);
+      expect(navigateSpy).toHaveBeenCalledWith(['/unsupported-browser']);
     });
 
-    it('Safariの場合はtrueを返す', () => {
+    it('Safariの場合はサポート外ページへリダイレクトしてfalseを返す', () => {
       Object.defineProperty(window.navigator, 'userAgent', {
         value:
           'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
@@ -128,8 +127,8 @@ describe('unsupportedBrowserGuard', () => {
 
       const result = executeGuard(route, state);
 
-      expect(result).toBe(true);
-      expect(navigateSpy).not.toHaveBeenCalled();
+      expect(result).toBe(false);
+      expect(navigateSpy).toHaveBeenCalledWith(['/unsupported-browser']);
     });
   });
 });
