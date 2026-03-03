@@ -14,7 +14,6 @@
     "baseUrl": ".",
     "paths": {
       "@app/*": ["apps/dashboard/src/app/*"],
-      "@dashboard/file": ["libs/dashboard/file/src/index.ts"],
       "@dashboard/guards": ["libs/dashboard/guards/src/index.ts"],
       "@dashboard/models": ["libs/dashboard/models/src/index.ts"],
       "@dashboard/utils": ["libs/dashboard/utils/src/index.ts"],
