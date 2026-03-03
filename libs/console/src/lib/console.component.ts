@@ -2,7 +2,7 @@ import { AfterViewInit, Component, inject } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { DialogService } from '@libs-dialogs';
 import { SerialFacadeService } from '@libs-web-serial';
-import { xtermConsoleConfigOptions } from '@libs-xterm';
+import { xtermConsoleConfigOptions } from './xterm-config';
 import { Store } from '@ngrx/store';
 import { Terminal } from '@xterm/xterm';
 
