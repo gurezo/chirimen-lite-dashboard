@@ -26,7 +26,7 @@ export class MonacoEditorService {
     monaco: any,
     container: HTMLElement,
     jsSrc: string,
-    onSave: (value: string) => void
+    onSave: (value: string) => void,
   ) {
     this.editor = monaco.editor.create(container, {
       value: jsSrc,
@@ -73,19 +73,7 @@ export class MonacoEditorService {
     this.editor.updateOptions({ readOnly: readonlyOpt });
   }
 
-  setSourcePath(fileName: string, dir: string): void {
-    this.sourcePath = { fileName, dir };
-  }
-
-  getSourcePath(): { fileName?: string; dir?: string } {
-    return this.sourcePath;
-  }
-
   setValue(srcTxt: string): void {
     this.editor.setValue(srcTxt);
-  }
-
-  isEdited(): boolean {
-    return this.editedFlag;
   }
 }
