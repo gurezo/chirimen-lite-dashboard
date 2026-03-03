@@ -8,7 +8,6 @@ import {
   webSerialFeatureKey,
   webSerialReducer,
 } from '@libs-web-serial';
-import { xtermFeatureKey, xtermReducer } from '@libs-xterm';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
 import { provideStore } from '@ngrx/store';
@@ -31,7 +30,6 @@ export const appConfig: ApplicationConfig = {
     provideMonacoEditor(monacoConfig),
     provideStore({
       [webSerialFeatureKey]: webSerialReducer,
-      [xtermFeatureKey]: xtermReducer,
     }),
     provideEffects([WebSerialEffects]),
     provideStoreDevtools({

@@ -6,10 +6,10 @@ export type XtermConsoleConfigOptions = ITerminalOptions &
 export const xtermConsoleConfigOptions: XtermConsoleConfigOptions = {
   cols: 300,
   rows: 56,
-  cursorBlink: true, //カーソルの点滅
-  cursorStyle: 'underline', //カーソルをアンダーライン
-  cursorWidth: 2, //カーソルの太さ
+  cursorBlink: true,
+  cursorStyle: 'underline',
+  cursorWidth: 2,
   theme: {
-    background: 'bkack',
+    background: 'black',
   },
 };
