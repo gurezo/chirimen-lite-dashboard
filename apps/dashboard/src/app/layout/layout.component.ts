@@ -1,10 +1,5 @@
 import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { MatDivider } from '@angular/material/divider';
-import { MatIcon } from '@angular/material/icon';
-import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
-import { ConsoleComponent } from '@libs-console';
-import { EditorComponent } from '@libs-editor';
 import { ButtonComponent } from '@libs-ui';
 import {
   selectConnectionMessage,
@@ -15,29 +10,11 @@ import {
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { BreadcombComponent } from './components/breadcomb/breadcomb.component';
 import { HeaderComponent } from './components/header/header.component';
-import { PinAssignComponent } from './components/pin-assign/pin-assign.component';
-import { TreeComponent } from './components/tree/tree.component';
 
 @Component({
   selector: 'choh-layout',
-  imports: [
-    AsyncPipe,
-    BreadcombComponent,
-    ButtonComponent,
-    ConsoleComponent,
-    EditorComponent,
-    HeaderComponent,
-    MatDivider,
-    MatIcon,
-    MatTabGroup,
-    MatTab,
-    MatTabLabel,
-    NgOptimizedImage,
-    PinAssignComponent,
-    TreeComponent,
-  ],
+  imports: [AsyncPipe, ButtonComponent, HeaderComponent, NgOptimizedImage],
   templateUrl: './layout.component.html',
 })
 export default class LayoutComponent implements OnInit, OnDestroy {
@@ -60,7 +37,7 @@ export default class LayoutComponent implements OnInit, OnDestroy {
         .pipe(filter((message) => message !== ''))
         .subscribe(() => {
           this.serialNotification.notifyConnectionSuccess();
-        })
+        }),
     );
 
     // エラーメッセージを監視
@@ -70,7 +47,7 @@ export default class LayoutComponent implements OnInit, OnDestroy {
         .pipe(filter((message) => message !== ''))
         .subscribe((errorMessage) => {
           this.serialNotification.notifyConnectionError(errorMessage);
-        })
+        }),
     );
   }
 
