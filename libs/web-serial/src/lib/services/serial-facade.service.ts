@@ -1,47 +1,38 @@
 /// <reference types="@types/w3c-web-serial" />
 
 import { Injectable, inject } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, take, type Subscription } from 'rxjs';
 import {
   CommandExecutionConfig,
   SerialCommandService,
 } from './serial-command.service';
-import { SerialConnectionService } from './serial-connection.service';
-import { SerialErrorHandlerService } from './serial-error-handler.service';
-import { SerialReaderService } from './serial-reader.service';
+import { SerialTransportService } from './serial-transport.service';
 import { SerialValidatorService } from './serial-validator.service';
-import { SerialWriterService } from './serial-writer.service';
 
 /**
  * Serial Facade サービス
  *
- * 複数の Serial サービスを統合し、シンプルなインターフェースを提供
- * Facade パターンで実装
- *
- * porting/services/serial.service.ts の機能を統合・分散化した後の
- * 便利なインターフェースとして提供
+ * Transport / Validator / Command を統合し、シンプルなインターフェースを提供
  */
 @Injectable({
   providedIn: 'root',
 })
 export class SerialFacadeService {
-  private connection = inject(SerialConnectionService);
-  private reader = inject(SerialReaderService);
-  private writer = inject(SerialWriterService);
+  private transport = inject(SerialTransportService);
   private command = inject(SerialCommandService);
-  private errorHandler = inject(SerialErrorHandlerService);
   private validator = inject(SerialValidatorService);
 
-  private currentPort: SerialPort | null = null;
+  private readBuffer = '';
+  private readSubscription: Subscription | null = null;
 
   /**
    * データストリーム (Observable)
    */
   get data$() {
-    if (!this.currentPort) {
+    if (!this.transport.isConnected()) {
       throw new Error('Serial port not connected');
     }
-    return this.reader.read(this.currentPort);
+    return this.transport.getReadStream();
   }
 
   /**
@@ -52,12 +43,11 @@ export class SerialFacadeService {
    */
   async connect(baudRate = 115200): Promise<boolean> {
     try {
-      // 既存の接続があれば切断
       if (this.isConnected()) {
         await this.disconnect();
       }
 
-      const result = await this.connection.connect(baudRate);
+      const result = await this.transport.connect(baudRate);
 
       if ('error' in result) {
         console.error('Connection failed:', result.error);
@@ -66,22 +56,36 @@ export class SerialFacadeService {
 
       const { port } = result;
 
-      // デバイス検証
       const isValid = await this.validator.isSupportedDevice(port);
       if (!isValid) {
-        await this.connection.disconnect();
-        console.warn('Unsupported device detected - not a Raspberry Pi Zero. Connection cancelled.');
+        await this.transport.disconnect();
+        console.warn(
+          'Unsupported device detected - not a Raspberry Pi Zero. Connection cancelled.',
+        );
         return false;
       }
 
-      this.currentPort = port;
-
+      this.startReadStreamSubscription();
       return true;
     } catch (error) {
-      const errorMessage = this.errorHandler.handleConnectionError(error);
-      console.error('Connection error:', errorMessage);
+      console.error('Connection error:', error);
       return false;
     }
+  }
+
+  private startReadStreamSubscription(): void {
+    this.readBuffer = '';
+    this.readSubscription?.unsubscribe();
+    this.readSubscription = this.transport.getReadStream().subscribe({
+      next: (chunk) => {
+        this.readBuffer += chunk;
+        const matched = this.command.processInput(this.readBuffer);
+        if (matched) {
+          this.readBuffer = '';
+        }
+      },
+      error: (err) => console.error('Serial read stream error:', err),
+    });
   }
 
   /**
@@ -89,12 +93,11 @@ export class SerialFacadeService {
    */
   async disconnect(): Promise<void> {
     try {
-      // すべてのコマンドをキャンセル
       this.command.cancelAllCommands();
-
-      // ポートを切断
-      await this.connection.disconnect();
-      this.currentPort = null;
+      this.readSubscription?.unsubscribe();
+      this.readSubscription = null;
+      this.readBuffer = '';
+      await this.transport.disconnect();
     } catch (error) {
       console.error('Disconnect error:', error);
       throw error;
@@ -103,32 +106,28 @@ export class SerialFacadeService {
 
   /**
    * データを書き込む
-   *
-   * @param data 書き込むデータ
    */
   async write(data: string): Promise<void> {
-    if (!this.currentPort) {
+    if (!this.transport.isConnected()) {
       throw new Error('Serial port not connected');
     }
-    return firstValueFrom(this.writer.write(this.currentPort, data));
+    return firstValueFrom(this.transport.write(data));
   }
 
   /**
    * 1回だけ読み取る
-   *
-   * @returns 読み取ったデータ
    */
   async read(): Promise<string> {
-    if (!this.currentPort) {
+    if (!this.transport.isConnected()) {
       throw new Error('Serial port not connected');
     }
-    return firstValueFrom(this.reader.read(this.currentPort));
+    return firstValueFrom(
+      this.transport.getReadStream().pipe(take(1))
+    );
   }
 
   /**
    * 1回だけ文字列として読み取る
-   *
-   * @returns 読み取った文字列
    */
   async readString(): Promise<string> {
     return this.read();
@@ -136,76 +135,45 @@ export class SerialFacadeService {
 
   /**
    * コマンドを実行し、指定されたプロンプトまで待機
-   *
-   * @param cmd コマンド
-   * @param prompt 期待するプロンプト
-   * @param timeout タイムアウト時間（ミリ秒）
-   * @returns コマンド実行結果
    */
   async executeCommand(
     cmd: string,
     prompt: string,
-    timeout = 10000
+    timeout = 10000,
   ): Promise<string> {
     const config: CommandExecutionConfig = { prompt, timeout };
     return this.command.executeCommand(cmd, config, (data) => this.write(data));
   }
 
-  /**
-   * 接続状態を取得
-   *
-   * @returns 接続中の場合 true
-   */
   isConnected(): boolean {
-    return this.connection.isConnected();
+    return this.transport.isConnected();
   }
 
   /**
-   * 読み取り中かどうか
-   *
-   * @returns 読み取り中の場合 true
+   * 読み取り中かどうか（ストリーム購読中は true）
    */
   isReading(): boolean {
-    return this.reader.isActive();
+    return this.readSubscription != null && !this.readSubscription.closed;
   }
 
-  /**
-   * 書き込み可能かどうか
-   *
-   * @returns 書き込み可能な場合 true
-   */
   isWriteReady(): boolean {
-    return this.writer.isReady();
+    return this.transport.isConnected();
   }
 
-  /**
-   * 待機中のコマンド数を取得
-   *
-   * @returns 待機中のコマンド数
-   */
   getPendingCommandCount(): number {
     return this.command.getPendingCommandCount();
   }
 
-  /**
-   * Raspberry Pi Zero かどうかを検証
-   *
-   * @returns Raspberry Pi Zero の場合 true
-   */
   async isRaspberryPiZero(): Promise<boolean> {
-    if (!this.currentPort) {
+    const port = this.transport.getPort();
+    if (!port) {
       return false;
     }
-    return this.validator.isRaspberryPiZero(this.currentPort);
+    return this.validator.isRaspberryPiZero(port);
   }
 
-  /**
-   * 現在のポートを取得
-   *
-   * @returns SerialPort または null
-   */
   getPort(): SerialPort | null {
-    return this.currentPort;
+    return this.transport.getPort() ?? null;
   }
 
   // ============================================
@@ -242,7 +210,7 @@ export class SerialFacadeService {
   async portWritelnWaitfor(
     cmd: string,
     prompt: string,
-    timeout = 10000
+    timeout = 10000,
   ): Promise<string> {
     return this.executeCommand(cmd, prompt, timeout);
   }
