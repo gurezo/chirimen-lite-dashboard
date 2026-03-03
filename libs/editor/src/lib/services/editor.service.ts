@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SourcePath } from '@dashboard/models';
+import { SourcePath } from '../source-path.model';
 import type { editor } from 'monaco-editor';
 
 /**

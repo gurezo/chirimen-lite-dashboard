@@ -9,4 +9,3 @@ export interface SourcePath {
   /** ディレクトリパス */
   dir: string;
 }
-

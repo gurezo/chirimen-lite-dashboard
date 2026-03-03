@@ -1,4 +1,4 @@
-import { FileListItem } from '@dashboard/models';
+import { FileListItem } from './file-list.model';
 
 /**
  * 共通パーサーユーティリティ
