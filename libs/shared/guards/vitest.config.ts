@@ -12,9 +12,17 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      reportsDirectory: resolve(__dirname, '../../../coverage/libs/dashboard/guards'),
+      reportsDirectory: resolve(
+        __dirname,
+        '../../../coverage/libs/dashboard/guards',
+      ),
     },
-    include: [resolve(__dirname, './src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}')],
+    include: [
+      resolve(
+        __dirname,
+        './src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+      ),
+    ],
   },
   resolve: {
     alias: {
@@ -25,4 +33,3 @@ export default defineConfig({
     target: 'node22',
   },
 });
-
