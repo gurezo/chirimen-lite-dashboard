@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { SourcePath } from '../source-path.model';
 import type { editor } from 'monaco-editor';
 
 /**
@@ -15,7 +14,6 @@ export class EditorService {
   private editor: editor.IStandaloneCodeEditor | null = null;
   private editedFlag = false;
   private saveDisabled = false;
-  private sourcePath: SourcePath | null = null;
 
   /**
    * Monaco Editor を初期化

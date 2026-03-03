@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial';
-import { FileUtils } from '@dashboard/utils';
+import { FileUtils } from '../utils/file.utils';
 
 /**
  * ファイル内容情報

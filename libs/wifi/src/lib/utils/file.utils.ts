@@ -198,4 +198,3 @@ export class FileUtils {
     return jsonString.replace(/^"/, `$$'`).replace(/"$/, `'`);
   }
 }
-
