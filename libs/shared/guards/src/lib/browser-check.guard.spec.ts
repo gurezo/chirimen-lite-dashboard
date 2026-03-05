@@ -8,6 +8,11 @@ import {
 import { vi } from 'vitest';
 
 import { browserCheckGuard } from './browser-check.guard';
+import { isSupportedBrowser } from './browser-detection';
+
+vi.mock('./browser-detection', () => ({
+  isSupportedBrowser: vi.fn(),
+}));
 
 describe('browserCheckGuard', () => {
   const executeGuard = (
@@ -39,51 +44,12 @@ describe('browserCheckGuard', () => {
   });
 
   describe('対応ブラウザの場合', () => {
-    const originalUserAgent = window.navigator.userAgent;
-
     afterEach(() => {
-      Object.defineProperty(window.navigator, 'userAgent', {
-        value: originalUserAgent,
-        writable: true,
-        configurable: true,
-      });
+      vi.mocked(isSupportedBrowser).mockReset();
     });
 
-    it('Chromeの場合はページ遷移を許可してtrueを返す', () => {
-      Object.defineProperty(window.navigator, 'userAgent', {
-        value:
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        writable: true,
-        configurable: true,
-      });
-
-      const result = executeGuard(route, state);
-
-      expect(result).toBe(true);
-      expect(navigateSpy).not.toHaveBeenCalled();
-    });
-
-    it('Edgeの場合はページ遷移を許可してtrueを返す', () => {
-      Object.defineProperty(window.navigator, 'userAgent', {
-        value:
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
-        writable: true,
-        configurable: true,
-      });
-
-      const result = executeGuard(route, state);
-
-      expect(result).toBe(true);
-      expect(navigateSpy).not.toHaveBeenCalled();
-    });
-
-    it('Operaの場合はページ遷移を許可してtrueを返す', () => {
-      Object.defineProperty(window.navigator, 'userAgent', {
-        value:
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 OPR/106.0.0.0',
-        writable: true,
-        configurable: true,
-      });
+    it('対応ブラウザの場合はページ遷移を許可してtrueを返す', () => {
+      vi.mocked(isSupportedBrowser).mockReturnValue(true);
 
       const result = executeGuard(route, state);
 
@@ -93,37 +59,12 @@ describe('browserCheckGuard', () => {
   });
 
   describe('非対応ブラウザの場合', () => {
-    const originalUserAgent = window.navigator.userAgent;
-
     afterEach(() => {
-      Object.defineProperty(window.navigator, 'userAgent', {
-        value: originalUserAgent,
-        writable: true,
-        configurable: true,
-      });
+      vi.mocked(isSupportedBrowser).mockReset();
     });
 
-    it('Firefoxの場合はサポート外ページへリダイレクトしてfalseを返す', () => {
-      Object.defineProperty(window.navigator, 'userAgent', {
-        value:
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0',
-        writable: true,
-        configurable: true,
-      });
-
-      const result = executeGuard(route, state);
-
-      expect(result).toBe(false);
-      expect(navigateSpy).toHaveBeenCalledWith(['/unsupported-browser']);
-    });
-
-    it('Safariの場合はサポート外ページへリダイレクトしてfalseを返す', () => {
-      Object.defineProperty(window.navigator, 'userAgent', {
-        value:
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
-        writable: true,
-        configurable: true,
-      });
+    it('非対応ブラウザの場合はサポート外ページへリダイレクトしてfalseを返す', () => {
+      vi.mocked(isSupportedBrowser).mockReturnValue(false);
 
       const result = executeGuard(route, state);
 
