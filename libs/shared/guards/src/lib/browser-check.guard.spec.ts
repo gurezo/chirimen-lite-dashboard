@@ -1,10 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  ActivatedRouteSnapshot,
-  provideRouter,
-  Router,
-  RouterStateSnapshot,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, provideRouter, Router } from '@angular/router';
 import { vi } from 'vitest';
 
 import { browserCheckGuard } from './browser-check.guard';
@@ -21,51 +16,75 @@ describe('browserCheckGuard', () => {
   ) => TestBed.runInInjectionContext(() => browserCheckGuard(route, state));
 
   let router: Router;
-  let navigateSpy: ReturnType<typeof vi.spyOn>;
-  let route: ActivatedRouteSnapshot;
-  let state: RouterStateSnapshot;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [provideRouter([])],
     });
     router = TestBed.inject(Router);
-    navigateSpy = vi.spyOn(router, 'navigate');
-    route = {} as ActivatedRouteSnapshot;
-    state = {} as RouterStateSnapshot;
   });
 
-  afterEach(() => {
-    navigateSpy.mockClear();
-  });
-
-  describe('対応ブラウザの場合', () => {
+  describe('ルートパス（\"\"）へのアクセス時', () => {
     afterEach(() => {
       vi.mocked(isSupportedBrowser).mockReset();
     });
 
-    it('対応ブラウザの場合はホームページへリダイレクトしてfalseを返す', () => {
+    it('対応ブラウザの場合はそのまま表示を許可してtrueを返す', () => {
       vi.mocked(isSupportedBrowser).mockReturnValue(true);
 
+      const route = {
+        routeConfig: { path: '' },
+      } as unknown as ActivatedRouteSnapshot;
+      const state = {} as RouterStateSnapshot;
+
       const result = executeGuard(route, state);
 
-      expect(result).toBe(false);
-      expect(navigateSpy).toHaveBeenCalledWith(['/']);
+      expect(result).toBe(true);
+    });
+
+    it('非対応ブラウザの場合はサポート外ページへリダイレクトするUrlTreeを返す', () => {
+      vi.mocked(isSupportedBrowser).mockReturnValue(false);
+
+      const route = {
+        routeConfig: { path: '' },
+      } as unknown as ActivatedRouteSnapshot;
+      const state = {} as RouterStateSnapshot;
+
+      const result = executeGuard(route, state);
+
+      expect(result).toEqual(router.parseUrl('/unsupported-browser'));
     });
   });
 
-  describe('非対応ブラウザの場合', () => {
+  describe('サポート外ブラウザページ（\"unsupported-browser\"）へのアクセス時', () => {
     afterEach(() => {
       vi.mocked(isSupportedBrowser).mockReset();
     });
 
-    it('非対応ブラウザの場合はサポート外ページへリダイレクトしてfalseを返す', () => {
-      vi.mocked(isSupportedBrowser).mockReturnValue(false);
+    it('対応ブラウザの場合はホームページへリダイレクトするUrlTreeを返す', () => {
+      vi.mocked(isSupportedBrowser).mockReturnValue(true);
+
+      const route = {
+        routeConfig: { path: 'unsupported-browser' },
+      } as unknown as ActivatedRouteSnapshot;
+      const state = {} as RouterStateSnapshot;
 
       const result = executeGuard(route, state);
 
-      expect(result).toBe(false);
-      expect(navigateSpy).toHaveBeenCalledWith(['/unsupported-browser']);
+      expect(result).toEqual(router.parseUrl('/'));
+    });
+
+    it('非対応ブラウザの場合はそのまま表示を許可してtrueを返す', () => {
+      vi.mocked(isSupportedBrowser).mockReturnValue(false);
+
+      const route = {
+        routeConfig: { path: 'unsupported-browser' },
+      } as unknown as ActivatedRouteSnapshot;
+      const state = {} as RouterStateSnapshot;
+
+      const result = executeGuard(route, state);
+
+      expect(result).toBe(true);
     });
   });
 });
