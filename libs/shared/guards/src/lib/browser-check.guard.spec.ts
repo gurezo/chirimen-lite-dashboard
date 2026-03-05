@@ -29,7 +29,7 @@ describe('browserCheckGuard', () => {
     router = TestBed.inject(Router);
   });
 
-  describe('ルートパス（\"\"）へのアクセス時', () => {
+  describe('ルートパスへのアクセス時', () => {
     afterEach(() => {
       vi.mocked(isBrowserSupported).mockReset();
     });
@@ -61,7 +61,7 @@ describe('browserCheckGuard', () => {
     });
   });
 
-  describe('サポート外ブラウザページ（\"unsupported-browser\"）へのアクセス時', () => {
+  describe('サポート外ブラウザページへのアクセス時', () => {
     afterEach(() => {
       vi.mocked(isBrowserSupported).mockReset();
     });
