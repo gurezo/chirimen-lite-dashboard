@@ -6,11 +6,10 @@ export const browserCheckGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (isSupportedBrowser()) {
-    // デスクトップ版の Chrome, Edge, Opera の場合はページ遷移を許可
-    return true;
+    router.navigate(['/']);
   } else {
-    // それ以外のブラウザの場合は、サポート外ページへ遷移
     router.navigate(['/unsupported-browser']);
-    return false;
   }
+
+  return false;
 };
