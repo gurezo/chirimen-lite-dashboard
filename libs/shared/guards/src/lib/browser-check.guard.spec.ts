@@ -3,10 +3,10 @@ import { ActivatedRouteSnapshot, provideRouter, Router } from '@angular/router';
 import { vi } from 'vitest';
 
 import { browserCheckGuard } from './browser-check.guard';
-import { isSupportedBrowser } from './browser-detection';
+import { isBrowserSupported } from '@gurezo/web-serial-rxjs';
 
-vi.mock('./browser-detection', () => ({
-  isSupportedBrowser: vi.fn(),
+vi.mock('@gurezo/web-serial-rxjs', () => ({
+  isBrowserSupported: vi.fn(),
 }));
 
 describe('browserCheckGuard', () => {
@@ -26,11 +26,11 @@ describe('browserCheckGuard', () => {
 
   describe('ルートパス（\"\"）へのアクセス時', () => {
     afterEach(() => {
-      vi.mocked(isSupportedBrowser).mockReset();
+      vi.mocked(isBrowserSupported).mockReset();
     });
 
     it('対応ブラウザの場合はそのまま表示を許可してtrueを返す', () => {
-      vi.mocked(isSupportedBrowser).mockReturnValue(true);
+      vi.mocked(isBrowserSupported).mockReturnValue(true);
 
       const route = {
         routeConfig: { path: '' },
@@ -43,7 +43,7 @@ describe('browserCheckGuard', () => {
     });
 
     it('非対応ブラウザの場合はサポート外ページへリダイレクトするUrlTreeを返す', () => {
-      vi.mocked(isSupportedBrowser).mockReturnValue(false);
+      vi.mocked(isBrowserSupported).mockReturnValue(false);
 
       const route = {
         routeConfig: { path: '' },
@@ -58,11 +58,11 @@ describe('browserCheckGuard', () => {
 
   describe('サポート外ブラウザページ（\"unsupported-browser\"）へのアクセス時', () => {
     afterEach(() => {
-      vi.mocked(isSupportedBrowser).mockReset();
+      vi.mocked(isBrowserSupported).mockReset();
     });
 
     it('対応ブラウザの場合はホームページへリダイレクトするUrlTreeを返す', () => {
-      vi.mocked(isSupportedBrowser).mockReturnValue(true);
+      vi.mocked(isBrowserSupported).mockReturnValue(true);
 
       const route = {
         routeConfig: { path: 'unsupported-browser' },
@@ -75,7 +75,7 @@ describe('browserCheckGuard', () => {
     });
 
     it('非対応ブラウザの場合はそのまま表示を許可してtrueを返す', () => {
-      vi.mocked(isSupportedBrowser).mockReturnValue(false);
+      vi.mocked(isBrowserSupported).mockReturnValue(false);
 
       const route = {
         routeConfig: { path: 'unsupported-browser' },
