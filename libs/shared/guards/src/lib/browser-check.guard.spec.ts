@@ -39,22 +39,18 @@ describe('browserCheckGuard', () => {
     navigateSpy.mockClear();
   });
 
-  it('should be created', () => {
-    expect(browserCheckGuard).toBeTruthy();
-  });
-
   describe('対応ブラウザの場合', () => {
     afterEach(() => {
       vi.mocked(isSupportedBrowser).mockReset();
     });
 
-    it('対応ブラウザの場合はページ遷移を許可してtrueを返す', () => {
+    it('対応ブラウザの場合はホームページへリダイレクトしてfalseを返す', () => {
       vi.mocked(isSupportedBrowser).mockReturnValue(true);
 
       const result = executeGuard(route, state);
 
-      expect(result).toBe(true);
-      expect(navigateSpy).not.toHaveBeenCalled();
+      expect(result).toBe(false);
+      expect(navigateSpy).toHaveBeenCalledWith(['/']);
     });
   });
 

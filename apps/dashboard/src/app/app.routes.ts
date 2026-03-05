@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { browserCheckGuard, unsupportedBrowserGuard } from '@dashboard/guards';
+import { browserCheckGuard } from '@dashboard/guards';
 
 export const routes: Routes = [
   {
@@ -10,7 +10,6 @@ export const routes: Routes = [
   {
     path: 'unsupported-browser',
     loadComponent: () => import('@libs-unsupported-browser'),
-    canActivate: [unsupportedBrowserGuard],
   },
   {
     path: '**',
