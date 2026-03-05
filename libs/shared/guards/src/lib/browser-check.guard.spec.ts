@@ -1,5 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, provideRouter, Router } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  provideRouter,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
 import { vi } from 'vitest';
 
 import { browserCheckGuard } from './browser-check.guard';
