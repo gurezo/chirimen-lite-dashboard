@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/core": "21.1.6",
-    "@angular/router": "21.1.6"
+    "@angular/router": "21.1.6",
+    "@gurezo/web-serial-rxjs": "0.1.8"
   },
   "sideEffects": false
 }
