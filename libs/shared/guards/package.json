@@ -4,7 +4,7 @@
   "peerDependencies": {
     "@angular/core": "21.1.6",
     "@angular/router": "21.1.6",
-    "@gurezo/web-serial-rxjs": "0.1.8"
+    "@gurezo/web-serial-rxjs": "0.1.11"
   },
   "sideEffects": false
 }
