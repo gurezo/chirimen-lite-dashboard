@@ -1,5 +1,5 @@
 {
-  "name": "chirimen-lite-dashboard",
+  "name": "chirimen-lite-console",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",

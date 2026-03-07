@@ -14,7 +14,7 @@ git rebase main
 echo "dashboard build"
 echo ""
 
-npx nx build apps-dashboard --prod --base-href /chirimen-lite-dashboard/
+npx nx build apps-dashboard --prod --base-href /chirimen-lite-console/
 
 
 echo "dashboard docs remove"
