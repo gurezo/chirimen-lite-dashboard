@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "dashboard re-install"
+echo "console re-install"
 echo ""
 
 echo "remove node_modules, package-lock.json, .angular"

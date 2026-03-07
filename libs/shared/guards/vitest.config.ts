@@ -14,7 +14,7 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
       reportsDirectory: resolve(
         __dirname,
-        '../../../coverage/libs/dashboard/guards',
+        '../../../coverage/libs/console/guards',
       ),
     },
     include: [

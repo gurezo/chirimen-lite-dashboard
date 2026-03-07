@@ -1,8 +1,8 @@
 {
-  "name": "apps-dashboard",
+  "name": "apps-console",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/dashboard/src",
+  "sourceRoot": "apps/console/src",
   "prefix": "choh",
   "generators": {
     "@schematics/angular:component": {
@@ -13,17 +13,17 @@
     "build": {
       "executor": "@angular-devkit/build-angular:application",
       "options": {
-        "outputPath": "dist/dashboard",
-        "index": "apps/dashboard/src/index.html",
-        "browser": "apps/dashboard/src/main.ts",
+        "outputPath": "dist/console",
+        "index": "apps/console/src/index.html",
+        "browser": "apps/console/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "apps/dashboard/tsconfig.app.json",
+        "tsConfig": "apps/console/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "allowedCommonJsDependencies": ["@xterm/xterm"],
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/dashboard/public"
+            "input": "apps/console/public"
           },
           {
             "glob": "**/*",
@@ -32,7 +32,7 @@
           },
           {
             "glob": "**/*",
-            "input": "apps/dashboard/public/assets/json",
+            "input": "apps/console/public/assets/json",
             "output": "/assets/json/"
           },
           {
@@ -46,7 +46,7 @@
           "@angular/material/prebuilt-themes/rose-red.css",
           "@xterm/xterm/css/xterm.css",
           "node_modules/ngx-toastr/toastr.css",
-          "apps/dashboard/src/styles.scss"
+          "apps/console/src/styles.scss"
         ],
         "scripts": []
       },
@@ -78,10 +78,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "apps-dashboard:build:production"
+          "buildTarget": "apps-console:build:production"
         },
         "development": {
-          "buildTarget": "apps-dashboard:build:development"
+          "buildTarget": "apps-console:build:development"
         }
       },
       "defaultConfiguration": "development",
@@ -94,7 +94,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "command": "vitest run --config apps/dashboard/vitest.config.ts",
+        "command": "vitest run --config apps/console/vitest.config.ts",
         "cwd": "{workspaceRoot}"
       }
     }

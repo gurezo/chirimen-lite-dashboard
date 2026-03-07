@@ -11,27 +11,27 @@ echo ""
 
 git rebase main
 
-echo "dashboard build"
+echo "console build"
 echo ""
 
-npx nx build apps-dashboard --prod --base-href /chirimen-lite-console/
+npx nx build apps-console --prod --base-href /chirimen-lite-console/
 
 
-echo "dashboard docs remove"
+echo "console docs remove"
 echo ""
 
 rm -rf docs
 
-echo "dashboard docs create"
+echo "console docs create"
 echo ""
 
 mkdir docs
 
 
-echo "dashboard deploy code move"
+echo "console deploy code move"
 echo ""
 
-mv -f dist/dashboard/browser/* docs
+mv -f dist/console/browser/* docs
 
 echo "git add"
 echo ""

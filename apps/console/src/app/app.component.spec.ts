@@ -17,9 +17,9 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'dashboard' title`, () => {
+  it(`should have the 'CHIRIMEN Lite Console' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('dashboard');
+    expect(app.title).toEqual('CHIRIMEN Lite Console');
   });
 });
