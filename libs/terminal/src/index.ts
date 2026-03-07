@@ -1,2 +1,2 @@
 // Public API Surface of @libs-terminal
-export { default as ConsoleComponent } from './lib/console.component';
+export { default as TerminalComponent } from './lib/terminal.component';
