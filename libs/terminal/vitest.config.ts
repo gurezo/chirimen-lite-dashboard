@@ -14,7 +14,12 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
       reportsDirectory: resolve(__dirname, '../../coverage/libs/console'),
     },
-    include: [resolve(__dirname, './src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}')],
+    include: [
+      resolve(
+        __dirname,
+        './src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+      ),
+    ],
   },
   resolve: {
     alias: {
