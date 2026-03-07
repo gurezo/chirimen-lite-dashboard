@@ -1,7 +1,7 @@
 {
-  "name": "libs-console",
+  "name": "libs-terminal",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/console/src",
+  "sourceRoot": "libs/terminal/src",
   "prefix": "choh",
   "projectType": "library",
   "tags": [],
@@ -10,12 +10,12 @@
       "executor": "@nx/angular:ng-packagr-lite",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
-        "project": "libs/console/ng-package.json",
-        "tsConfig": "libs/console/tsconfig.lib.json"
+        "project": "libs/terminal/ng-package.json",
+        "tsConfig": "libs/terminal/tsconfig.lib.json"
       },
       "configurations": {
         "production": {
-          "tsConfig": "libs/console/tsconfig.lib.prod.json"
+          "tsConfig": "libs/terminal/tsconfig.lib.prod.json"
         },
         "development": {}
       },
@@ -25,7 +25,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "command": "vitest run --config libs/console/vitest.config.ts",
+        "command": "vitest run --config libs/terminal/vitest.config.ts",
         "cwd": "{workspaceRoot}"
       }
     },

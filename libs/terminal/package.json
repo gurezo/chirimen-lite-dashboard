@@ -1,5 +1,5 @@
 {
-  "name": "@libs-console",
+  "name": "@libs-terminal",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/core": "21.1.6",
@@ -11,4 +11,3 @@
   },
   "sideEffects": false
 }
-
