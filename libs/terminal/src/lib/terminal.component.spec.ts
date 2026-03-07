@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import ConsoleComponent from './console.component';
+import TerminalComponent from './terminal.component';
 
-describe('ConsoleComponent', () => {
-  let component: ConsoleComponent;
-  let fixture: ComponentFixture<ConsoleComponent>;
+describe('TerminalComponent', () => {
+  let component: TerminalComponent;
+  let fixture: ComponentFixture<TerminalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConsoleComponent],
+      imports: [TerminalComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ConsoleComponent);
+    fixture = TestBed.createComponent(TerminalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -7,12 +7,12 @@ import { Store } from '@ngrx/store';
 import { Terminal } from '@xterm/xterm';
 
 @Component({
-  selector: 'choh-console',
+  selector: 'choh-terminal',
   imports: [MatDividerModule],
   template: ` <div id="consoleDom" class="mt-2"></div> `,
   providers: [SerialFacadeService],
 })
-export default class ConsoleComponent implements AfterViewInit {
+export default class TerminalComponent implements AfterViewInit {
   store = inject(Store);
   service = inject(SerialFacadeService);
   dialogService = inject(DialogService);
