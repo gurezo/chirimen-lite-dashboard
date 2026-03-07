@@ -54,7 +54,7 @@
         "configDir": "libs/shared/ui/.storybook",
         "browserTarget": "libs-ui:build-storybook",
         "compodoc": false,
-        "styles": ["apps/dashboard/src/styles.scss"]
+        "styles": ["apps/console/src/styles.scss"]
       },
       "configurations": {
         "ci": {

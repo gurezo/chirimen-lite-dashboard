@@ -8,9 +8,8 @@ describe('PinAssignComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PinAssignComponent]
-    })
-    .compileComponents();
+      imports: [PinAssignComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PinAssignComponent);
     component = fixture.componentInstance;

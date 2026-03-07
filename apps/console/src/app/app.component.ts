@@ -8,7 +8,7 @@ import { IconService } from '@libs-shared';
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
-  title = 'CHIRIMEN Lite DashBoard';
+  title = 'CHIRIMEN Lite Console';
   iconService = inject(IconService);
 
   ngOnInit(): void {

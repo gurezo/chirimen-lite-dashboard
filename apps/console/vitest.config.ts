@@ -14,7 +14,12 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
       reportsDirectory: resolve(__dirname, '../../coverage/apps/dashboard'),
     },
-    include: [resolve(__dirname, './src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}')],
+    include: [
+      resolve(
+        __dirname,
+        './src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+      ),
+    ],
   },
   resolve: {
     alias: {
@@ -31,4 +36,3 @@ export default defineConfig({
     target: 'node22',
   },
 });
-

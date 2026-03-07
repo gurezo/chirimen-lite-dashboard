@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { browserCheckGuard } from '@dashboard/guards';
+import { browserCheckGuard } from '@console/guards';
 
 export const routes: Routes = [
   {
