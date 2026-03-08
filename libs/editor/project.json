@@ -14,7 +14,7 @@
       }
     },
     "build": {
-      "dependsOn": ["prepare-package"],
+      "dependsOn": ["^build", "prepare-package"],
       "executor": "@nx/angular:ng-packagr-lite",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {

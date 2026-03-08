@@ -2,8 +2,9 @@
 /**
  * Generates ng-package.json and package.json in a lib root for build.
  * Run before @nx/angular:package or @nx/angular:ng-packagr-lite.
+ * Package name is derived from projectRoot; peerDependencies from root
+ * package.json dependencies + devDependencies.
  * Usage: node scripts/generate-lib-package.js <projectRoot>
- * Example: node scripts/generate-lib-package.js libs/dialogs
  */
 
 const fs = require('fs');
@@ -16,19 +17,28 @@ if (!projectRoot) {
   process.exit(1);
 }
 
-const manifestPath = path.join(workspaceRoot, projectRoot, 'package.manifest.json');
-const projectJsonPath = path.join(workspaceRoot, projectRoot, 'project.json');
-let packageMeta;
-if (fs.existsSync(manifestPath)) {
-  packageMeta = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-} else {
-  const projectJson = JSON.parse(fs.readFileSync(projectJsonPath, 'utf8'));
-  packageMeta = projectJson.libPackage || projectJson.package;
-}
-if (!packageMeta) {
-  console.error(`Missing package.manifest.json or "libPackage" in ${projectJsonPath}`);
-  process.exit(1);
-}
+const rootPackagePath = path.join(workspaceRoot, 'package.json');
+const rootPackage = JSON.parse(fs.readFileSync(rootPackagePath, 'utf8'));
+
+const nameByRoot = {
+  'libs/shared/guards': '@console/guards',
+  'libs/shared/ui': '@libs-ui',
+};
+const packageName =
+  nameByRoot[projectRoot] ||
+  '@libs-' + projectRoot.replace(/^libs\//, '').replace(/\//g, '-');
+
+const peerDependencies = {
+  ...(rootPackage.dependencies || {}),
+  ...(rootPackage.devDependencies || {}),
+};
+
+const packageMeta = {
+  name: packageName,
+  version: rootPackage.version || '0.0.1',
+  peerDependencies,
+  sideEffects: false,
+};
 
 const libRoot = path.join(workspaceRoot, projectRoot);
 const depth = projectRoot.split(path.sep).length;
