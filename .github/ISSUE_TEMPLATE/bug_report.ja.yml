@@ -1,0 +1,98 @@
+name: 🐛 バグ報告
+description: chirimen-lite-console の不具合報告
+title: '[Bug]: '
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ありがとうございます！再現可能な情報があると調査が速くなります。
+
+  - type: input
+    id: environment
+    attributes:
+      label: 環境（Nx / Node / pnpm など）
+      description: '例: Nx 22.x, Node 20.x, pnpm 10.x'
+      placeholder: 'Nx x.x / Node x.x / pnpm x.x'
+    validations:
+      required: true
+
+  - type: dropdown
+    id: runtime
+    attributes:
+      label: 対象アプリ
+      options:
+        - console (Angular)
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: ブラウザ / バージョン（web の場合）
+      description: '例: Chrome 120 / Edge 120'
+      placeholder: 'Chrome xx / Edge xx / 該当なし'
+    validations:
+      required: false
+
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: 'macOS / Windows / Linux'
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 何が起きましたか？
+      description: 実際に起きたこと（エラー内容や挙動）
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現手順
+      description: 再現手順（番号付きで）
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待される動作
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: ログ / エラースタック
+      description: コンソールログ、スタックトレース、スクリーンショット（あれば）を貼ってください
+      render: shell
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: チェックリスト
+      options:
+        - label: README の Quick Start を確認しました
+          required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ## 作業上の留意点
+
+        - 作業を実施する時は、Conventional Commits に準拠したブランチを作成して作業を開始してください
+        - 差分を Conventional Commits に準拠したコミットメッセージで、コミットしてください
+        - プッシュして `.github/pull_request_template.md` に沿った Conventional Commits に準拠したプルリクエストの概要とタイトルを作成してください

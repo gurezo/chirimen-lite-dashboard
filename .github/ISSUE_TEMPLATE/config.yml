@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 質問 / Q&A (Discussions)
+    url: https://github.com/gurezo/chirimen-lite-console/discussions
+    about: バグ報告・機能要望以外（質問、使い方相談）は Discussions へお願いします
+  - name: 📖 README / ドキュメント
+    url: https://github.com/gurezo/chirimen-lite-console#readme
+    about: まずは README（使い方、前提条件）をご確認ください
