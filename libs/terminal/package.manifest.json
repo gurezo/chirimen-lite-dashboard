@@ -1,0 +1,13 @@
+{
+  "name": "@libs-terminal",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/core": "21.1.6",
+    "@angular/material": "21.1.6",
+    "@libs-dialogs": "workspace:*",
+    "@libs-web-serial": "workspace:*",
+    "@ngrx/store": "21.0.1",
+    "@xterm/xterm": "^5.5.0"
+  },
+  "sideEffects": false
+}
