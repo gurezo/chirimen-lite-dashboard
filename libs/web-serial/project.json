@@ -6,7 +6,15 @@
   "projectType": "library",
   "tags": ["type:feature", "scope:shared"],
   "targets": {
+    "prepare-package": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node scripts/generate-lib-package.js {projectRoot}",
+        "cwd": "{workspaceRoot}"
+      }
+    },
     "build": {
+      "dependsOn": ["prepare-package"],
       "executor": "@nx/angular:package",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
@@ -14,9 +22,7 @@
         "tsConfig": "libs/web-serial/tsconfig.lib.json"
       },
       "configurations": {
-        "production": {
-          "tsConfig": "libs/web-serial/tsconfig.lib.prod.json"
-        },
+        "production": {},
         "development": {}
       },
       "defaultConfiguration": "production"
