@@ -4,6 +4,7 @@
   "sourceRoot": "libs/example/src",
   "prefix": "lib",
   "projectType": "library",
+  "implicitDependencies": ["libs-dialogs", "libs-ui"],
   "release": {
     "version": {
       "manifestRootsToUpdate": ["dist/{projectRoot}"],
@@ -21,7 +22,7 @@
       }
     },
     "build": {
-      "dependsOn": ["prepare-package"],
+      "dependsOn": ["^build", "prepare-package"],
       "executor": "@nx/angular:package",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {

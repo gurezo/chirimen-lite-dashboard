@@ -4,6 +4,7 @@
   "sourceRoot": "libs/chirimen-panel/src",
   "prefix": "choh",
   "projectType": "library",
+  "implicitDependencies": ["libs-dialogs", "libs-ui"],
   "tags": ["type:ui", "scope:shared"],
   "targets": {
     "prepare-package": {
@@ -14,7 +15,7 @@
       }
     },
     "build": {
-      "dependsOn": ["prepare-package"],
+      "dependsOn": ["^build", "prepare-package"],
       "executor": "@nx/angular:package",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
