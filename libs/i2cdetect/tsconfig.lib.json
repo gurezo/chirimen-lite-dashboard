@@ -3,9 +3,12 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "declaration": true,
-    "declarationMap": true,
+    "declarationMap": false,
     "inlineSources": false,
     "types": []
+  },
+  "angularCompilerOptions": {
+    "compilationMode": "partial"
   },
   "exclude": [
     "src/**/*.spec.ts",

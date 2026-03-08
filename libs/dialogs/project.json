@@ -14,7 +14,15 @@
   },
   "tags": [],
   "targets": {
+    "prepare-package": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node scripts/generate-lib-package.js {projectRoot}",
+        "cwd": "{workspaceRoot}"
+      }
+    },
     "build": {
+      "dependsOn": ["prepare-package"],
       "executor": "@nx/angular:ng-packagr-lite",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
@@ -22,9 +30,7 @@
         "tsConfig": "libs/dialogs/tsconfig.lib.json"
       },
       "configurations": {
-        "production": {
-          "tsConfig": "libs/dialogs/tsconfig.lib.prod.json"
-        },
+        "production": {},
         "development": {}
       },
       "defaultConfiguration": "production"
