@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/core": "21.1.6",
-    "@libs-dialogs": "0.0.1",
-    "@libs-ui": "0.0.1",
-    "@libs-web-serial": "0.0.1"
+    "@libs-dialogs": "workspace:*",
+    "@libs-ui": "workspace:*",
+    "@libs-web-serial": "workspace:*"
   },
   "sideEffects": false
 }

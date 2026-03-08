@@ -4,8 +4,8 @@
   "peerDependencies": {
     "@angular/core": "21.1.6",
     "@angular/material": "21.1.6",
-    "@libs-dialogs": "0.0.1",
-    "@libs-ui": "0.0.1"
+    "@libs-dialogs": "workspace:*",
+    "@libs-ui": "workspace:*"
   },
   "sideEffects": false
 }
