@@ -1,13 +1,18 @@
 {
   "name": "libs-connect-ui",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "connect/ui/src",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/connect/ui/src",
   "projectType": "library",
-  "tags": ["type:ui", "domain:connect"],
+  "tags": [
+    "type:ui",
+    "domain:connect"
+  ],
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/dist/{projectRoot}"
+      ],
       "options": {
         "command": "echo \"build libs-connect-ui\""
       }
@@ -17,4 +22,3 @@
     }
   }
 }
-
