@@ -27,7 +27,7 @@
       "@libs-page-not-found": ["libs/page-not-found/src/index.ts"],
       "@libs-unsupported-browser": ["libs/unsupported-browser/src/index.ts"],
       "@libs-terminal": ["libs/terminal/src/index.ts"],
-      "@chirimen-lite/connect/feature": ["connect/feature/src/index.ts"],
+      "@chirimen-lite/connect/feature": ["libs/connect/feature/src/index.ts"],
       "@chirimen-lite/connect/ui": ["connect/ui/src/index.ts"],
       "@chirimen-lite/connect/util": ["connect/util/src/index.ts"]
     }
