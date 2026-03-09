@@ -124,10 +124,10 @@ importers:
         specifier: 21.1.6
         version: 21.1.6(@angular/compiler@21.1.6)(typescript@5.9.2)
       '@commitlint/cli':
-        specifier: ^19.6.0
+        specifier: 19.8.1
         version: 19.8.1(@types/node@18.16.9)(typescript@5.9.2)
       '@commitlint/config-conventional':
-        specifier: ^19.6.0
+        specifier: 19.8.1
         version: 19.8.1
       '@nx/angular':
         specifier: 22.5.3
