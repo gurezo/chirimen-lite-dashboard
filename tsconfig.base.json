@@ -69,6 +69,15 @@
       ],
       "@chirimen-lite/connect/util": [
         "libs/connect/util/src/index.ts"
+      ],
+      "@chirimen-lite/console-shell/feature": [
+        "libs/console-shell/feature/src/index.ts"
+      ],
+      "@chirimen-lite/console-shell/ui": [
+        "libs/console-shell/ui/src/index.ts"
+      ],
+      "@chirimen-lite/console-shell/util": [
+        "libs/console-shell/util/src/index.ts"
       ]
     }
   }
