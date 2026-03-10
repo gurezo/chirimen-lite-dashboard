@@ -18,7 +18,10 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/connect/util/**/*.ts"]
+      }
     }
   }
 }
