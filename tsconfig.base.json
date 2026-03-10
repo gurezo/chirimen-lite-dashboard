@@ -78,6 +78,18 @@
       ],
       "@chirimen-lite/console-shell/util": [
         "libs/console-shell/util/src/index.ts"
+      ],
+      "@chirimen-lite/remote/feature": [
+        "libs/remote/feature/src/index.ts"
+      ],
+      "@chirimen-lite/remote/ui": [
+        "libs/remote/ui/src/index.ts"
+      ],
+      "@chirimen-lite/remote/data-access": [
+        "libs/remote/data-access/src/index.ts"
+      ],
+      "@chirimen-lite/remote/util": [
+        "libs/remote/util/src/index.ts"
       ]
     }
   }
