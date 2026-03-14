@@ -4,7 +4,7 @@
   "sourceRoot": "libs/wifi/src",
   "prefix": "lib",
   "projectType": "library",
-  "implicitDependencies": ["libs-dialogs", "libs-ui", "libs-web-serial"],
+  "implicitDependencies": ["libs-dialogs-feature", "libs-ui", "libs-web-serial"],
   "release": {
     "version": {
       "manifestRootsToUpdate": ["dist/{projectRoot}"],

@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
-import { DialogService } from '@libs-dialogs';
+import { DialogService } from '@libs-dialogs-util';
 import { SerialFacadeService } from '@libs-web-serial';
 import { xtermConsoleConfigOptions } from './xterm-config';
 import { Store } from '@ngrx/store';

@@ -4,7 +4,7 @@
   "sourceRoot": "libs/example/src",
   "prefix": "lib",
   "projectType": "library",
-  "implicitDependencies": ["libs-dialogs", "libs-ui"],
+  "implicitDependencies": ["libs-dialogs-feature", "libs-ui"],
   "release": {
     "version": {
       "manifestRootsToUpdate": ["dist/{projectRoot}"],

@@ -1,6 +1,6 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { MatTable, MatTableModule } from '@angular/material/table';
-import { DialogService } from '@libs-dialogs';
+import { DialogService } from '@libs-dialogs-util';
 import { ButtonComponent } from '@libs-ui';
 
 export interface PeriodicElement {

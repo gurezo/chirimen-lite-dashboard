@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { DialogService } from '@libs-dialogs';
+import { DialogService } from '@libs-dialogs-util';
 import { ButtonComponent } from '@libs-ui';
 
 @Component({

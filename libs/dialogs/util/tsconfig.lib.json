@@ -1,19 +1,17 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "../../../dist/out-tsc",
     "declaration": true,
     "declarationMap": false,
     "inlineSources": true,
-    "types": []
+    "types": [],
+    "module": "preserve",
+    "moduleResolution": "bundler"
   },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
   "angularCompilerOptions": {
     "compilationMode": "partial"
-  },
-  "exclude": [
-    "src/**/*.spec.ts",
-    "src/test-setup.ts",
-    "src/**/*.test.ts"
-  ],
-  "include": ["src/**/*.ts"]
+  }
 }

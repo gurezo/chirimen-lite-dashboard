@@ -8,125 +8,65 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
-    "lib": [
-      "ES2022",
-      "dom",
-      "dom.iterable"
-    ],
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "lib": ["ES2022", "dom", "dom.iterable"],
+    "typeRoots": ["node_modules/@types"],
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@app/*": [
-        "apps/console/src/app/*"
+      "@app/*": ["apps/console/src/app/*"],
+      "@console/guards": ["libs/shared/guards/src/index.ts"],
+      "@libs-chirimen-panel": ["libs/chirimen-panel/src/index.ts"],
+      "@libs-dialogs": ["libs/dialogs/feature/src/index.ts"],
+      "@libs-dialogs-util": ["libs/dialogs/util/src/index.ts"],
+      "@chirimen-lite/dialogs/feature": [
+        "libs/dialogs/feature/src/index.ts"
       ],
-      "@console/guards": [
-        "libs/shared/guards/src/index.ts"
-      ],
-      "@libs-chirimen-panel": [
-        "libs/chirimen-panel/src/index.ts"
-      ],
-      "@libs-dialogs": [
-        "libs/dialogs/src/index.ts"
-      ],
-      "@chirimen-lite/dialogs/util": [
-        "libs/dialogs/util/src/index.ts"
-      ],
-      "@chirimen-lite/dialogs/ui": [
-        "libs/dialogs/ui/src/index.ts"
-      ],
-      "@libs-editor": [
-        "libs/editor/src/index.ts"
-      ],
-      "@libs-example": [
-        "libs/example/src/index.ts"
-      ],
-      "@libs-i2cdetect": [
-        "libs/i2cdetect/src/index.ts"
-      ],
-      "@libs-shared": [
-        "libs/shared/ui/src/index.ts"
-      ],
-      "@libs-ui": [
-        "libs/shared/ui/src/index.ts"
-      ],
-      "@libs-web-serial": [
-        "libs/web-serial/src/index.ts"
-      ],
-      "@libs-wifi": [
-        "libs/wifi/src/index.ts"
-      ],
-      "@libs-page-not-found": [
-        "libs/page-not-found/src/index.ts"
-      ],
-      "@libs-unsupported-browser": [
-        "libs/unsupported-browser/src/index.ts"
-      ],
-      "@libs-terminal": [
-        "libs/terminal/src/index.ts"
-      ],
-      "@chirimen-lite/connect/feature": [
-        "libs/connect/feature/src/index.ts"
-      ],
-      "@chirimen-lite/connect/ui": [
-        "libs/connect/ui/src/index.ts"
-      ],
-      "@chirimen-lite/connect/util": [
-        "libs/connect/util/src/index.ts"
-      ],
+      "@chirimen-lite/dialogs/util": ["libs/dialogs/util/src/index.ts"],
+      "@chirimen-lite/dialogs/ui": ["libs/dialogs/ui/src/index.ts"],
+      "@libs-editor": ["libs/editor/src/index.ts"],
+      "@libs-example": ["libs/example/src/index.ts"],
+      "@libs-i2cdetect": ["libs/i2cdetect/src/index.ts"],
+      "@libs-shared": ["libs/shared/ui/src/index.ts"],
+      "@libs-ui": ["libs/shared/ui/src/index.ts"],
+      "@libs-web-serial": ["libs/web-serial/src/index.ts"],
+      "@libs-wifi": ["libs/wifi/src/index.ts"],
+      "@libs-page-not-found": ["libs/page-not-found/src/index.ts"],
+      "@libs-unsupported-browser": ["libs/unsupported-browser/src/index.ts"],
+      "@libs-terminal": ["libs/terminal/src/index.ts"],
+      "@chirimen-lite/connect/feature": ["libs/connect/feature/src/index.ts"],
+      "@chirimen-lite/connect/ui": ["libs/connect/ui/src/index.ts"],
+      "@chirimen-lite/connect/util": ["libs/connect/util/src/index.ts"],
       "@chirimen-lite/console-shell/feature": [
         "libs/console-shell/feature/src/index.ts"
       ],
-      "@chirimen-lite/console-shell/ui": [
-        "libs/console-shell/ui/src/index.ts"
-      ],
+      "@chirimen-lite/console-shell/ui": ["libs/console-shell/ui/src/index.ts"],
       "@chirimen-lite/console-shell/util": [
         "libs/console-shell/util/src/index.ts"
       ],
-      "@chirimen-lite/remote/feature": [
-        "libs/remote/feature/src/index.ts"
-      ],
-      "@chirimen-lite/remote/ui": [
-        "libs/remote/ui/src/index.ts"
-      ],
+      "@chirimen-lite/remote/feature": ["libs/remote/feature/src/index.ts"],
+      "@chirimen-lite/remote/ui": ["libs/remote/ui/src/index.ts"],
       "@chirimen-lite/remote/data-access": [
         "libs/remote/data-access/src/index.ts"
       ],
-      "@chirimen-lite/remote/util": [
-        "libs/remote/util/src/index.ts"
-      ],
-      "@chirimen-lite/shared/types": [
-        "libs/shared/types/src/index.ts"
-      ],
-      "@chirimen-lite/shared/util": [
-        "libs/shared/util/src/index.ts"
-      ],
-      "@chirimen-lite/setup/util": [
-        "libs/setup/util/src/index.ts"
-      ],
+      "@chirimen-lite/remote/util": ["libs/remote/util/src/index.ts"],
+      "@chirimen-lite/shared/types": ["libs/shared/types/src/index.ts"],
+      "@chirimen-lite/shared/util": ["libs/shared/util/src/index.ts"],
+      "@chirimen-lite/setup/util": ["libs/setup/util/src/index.ts"],
       "@chirimen-lite/setup/data-access": [
         "libs/setup/data-access/src/index.ts"
       ],
-      "@chirimen-lite/setup/ui": [
-        "libs/setup/ui/src/index.ts"
-      ],
-      "@chirimen-lite/setup/feature": [
-        "libs/setup/feature/src/index.ts"
-      ],
+      "@chirimen-lite/setup/ui": ["libs/setup/ui/src/index.ts"],
+      "@chirimen-lite/setup/feature": ["libs/setup/feature/src/index.ts"],
       "@chirimen-lite/file-manager/feature": [
         "libs/file-manager/feature/src/index.ts"
       ],
-      "@chirimen-lite/file-manager/ui": [
-        "libs/file-manager/ui/src/index.ts"
-      ],
+      "@chirimen-lite/file-manager/ui": ["libs/file-manager/ui/src/index.ts"],
       "@chirimen-lite/file-manager/data-access": [
         "libs/file-manager/data-access/src/index.ts"
       ],
       "@chirimen-lite/file-manager/util": [
         "libs/file-manager/util/src/index.ts"
-      ]
+      ],
     }
   }
 }
