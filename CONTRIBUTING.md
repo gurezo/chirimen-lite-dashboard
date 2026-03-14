@@ -37,7 +37,7 @@
 | `chirimen-panel` | CHIRIMEN パネル lib |
 | `shared-ui` | 共有 UI lib |
 | `shared-guards` | 共有ガード lib |
-| `i2cdetect` | I2C 検出 lib |
+| `i2cdetect` / `i2cdetect-ui` / `i2cdetect-data-access` / `i2cdetect-util` | I2C 検出 lib（ui / data-access / util に分割） |
 
 ### 例
 
