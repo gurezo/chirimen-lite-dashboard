@@ -25,7 +25,6 @@
       "@libs-dialogs-feature": ["libs/dialogs/feature/src/index.ts"],
       "@libs-dialogs-ui": ["libs/dialogs/ui/src/index.ts"],
       "@libs-dialogs-util": ["libs/dialogs/util/src/index.ts"],
-      "@libs-editor": ["libs/editor/src/index.ts"],
       "@libs-editor-data-access": ["libs/editor/data-access/src/index.ts"],
       "@libs-editor-feature": ["libs/editor/feature/src/index.ts"],
       "@libs-editor-ui": ["libs/editor/ui/src/index.ts"],
