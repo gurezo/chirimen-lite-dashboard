@@ -37,6 +37,7 @@
       "@libs-i2cdetect-data-access": [
         "libs/i2cdetect/data-access/src/index.ts"
       ],
+      "@libs-i2cdetect-ui": ["libs/i2cdetect/ui/src/index.ts"],
       "@libs-i2cdetect-util": ["libs/i2cdetect/util/src/index.ts"],
       "@libs-page-not-found": ["libs/page-not-found/src/index.ts"],
       "@libs-remote-data-access": [
