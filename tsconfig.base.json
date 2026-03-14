@@ -45,6 +45,13 @@
       "@libs-i2cdetect-ui": ["libs/i2cdetect/ui/src/index.ts"],
       "@libs-i2cdetect-util": ["libs/i2cdetect/util/src/index.ts"],
       "@libs-page-not-found": ["libs/page-not-found/src/index.ts"],
+      "@libs-pin-assign-panel-feature": [
+        "libs/pin-assign-panel-feature/src/index.ts"
+      ],
+      "@libs-pin-assign-panel-ui": ["libs/pin-assign-panel-ui/src/index.ts"],
+      "@libs-pin-assign-panel-util": [
+        "libs/pin-assign-panel-util/src/index.ts"
+      ],
       "@libs-remote-data-access": [
         "libs/remote/data-access/src/index.ts"
       ],
