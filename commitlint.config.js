@@ -20,6 +20,7 @@ module.exports = {
         'shared-guards',
         'i2cdetect',
         'workspace',
+        'setup',
       ],
     ],
   },
