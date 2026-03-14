@@ -1,0 +1,25 @@
+{
+  "name": "libs-editor-feature",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/editor/feature/src",
+  "prefix": "choh",
+  "projectType": "library",
+  "tags": ["type:feature", "domain:editor"],
+  "implicitDependencies": ["libs-editor-ui", "libs-editor-data-access"],
+  "targets": {
+    "build": {
+      "dependsOn": ["^build"],
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "command": "echo \"build libs-editor-feature\""
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/editor/feature/**/*.ts"]
+      }
+    }
+  }
+}
