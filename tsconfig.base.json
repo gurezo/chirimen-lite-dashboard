@@ -54,6 +54,7 @@
       "@libs-shared-types": ["libs/shared/types/src/index.ts"],
       "@libs-shared-util": ["libs/shared/util/src/index.ts"],
       "@libs-terminal": ["libs/terminal/src/index.ts"],
+      "@libs-terminal-ui": ["libs/terminal/ui/src/index.ts"],
       "@libs-terminal-util": ["libs/terminal/util/src/index.ts"],
       "@libs-ui": ["libs/shared/ui/src/index.ts"],
       "@libs-unsupported-browser": ["libs/unsupported-browser/src/index.ts"],
