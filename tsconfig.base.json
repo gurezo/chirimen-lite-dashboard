@@ -30,6 +30,10 @@
       "@libs-editor-ui": ["libs/editor/ui/src/index.ts"],
       "@libs-editor-util": ["libs/editor/util/src/index.ts"],
       "@libs-example": ["libs/example/src/index.ts"],
+      "@libs-example-util": ["libs/example/util/src/index.ts"],
+      "@libs-example-data-access": ["libs/example/data-access/src/index.ts"],
+      "@libs-example-ui": ["libs/example/ui/src/index.ts"],
+      "@libs-example-feature": ["libs/example/feature/src/index.ts"],
       "@libs-file-manager-data-access": [
         "libs/file-manager/data-access/src/index.ts"
       ],
