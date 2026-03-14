@@ -4,8 +4,8 @@
   "sourceRoot": "libs/chirimen-panel/src",
   "prefix": "choh",
   "projectType": "library",
-  "implicitDependencies": ["libs-pin-assign-panel-feature"],
   "tags": ["type:ui", "scope:shared"],
+  "implicitDependencies": ["libs-pin-assign-panel-feature"],
   "targets": {
     "build": {
       "dependsOn": ["^build"],

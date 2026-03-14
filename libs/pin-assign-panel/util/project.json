@@ -1,12 +1,9 @@
 {
   "name": "libs-pin-assign-panel-util",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/pin-assign-panel-util/src",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/pin-assign-panel/util/src",
   "projectType": "library",
-  "tags": [
-    "type:util",
-    "domain:pin-assign-panel"
-  ],
+  "tags": ["type:util", "domain:pin-assign-panel"],
   "targets": {
     "prepare-package": {
       "executor": "nx:run-commands",
@@ -20,8 +17,8 @@
       "executor": "@nx/angular:package",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
-        "project": "libs/pin-assign-panel-util/ng-package.json",
-        "tsConfig": "libs/pin-assign-panel-util/tsconfig.lib.json"
+        "project": "libs/pin-assign-panel/util/ng-package.json",
+        "tsConfig": "libs/pin-assign-panel/util/tsconfig.lib.json"
       },
       "configurations": {
         "production": {},
@@ -32,7 +29,7 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "options": {
-        "lintFilePatterns": ["libs/pin-assign-panel-util/**/*.ts"]
+        "lintFilePatterns": ["libs/pin-assign-panel/util/**/*.ts"]
       }
     }
   }

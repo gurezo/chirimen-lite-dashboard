@@ -19,7 +19,9 @@
       "@libs-connect-feature": ["libs/connect/feature/src/index.ts"],
       "@libs-connect-ui": ["libs/connect/ui/src/index.ts"],
       "@libs-connect-util": ["libs/connect/util/src/index.ts"],
-      "@libs-console-shell-feature": ["libs/console-shell/feature/src/index.ts"],
+      "@libs-console-shell-feature": [
+        "libs/console-shell/feature/src/index.ts"
+      ],
       "@libs-console-shell-ui": ["libs/console-shell/ui/src/index.ts"],
       "@libs-console-shell-util": ["libs/console-shell/util/src/index.ts"],
       "@libs-dialogs-feature": ["libs/dialogs/feature/src/index.ts"],
@@ -46,21 +48,17 @@
       "@libs-i2cdetect-util": ["libs/i2cdetect/util/src/index.ts"],
       "@libs-page-not-found": ["libs/page-not-found/src/index.ts"],
       "@libs-pin-assign-panel-feature": [
-        "libs/pin-assign-panel-feature/src/index.ts"
+        "libs/pin-assign-panel/feature/src/index.ts"
       ],
-      "@libs-pin-assign-panel-ui": ["libs/pin-assign-panel-ui/src/index.ts"],
+      "@libs-pin-assign-panel-ui": ["libs/pin-assign-panel/ui/src/index.ts"],
       "@libs-pin-assign-panel-util": [
-        "libs/pin-assign-panel-util/src/index.ts"
+        "libs/pin-assign-panel/util/src/index.ts"
       ],
-      "@libs-remote-data-access": [
-        "libs/remote/data-access/src/index.ts"
-      ],
+      "@libs-remote-data-access": ["libs/remote/data-access/src/index.ts"],
       "@libs-remote-feature": ["libs/remote/feature/src/index.ts"],
       "@libs-remote-ui": ["libs/remote/ui/src/index.ts"],
       "@libs-remote-util": ["libs/remote/util/src/index.ts"],
-      "@libs-setup-data-access": [
-        "libs/setup/data-access/src/index.ts"
-      ],
+      "@libs-setup-data-access": ["libs/setup/data-access/src/index.ts"],
       "@libs-setup-feature": ["libs/setup/feature/src/index.ts"],
       "@libs-setup-ui": ["libs/setup/ui/src/index.ts"],
       "@libs-setup-util": ["libs/setup/util/src/index.ts"],
