@@ -34,6 +34,9 @@
       "@chirimen-lite/dialogs/util": [
         "libs/dialogs/util/src/index.ts"
       ],
+      "@chirimen-lite/dialogs/ui": [
+        "libs/dialogs/ui/src/index.ts"
+      ],
       "@libs-editor": [
         "libs/editor/src/index.ts"
       ],
