@@ -1,16 +1,59 @@
-import { Component } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import {
+  ConnectButtonComponent,
+  ConnectionStatusComponent,
+  type ConnectStatus,
+} from '@libs-connect-ui';
+import { WebSerialActions } from '@libs-web-serial-state';
+import { Store } from '@ngrx/store';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'lib-connect-page',
   standalone: true,
+  imports: [
+    AsyncPipe,
+    ConnectButtonComponent,
+    ConnectionStatusComponent,
+  ],
   template: `
-    <section>
-      <h1>Connect Page</h1>
-      <p>
-        TODO: connect/ui ライブラリの ConnectButton や ConnectionStatus
-        コンポーネントを組み合わせて 実際の接続画面を実装します。
-      </p>
+    <section
+      class="text-center h-[80vh] flex flex-col justify-center items-center gap-4"
+    >
+      @if (connectionStatus$ | async; as status) {
+        <lib-connection-status
+          [status]="status"
+          [message]="disconnectedMessage"
+          [imageSrc]="imageSrc"
+          [imageAlt]="imageAlt"
+        />
+        @if (status === 'disconnected') {
+          <lib-connect-button
+            [label]="connectButtonLabel"
+            (connect)="onConnect()"
+          />
+        }
+      }
     </section>
   `,
 })
-export class ConnectPageComponent {}
+export class ConnectPageComponent {
+  private store = inject(Store);
+
+  disconnectedMessage =
+    'Raspberry Pi Zero と PC を USB で繋いだ後、Connect ボタンをクリックして、Web Serail を接続して下さい';
+  imageSrc = '/PiZeroW_OTG.jpg';
+  imageAlt = 'PiZeroW_OTG';
+  connectButtonLabel = 'Web Serial Connect';
+
+  connectionStatus$ = this.store
+    .select((state: { webSerial: { isConnected: boolean } }) => state.webSerial.isConnected)
+    .pipe(
+      map((connected): ConnectStatus => (connected ? 'connected' : 'disconnected'))
+    );
+
+  onConnect(): void {
+    this.store.dispatch(WebSerialActions.onConnect());
+  }
+}
