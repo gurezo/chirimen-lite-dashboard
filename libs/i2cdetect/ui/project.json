@@ -1,0 +1,30 @@
+{
+  "name": "libs-i2cdetect-ui",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/i2cdetect/ui/src",
+  "projectType": "library",
+  "tags": [
+    "type:ui",
+    "domain:i2cdetect"
+  ],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": [
+        "{workspaceRoot}/dist/{projectRoot}"
+      ],
+      "options": {
+        "command": "echo \"build libs-i2cdetect-ui\""
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/i2cdetect/ui/**/*.ts",
+          "libs/i2cdetect/ui/**/*.html"
+        ]
+      }
+    }
+  }
+}
