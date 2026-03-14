@@ -1,3 +1,3 @@
-/** Barrel: re-export dialogs util and ui for @libs-dialogs compatibility. */
-export * from '@chirimen-lite/dialogs/util';
-export * from '@chirimen-lite/dialogs/ui';
+/** Barrel: re-export dialogs util and ui for @libs-dialogs-feature compatibility. */
+export * from '@libs-dialogs-util';
+export * from '@libs-dialogs-ui';
