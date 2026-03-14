@@ -1,0 +1,39 @@
+{
+  "name": "libs-i2cdetect-util",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/i2cdetect/util/src",
+  "projectType": "library",
+  "tags": [
+    "type:util",
+    "domain:i2cdetect"
+  ],
+  "targets": {
+    "prepare-package": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node scripts/generate-lib-package.js {projectRoot}",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "build": {
+      "dependsOn": ["^build", "prepare-package"],
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/i2cdetect/util/ng-package.json",
+        "tsConfig": "libs/i2cdetect/util/tsconfig.lib.json"
+      },
+      "configurations": {
+        "production": {},
+        "development": {}
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/i2cdetect/util/**/*.ts"]
+      }
+    }
+  }
+}

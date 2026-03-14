@@ -34,6 +34,7 @@
       "@libs-file-manager-ui": ["libs/file-manager/ui/src/index.ts"],
       "@libs-file-manager-util": ["libs/file-manager/util/src/index.ts"],
       "@libs-i2cdetect": ["libs/i2cdetect/src/index.ts"],
+      "@libs-i2cdetect-util": ["libs/i2cdetect/util/src/index.ts"],
       "@libs-page-not-found": ["libs/page-not-found/src/index.ts"],
       "@libs-remote-data-access": [
         "libs/remote/data-access/src/index.ts"
