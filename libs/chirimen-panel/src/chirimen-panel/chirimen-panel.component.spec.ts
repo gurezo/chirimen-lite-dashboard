@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { PinAssignPanelComponent } from './pin-assign-panel.component';
+import { ChirimenPanelComponent } from './chirimen-panel.component';
 
-describe('PinAssignPanelComponent', () => {
-  let component: PinAssignPanelComponent;
-  let fixture: ComponentFixture<PinAssignPanelComponent>;
+describe('ChirimenPanelComponent', () => {
+  let component: ChirimenPanelComponent;
+  let fixture: ComponentFixture<ChirimenPanelComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PinAssignPanelComponent],
+      imports: [ChirimenPanelComponent],
       providers: [provideNoopAnimations()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PinAssignPanelComponent);
+    fixture = TestBed.createComponent(ChirimenPanelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
