@@ -1,9 +1,16 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { createSelector } from '@ngrx/store';
 import { Store } from '@ngrx/store';
 import { map, take } from 'rxjs';
 
-import { isConnected } from '@libs-web-serial-state';
+const selectWebSerial = (state: { webSerial: { isConnected: boolean } }) =>
+  state.webSerial;
+
+const isConnected = createSelector(
+  selectWebSerial,
+  (state) => state.isConnected
+);
 
 /**
  * 接続必須でないルート（'' または 'unsupported-browser'）は常に許可する。
