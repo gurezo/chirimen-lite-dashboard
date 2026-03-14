@@ -96,6 +96,9 @@
       ],
       "@chirimen-lite/setup/data-access": [
         "libs/setup/data-access/src/index.ts"
+      ],
+      "@chirimen-lite/setup/ui": [
+        "libs/setup/ui/src/index.ts"
       ]
     }
   }
