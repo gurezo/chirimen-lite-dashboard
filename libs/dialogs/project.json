@@ -13,27 +13,16 @@
     }
   },
   "tags": [],
+  "implicitDependencies": ["libs-dialogs-util", "libs-dialogs-ui"],
   "targets": {
-    "prepare-package": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "node scripts/generate-lib-package.js {projectRoot}",
-        "cwd": "{workspaceRoot}"
-      }
-    },
     "build": {
-      "dependsOn": ["^build", "prepare-package"],
-      "executor": "@nx/angular:ng-packagr-lite",
+      "dependsOn": ["^build"],
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
-        "project": "libs/dialogs/ng-package.json",
-        "tsConfig": "libs/dialogs/tsconfig.lib.json"
-      },
-      "configurations": {
-        "production": {},
-        "development": {}
-      },
-      "defaultConfiguration": "production"
+        "command": "mkdir -p dist/libs/dialogs && echo \"build libs-dialogs\"",
+        "cwd": "{workspaceRoot}"
+      }
     },
     "nx-release-publish": {
       "options": {

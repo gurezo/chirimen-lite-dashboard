@@ -1,1 +1,2 @@
-export * from './lib/services/dialog.service';
+export * from '@chirimen-lite/dialogs/util';
+export * from '@chirimen-lite/dialogs/ui';
