@@ -1,6 +1,9 @@
-import { AsyncPipe, NgOptimizedImage } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ButtonComponent } from '@libs-ui';
+import {
+  ConnectButtonComponent,
+  ConnectionStatusComponent,
+} from '@libs-connect-ui';
 import { HeaderToolbarComponent } from '@libs-console-shell-ui';
 import {
   selectConnectionMessage,
@@ -17,9 +20,9 @@ import { filter } from 'rxjs/operators';
   standalone: true,
   imports: [
     AsyncPipe,
-    ButtonComponent,
+    ConnectButtonComponent,
+    ConnectionStatusComponent,
     HeaderToolbarComponent,
-    NgOptimizedImage,
   ],
   templateUrl: './console-shell.component.html',
 })

@@ -13,17 +13,15 @@
   <div
     class="col-span-4 text-center h-[80vh] flex flex-col justify-center items-center gap-4"
   >
-    <h2>
-      Raspberry Pi Zero と PC を USB で繋いだ後、Connect
-      ボタンをクリックして、Web Serail を接続して下さい
-    </h2>
-    <img
-      ngSrc="PiZeroW_OTG.jpg"
-      width="680"
-      height="270"
-      priority
-      alt="PiZeroW_OTG"
+    <lib-connection-status
+      status="disconnected"
+      message="Raspberry Pi Zero と PC を USB で繋いだ後、Connect ボタンをクリックして、Web Serail を接続して下さい"
+      imageSrc="/PiZeroW_OTG.jpg"
+      imageAlt="PiZeroW_OTG"
     />
-    <choh-button [label]="'Web Serial Connect'" (clickEvent)="onConnect()" />
+    <lib-connect-button
+      label="Web Serial Connect"
+      (connect)="onConnect()"
+    />
   </div>
 }
