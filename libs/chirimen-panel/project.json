@@ -4,7 +4,7 @@
   "sourceRoot": "libs/chirimen-panel/src",
   "prefix": "choh",
   "projectType": "library",
-  "implicitDependencies": ["libs-dialogs", "libs-ui"],
+  "implicitDependencies": ["libs-dialogs-feature", "libs-ui"],
   "tags": ["type:ui", "scope:shared"],
   "targets": {
     "prepare-package": {

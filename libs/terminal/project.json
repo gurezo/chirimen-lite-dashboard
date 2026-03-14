@@ -4,7 +4,7 @@
   "sourceRoot": "libs/terminal/src",
   "prefix": "choh",
   "projectType": "library",
-  "implicitDependencies": ["libs-dialogs", "libs-web-serial"],
+  "implicitDependencies": ["libs-dialogs-feature", "libs-web-serial"],
   "tags": [],
   "targets": {
     "prepare-package": {
