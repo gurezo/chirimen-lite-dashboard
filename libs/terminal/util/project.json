@@ -1,0 +1,36 @@
+{
+  "name": "libs-terminal-util",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/terminal/util/src",
+  "projectType": "library",
+  "tags": ["type:util", "domain:terminal"],
+  "targets": {
+    "prepare-package": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node scripts/generate-lib-package.js {projectRoot}",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "build": {
+      "dependsOn": ["^build", "prepare-package"],
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/terminal/util/ng-package.json",
+        "tsConfig": "libs/terminal/util/tsconfig.lib.json"
+      },
+      "configurations": {
+        "production": {},
+        "development": {}
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/terminal/util/**/*.ts"]
+      }
+    }
+  }
+}
