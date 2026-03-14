@@ -53,7 +53,6 @@
       "@libs-setup-util": ["libs/setup/util/src/index.ts"],
       "@libs-shared-types": ["libs/shared/types/src/index.ts"],
       "@libs-shared-util": ["libs/shared/util/src/index.ts"],
-      "@libs-terminal": ["libs/terminal/src/index.ts"],
       "@libs-terminal-feature": ["libs/terminal/feature/src/index.ts"],
       "@libs-terminal-ui": ["libs/terminal/ui/src/index.ts"],
       "@libs-terminal-util": ["libs/terminal/util/src/index.ts"],
