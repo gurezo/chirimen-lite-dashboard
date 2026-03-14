@@ -4,7 +4,8 @@ import { browserCheckGuard, connectionGuard } from '@libs-console-guards';
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./layout/layout.component'),
+    loadComponent: () =>
+      import('@libs-console-shell-feature').then((m) => m.ConsoleShellComponent),
     canActivate: [browserCheckGuard, connectionGuard],
   },
   {
