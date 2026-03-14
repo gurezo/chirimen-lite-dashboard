@@ -111,6 +111,9 @@
       ],
       "@chirimen-lite/file-manager/data-access": [
         "libs/file-manager/data-access/src/index.ts"
+      ],
+      "@chirimen-lite/file-manager/util": [
+        "libs/file-manager/util/src/index.ts"
       ]
     }
   }
