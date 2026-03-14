@@ -29,7 +29,6 @@
       "@libs-editor-feature": ["libs/editor/feature/src/index.ts"],
       "@libs-editor-ui": ["libs/editor/ui/src/index.ts"],
       "@libs-editor-util": ["libs/editor/util/src/index.ts"],
-      "@libs-example": ["libs/example/feature/src/index.ts"],
       "@libs-example-util": ["libs/example/util/src/index.ts"],
       "@libs-example-data-access": ["libs/example/data-access/src/index.ts"],
       "@libs-example-ui": ["libs/example/ui/src/index.ts"],
