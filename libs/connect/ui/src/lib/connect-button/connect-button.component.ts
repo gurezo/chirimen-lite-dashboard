@@ -2,7 +2,6 @@ import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'lib-connect-button',
-  standalone: true,
   template: `
     <button
       type="button"

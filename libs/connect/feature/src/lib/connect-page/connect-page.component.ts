@@ -11,12 +11,7 @@ import { map } from 'rxjs';
 
 @Component({
   selector: 'lib-connect-page',
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    ConnectButtonComponent,
-    ConnectionStatusComponent,
-  ],
+  imports: [AsyncPipe, ConnectButtonComponent, ConnectionStatusComponent],
   template: `
     <section
       class="text-center h-[80vh] flex flex-col justify-center items-center gap-4"
@@ -48,9 +43,15 @@ export class ConnectPageComponent {
   connectButtonLabel = 'Web Serial Connect';
 
   connectionStatus$ = this.store
-    .select((state: { webSerial: { isConnected: boolean } }) => state.webSerial.isConnected)
+    .select(
+      (state: { webSerial: { isConnected: boolean } }) =>
+        state.webSerial.isConnected,
+    )
     .pipe(
-      map((connected): ConnectStatus => (connected ? 'connected' : 'disconnected'))
+      map(
+        (connected): ConnectStatus =>
+          connected ? 'connected' : 'disconnected',
+      ),
     );
 
   onConnect(): void {
