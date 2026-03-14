@@ -18,6 +18,8 @@ module.exports = {
         'chirimen-panel',
         'shared-ui',
         'shared-guards',
+        'shared-types',
+        'shared-util',
         'i2cdetect',
         'workspace',
         'setup',
