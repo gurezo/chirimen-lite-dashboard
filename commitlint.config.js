@@ -21,6 +21,7 @@ module.exports = {
         'i2cdetect',
         'workspace',
         'setup',
+        'file-manager',
       ],
     ],
   },
