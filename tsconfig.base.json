@@ -91,6 +91,12 @@
       "@chirimen-lite/remote/util": [
         "libs/remote/util/src/index.ts"
       ],
+      "@chirimen-lite/shared/types": [
+        "libs/shared/types/src/index.ts"
+      ],
+      "@chirimen-lite/shared/util": [
+        "libs/shared/util/src/index.ts"
+      ],
       "@chirimen-lite/setup/util": [
         "libs/setup/util/src/index.ts"
       ],
