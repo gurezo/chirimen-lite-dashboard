@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { FileContentService } from './file-content.service';
-import { SerialFacadeService } from '@libs-web-serial';
+import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { FileUtils } from '@libs-wifi-util';
 import { WifiRebootFlowService } from './wifi-reboot-flow.service';
 

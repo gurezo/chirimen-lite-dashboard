@@ -7,7 +7,7 @@ import {
   WebSerialEffects,
   webSerialFeatureKey,
   webSerialReducer,
-} from '@libs-web-serial';
+} from '@libs-web-serial-state';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
 import { provideStore } from '@ngrx/store';

@@ -3,7 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { map, take } from 'rxjs';
 
-import { isConnected } from '@libs-web-serial';
+import { isConnected } from '@libs-web-serial-state';
 
 /**
  * 接続必須でないルート（'' または 'unsupported-browser'）は常に許可する。

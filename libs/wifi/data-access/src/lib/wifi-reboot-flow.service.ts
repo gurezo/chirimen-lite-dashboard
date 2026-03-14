@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { SerialFacadeService } from '@libs-web-serial';
+import { SerialFacadeService } from '@libs-web-serial-data-access';
 
 /**
  * WiFi 再起動・有効/無効のフローを担当
