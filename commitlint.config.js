@@ -7,6 +7,7 @@ module.exports = {
       'always',
       [
         'console',
+        'console-shell',
         'page-not-found',
         'web-serial',
         'web-serial-util',
