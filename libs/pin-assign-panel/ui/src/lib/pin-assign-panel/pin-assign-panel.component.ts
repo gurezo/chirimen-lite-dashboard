@@ -1,7 +1,5 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, viewChild } from '@angular/core';
 import { MatTable, MatTableModule } from '@angular/material/table';
-import { DialogService } from '@libs-dialogs-util';
-import { ButtonComponent } from '@libs-ui';
 
 export interface PeriodicElement {
   runing: string;
@@ -18,19 +16,12 @@ const ELEMENT_DATA: PeriodicElement[] = [
 
 @Component({
   selector: 'choh-chirimen-panel',
-  standalone: true,
-  imports: [ButtonComponent, MatTable, MatTableModule],
+  imports: [MatTable, MatTableModule],
   templateUrl: './pin-assign-panel.component.html',
 })
 export class PinAssignPanelComponent {
   displayedColumns: string[] = ['Now Running', 'App Name', 'Select'];
   dataSource = [...ELEMENT_DATA];
-  private dialogService = inject(DialogService);
 
-  @ViewChild(MatTable) table: MatTable<PeriodicElement> =
-    {} as MatTable<PeriodicElement>;
-
-  closeModal(): void {
-    this.dialogService.close();
-  }
+  readonly table = viewChild(MatTable<PeriodicElement>);
 }

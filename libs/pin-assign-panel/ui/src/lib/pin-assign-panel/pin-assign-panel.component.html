@@ -25,7 +25,4 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-  <div class="flex justify-end w-full">
-    <choh-button [label]="'閉じる'" type="button" (clickEvent)="closeModal()" />
-  </div>
 </div>
