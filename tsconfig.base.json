@@ -62,7 +62,8 @@
       "@libs-ui": ["libs/shared/ui/src/index.ts"],
       "@libs-unsupported-browser": ["libs/unsupported-browser/src/index.ts"],
       "@libs-web-serial": ["libs/web-serial/src/index.ts"],
-      "@libs-wifi": ["libs/wifi/src/index.ts"]
+      "@libs-wifi": ["libs/wifi/src/index.ts"],
+      "@libs-wifi-util": ["libs/wifi/util/src/index.ts"]
     }
   }
 }
