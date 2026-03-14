@@ -33,7 +33,6 @@
       "@libs-file-manager-feature": ["libs/file-manager/feature/src/index.ts"],
       "@libs-file-manager-ui": ["libs/file-manager/ui/src/index.ts"],
       "@libs-file-manager-util": ["libs/file-manager/util/src/index.ts"],
-      "@libs-i2cdetect": ["libs/i2cdetect/src/index.ts"],
       "@libs-i2cdetect-data-access": [
         "libs/i2cdetect/data-access/src/index.ts"
       ],
