@@ -30,7 +30,14 @@ export default defineConfig({
       '@libs-terminal-ui': resolve(__dirname, '../ui/src/index.ts'),
       '@libs-terminal-util': resolve(__dirname, '../util/src/index.ts'),
       '@libs-dialogs-util': resolve(__dirname, '../../dialogs/util/src/index.ts'),
-      '@libs-web-serial': resolve(__dirname, '../../web-serial/src/index.ts'),
+      '@libs-web-serial-data-access': resolve(
+        __dirname,
+        '../../web-serial/data-access/src/index.ts',
+      ),
+      '@libs-web-serial-state': resolve(
+        __dirname,
+        '../../web-serial/state/src/index.ts',
+      ),
     },
   },
   esbuild: {

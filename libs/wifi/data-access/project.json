@@ -4,7 +4,7 @@
   "sourceRoot": "libs/wifi/data-access/src",
   "projectType": "library",
   "tags": ["type:data-access", "domain:wifi"],
-  "implicitDependencies": ["libs-wifi-util", "libs-web-serial"],
+  "implicitDependencies": ["libs-wifi-util", "libs-web-serial-data-access"],
   "targets": {
     "build": {
       "executor": "nx:run-commands",

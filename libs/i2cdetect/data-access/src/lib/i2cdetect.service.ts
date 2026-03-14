@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { SerialFacadeService } from '@libs-web-serial';
+import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { formatI2cdetectResult } from '@libs-i2cdetect-util';
 
 /**

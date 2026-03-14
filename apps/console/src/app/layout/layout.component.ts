@@ -4,9 +4,9 @@ import { ButtonComponent } from '@libs-ui';
 import {
   selectConnectionMessage,
   selectErrorMessage,
-  SerialNotificationService,
   WebSerialActions,
-} from '@libs-web-serial';
+} from '@libs-web-serial-state';
+import { SerialNotificationService } from '@libs-web-serial-data-access';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
