@@ -1,2 +1,3 @@
-/** Dialog UI components (confirm, progress, wait) - exports added with components */
-export {};
+export * from './lib/confirm-dialog/confirm-dialog.component';
+export * from './lib/progress-dialog/progress-dialog.component';
+export * from './lib/wait-dialog/wait-dialog.component';
