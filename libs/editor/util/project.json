@@ -12,6 +12,12 @@
         "command": "echo \"build libs-editor-util\""
       }
     },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "echo \"test libs-editor-util\""
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "options": {
