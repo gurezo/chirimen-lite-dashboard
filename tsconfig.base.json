@@ -14,7 +14,7 @@
     "baseUrl": ".",
     "paths": {
       "@app/*": ["apps/console/src/app/*"],
-      "@console/guards": ["libs/shared/guards/src/index.ts"],
+      "@libs-console-guards": ["libs/shared/guards/src/index.ts"],
       "@libs-chirimen-panel": ["libs/chirimen-panel/src/index.ts"],
       "@libs-connect-feature": ["libs/connect/feature/src/index.ts"],
       "@libs-connect-ui": ["libs/connect/ui/src/index.ts"],
