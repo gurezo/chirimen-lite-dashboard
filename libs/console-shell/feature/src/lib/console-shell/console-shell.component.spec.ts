@@ -1,0 +1,70 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { SerialNotificationService } from '@libs-web-serial-data-access';
+import { of } from 'rxjs';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ConsoleShellComponent } from './console-shell.component';
+
+describe('ConsoleShellComponent', () => {
+  let component: ConsoleShellComponent;
+  let fixture: ComponentFixture<ConsoleShellComponent>;
+  let storeSelect: ReturnType<typeof vi.fn>;
+  let storeDispatch: ReturnType<typeof vi.fn>;
+  let notifyConnectionSuccess: ReturnType<typeof vi.fn>;
+  let notifyConnectionError: ReturnType<typeof vi.fn>;
+
+  beforeEach(async () => {
+    storeSelect = vi
+      .fn()
+      .mockReturnValueOnce(of(false))
+      .mockReturnValueOnce(of(''))
+      .mockReturnValueOnce(of(''));
+    storeDispatch = vi.fn();
+
+    notifyConnectionSuccess = vi.fn();
+    notifyConnectionError = vi.fn();
+
+    await TestBed.configureTestingModule({
+      imports: [ConsoleShellComponent],
+      providers: [
+        provideRouter([]),
+        {
+          provide: Store,
+          useValue: { select: storeSelect, dispatch: storeDispatch },
+        },
+        {
+          provide: SerialNotificationService,
+          useValue: {
+            notifyConnectionSuccess,
+            notifyConnectionError,
+          },
+        },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ConsoleShellComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should dispatch init on ngOnInit', () => {
+    expect(storeDispatch).toHaveBeenCalled();
+  });
+
+  it('should dispatch onConnect when onConnect is called', () => {
+    storeDispatch.mockClear();
+    component.onConnect();
+    expect(storeDispatch).toHaveBeenCalledTimes(1);
+  });
+
+  it('should dispatch onDisConnect when onDisConnect is called', () => {
+    storeDispatch.mockClear();
+    component.onDisConnect();
+    expect(storeDispatch).toHaveBeenCalledTimes(1);
+  });
+});
