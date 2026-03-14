@@ -16,6 +16,7 @@ module.exports = {
         'editor',
         'terminal',
         'chirimen-panel',
+        'pin-assign-panel',
         'shared-ui',
         'shared-guards',
         'shared-types',
