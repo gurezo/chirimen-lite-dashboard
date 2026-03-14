@@ -69,7 +69,6 @@
       "@libs-terminal-util": ["libs/terminal/util/src/index.ts"],
       "@libs-ui": ["libs/shared/ui/src/index.ts"],
       "@libs-unsupported-browser": ["libs/unsupported-browser/src/index.ts"],
-      "@libs-web-serial": ["libs/web-serial/src/index.ts"],
       "@libs-web-serial-util": ["libs/web-serial/util/src/index.ts"],
       "@libs-web-serial-data-access": [
         "libs/web-serial/data-access/src/index.ts"
