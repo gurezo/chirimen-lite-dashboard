@@ -1,17 +1,17 @@
 import { Routes } from '@angular/router';
-import { browserCheckGuard, connectionGuard } from '@libs-console-guards';
+import { browserCheckGuard } from '@libs-console-guards';
 
 export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
       import('@libs-console-shell-feature').then((m) => m.ConsoleShellComponent),
-    canActivate: [browserCheckGuard, connectionGuard],
+    canActivate: [browserCheckGuard],
   },
   {
     path: 'unsupported-browser',
     loadComponent: () => import('@libs-unsupported-browser'),
-    canActivate: [browserCheckGuard, connectionGuard],
+    canActivate: [browserCheckGuard],
   },
   {
     path: '**',
