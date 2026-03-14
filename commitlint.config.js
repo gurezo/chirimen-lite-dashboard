@@ -6,6 +6,7 @@ module.exports = {
       2,
       'always',
       [
+        'connect',
         'console',
         'console-shell',
         'page-not-found',
