@@ -4,6 +4,7 @@ import {
   ConnectButtonComponent,
   ConnectionStatusComponent,
 } from '@libs-connect-ui';
+import { ChirimenPanelComponent } from '@libs-chirimen-panel';
 import { HeaderToolbarComponent } from '@libs-console-shell-ui';
 import { SerialNotificationService } from '@libs-web-serial-data-access';
 import {
@@ -19,6 +20,7 @@ import { filter } from 'rxjs/operators';
   selector: 'lib-console-shell',
   imports: [
     AsyncPipe,
+    ChirimenPanelComponent,
     ConnectButtonComponent,
     ConnectionStatusComponent,
     HeaderToolbarComponent,
