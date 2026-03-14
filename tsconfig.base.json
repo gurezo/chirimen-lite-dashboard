@@ -90,6 +90,9 @@
       ],
       "@chirimen-lite/remote/util": [
         "libs/remote/util/src/index.ts"
+      ],
+      "@chirimen-lite/setup/util": [
+        "libs/setup/util/src/index.ts"
       ]
     }
   }
