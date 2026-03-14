@@ -1,0 +1,27 @@
+{
+  "name": "libs-dialogs-util",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/dialogs/util/src",
+  "projectType": "library",
+  "tags": [
+    "type:util",
+    "domain:dialogs"
+  ],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": [
+        "{workspaceRoot}/dist/{projectRoot}"
+      ],
+      "options": {
+        "command": "echo \"build libs-dialogs-util\""
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/dialogs/util/**/*.ts"]
+      }
+    }
+  }
+}
