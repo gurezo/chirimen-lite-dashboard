@@ -5,19 +5,18 @@ import {
   ConnectionStatusComponent,
 } from '@libs-connect-ui';
 import { HeaderToolbarComponent } from '@libs-console-shell-ui';
+import { SerialNotificationService } from '@libs-web-serial-data-access';
 import {
   selectConnectionMessage,
   selectErrorMessage,
   WebSerialActions,
 } from '@libs-web-serial-state';
-import { SerialNotificationService } from '@libs-web-serial-data-access';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'lib-console-shell',
-  standalone: true,
   imports: [
     AsyncPipe,
     ConnectButtonComponent,
