@@ -105,6 +105,9 @@
       ],
       "@chirimen-lite/file-manager/feature": [
         "libs/file-manager/feature/src/index.ts"
+      ],
+      "@chirimen-lite/file-manager/ui": [
+        "libs/file-manager/ui/src/index.ts"
       ]
     }
   }
