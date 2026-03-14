@@ -8,11 +8,7 @@ import {
 import { vi } from 'vitest';
 
 import { browserCheckGuard } from './browser-check.guard';
-import { isBrowserSupported } from '@gurezo/web-serial-rxjs';
-
-vi.mock('@gurezo/web-serial-rxjs', () => ({
-  isBrowserSupported: vi.fn(),
-}));
+import { BrowserCheckService } from './browser-check.service';
 
 describe('browserCheckGuard', () => {
   const executeGuard = (
@@ -21,21 +17,26 @@ describe('browserCheckGuard', () => {
   ) => TestBed.runInInjectionContext(() => browserCheckGuard(route, state));
 
   let router: Router;
+  let browserCheckService: { isSupported: ReturnType<typeof vi.fn> };
 
   beforeEach(() => {
+    browserCheckService = { isSupported: vi.fn() };
     TestBed.configureTestingModule({
-      providers: [provideRouter([])],
+      providers: [
+        provideRouter([]),
+        { provide: BrowserCheckService, useValue: browserCheckService },
+      ],
     });
     router = TestBed.inject(Router);
   });
 
   describe('ルートパスへのアクセス時', () => {
     afterEach(() => {
-      vi.mocked(isBrowserSupported).mockReset();
+      browserCheckService.isSupported.mockReset();
     });
 
     it('対応ブラウザの場合はそのまま表示を許可してtrueを返す', () => {
-      vi.mocked(isBrowserSupported).mockReturnValue(true);
+      browserCheckService.isSupported.mockReturnValue(true);
 
       const route = {
         routeConfig: { path: '' },
@@ -48,7 +49,7 @@ describe('browserCheckGuard', () => {
     });
 
     it('非対応ブラウザの場合はサポート外ページへリダイレクトするUrlTreeを返す', () => {
-      vi.mocked(isBrowserSupported).mockReturnValue(false);
+      browserCheckService.isSupported.mockReturnValue(false);
 
       const route = {
         routeConfig: { path: '' },
@@ -63,11 +64,11 @@ describe('browserCheckGuard', () => {
 
   describe('サポート外ブラウザページへのアクセス時', () => {
     afterEach(() => {
-      vi.mocked(isBrowserSupported).mockReset();
+      browserCheckService.isSupported.mockReset();
     });
 
     it('対応ブラウザの場合はホームページへリダイレクトするUrlTreeを返す', () => {
-      vi.mocked(isBrowserSupported).mockReturnValue(true);
+      browserCheckService.isSupported.mockReturnValue(true);
 
       const route = {
         routeConfig: { path: 'unsupported-browser' },
@@ -80,7 +81,7 @@ describe('browserCheckGuard', () => {
     });
 
     it('非対応ブラウザの場合はそのまま表示を許可してtrueを返す', () => {
-      vi.mocked(isBrowserSupported).mockReturnValue(false);
+      browserCheckService.isSupported.mockReturnValue(false);
 
       const route = {
         routeConfig: { path: 'unsupported-browser' },

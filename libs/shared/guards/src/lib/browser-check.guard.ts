@@ -1,10 +1,12 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { isBrowserSupported } from '@gurezo/web-serial-rxjs';
+
+import { BrowserCheckService } from './browser-check.service';
 
 export const browserCheckGuard: CanActivateFn = (route) => {
   const router = inject(Router);
-  const supported = isBrowserSupported();
+  const browserCheck = inject(BrowserCheckService);
+  const supported = browserCheck.isSupported();
   const path = route.routeConfig?.path;
 
   // unsupported-browser ページへのアクセス時
