@@ -99,6 +99,9 @@
       ],
       "@chirimen-lite/setup/ui": [
         "libs/setup/ui/src/index.ts"
+      ],
+      "@chirimen-lite/setup/feature": [
+        "libs/setup/feature/src/index.ts"
       ]
     }
   }
