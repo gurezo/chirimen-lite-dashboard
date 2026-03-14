@@ -1,0 +1,23 @@
+{
+  "name": "libs-web-serial-data-access",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/web-serial/data-access/src",
+  "projectType": "library",
+  "tags": ["type:data-access", "domain:web-serial"],
+  "implicitDependencies": ["libs-web-serial-util"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "command": "echo \"build libs-web-serial-data-access\""
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/web-serial/data-access/**/*.ts"]
+      }
+    }
+  }
+}
