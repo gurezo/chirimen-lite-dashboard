@@ -17,9 +17,9 @@ const ELEMENT_DATA: PeriodicElement[] = [
 @Component({
   selector: 'choh-chirimen-panel',
   imports: [MatTable, MatTableModule],
-  templateUrl: './pin-assign-panel.component.html',
+  templateUrl: './chirimen-panel.component.html',
 })
-export class PinAssignPanelComponent {
+export class ChirimenPanelComponent {
   displayedColumns: string[] = ['Now Running', 'App Name', 'Select'];
   dataSource = [...ELEMENT_DATA];
 

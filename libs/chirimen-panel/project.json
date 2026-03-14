@@ -5,7 +5,6 @@
   "prefix": "choh",
   "projectType": "library",
   "tags": ["type:ui", "scope:shared"],
-  "implicitDependencies": ["libs-pin-assign-panel-feature"],
   "targets": {
     "build": {
       "dependsOn": ["^build"],
@@ -16,7 +15,13 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/chirimen-panel/**/*.ts",
+          "libs/chirimen-panel/**/*.html"
+        ]
+      }
     }
   }
 }
