@@ -1,0 +1,27 @@
+{
+  "name": "libs-pin-assign-panel-feature",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/pin-assign-panel-feature/src",
+  "projectType": "library",
+  "tags": [
+    "type:feature",
+    "domain:pin-assign-panel"
+  ],
+  "implicitDependencies": ["libs-pin-assign-panel-ui", "libs-pin-assign-panel-util"],
+  "targets": {
+    "build": {
+      "dependsOn": ["^build"],
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "command": "echo \"build libs-pin-assign-panel-feature\""
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/pin-assign-panel-feature/**/*.ts"]
+      }
+    }
+  }
+}
