@@ -33,6 +33,7 @@ module.exports = {
         'workspace',
         'setup',
         'file-manager',
+        'remote',
       ],
     ],
   },
