@@ -14,7 +14,7 @@
     "baseUrl": ".",
     "paths": {
       "@app/*": ["apps/console/src/app/*"],
-      "@libs-console-guards": ["libs/shared/guards/src/index.ts"],
+      "@libs-shared-guards": ["libs/shared/guards/src/index.ts"],
       "@libs-chirimen-panel": ["libs/chirimen-panel/src/index.ts"],
       "@libs-connect-feature": ["libs/connect/feature/src/index.ts"],
       "@libs-connect-ui": ["libs/connect/ui/src/index.ts"],
@@ -67,7 +67,7 @@
       "@libs-terminal-feature": ["libs/terminal/feature/src/index.ts"],
       "@libs-terminal-ui": ["libs/terminal/ui/src/index.ts"],
       "@libs-terminal-util": ["libs/terminal/util/src/index.ts"],
-      "@libs-ui": ["libs/shared/ui/src/index.ts"],
+      "@libs-shared-ui": ["libs/shared/ui/src/index.ts"],
       "@libs-unsupported-browser": ["libs/unsupported-browser/src/index.ts"],
       "@libs-web-serial-util": ["libs/web-serial/util/src/index.ts"],
       "@libs-web-serial-data-access": [
