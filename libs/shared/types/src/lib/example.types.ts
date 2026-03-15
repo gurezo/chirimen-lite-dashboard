@@ -1,2 +1,11 @@
-// Stub for example-related types. To be implemented in migration phase.
-export {};
+export interface ExampleJson {
+  id: string;
+  title: string;
+  overview: string;
+}
+
+export interface ExampleItem extends ExampleJson {
+  js: string;
+  circuit: string;
+  link: string;
+}
