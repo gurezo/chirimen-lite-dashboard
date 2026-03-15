@@ -71,7 +71,6 @@
     "@swc/core": "1.15.8",
     "@swc/helpers": "0.5.19",
     "@testing-library/angular": "^17.2.1",
-    "@testing-library/jest-dom": "^6.4.8",
     "@types/jasmine": "~5.1.4",
     "@types/node": "18.16.9",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
