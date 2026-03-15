@@ -1,14 +1,6 @@
-export interface ExampleJson {
-  id: string;
-  title: string;
-  overview: string;
-}
+import type { ExampleJson, ExampleItem } from '@libs-shared-types';
 
-export interface ExampleItem extends ExampleJson {
-  js: string;
-  circuit: string;
-  link: string;
-}
+export type { ExampleJson, ExampleItem } from '@libs-shared-types';
 
 export function convertExampleJsonToList(
   jsonList: ExampleJson[]
