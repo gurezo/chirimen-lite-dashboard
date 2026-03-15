@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/spec",
-    "types": ["vitest/globals", "vitest/importMeta", "node", "vitest"],
+    "types": ["vitest/globals", "node"],
     "moduleResolution": "bundler",
     "isolatedModules": true
   },
