@@ -4,7 +4,7 @@
     "outDir": "../../dist/out-tsc",
     "module": "preserve",
     "target": "ES2022",
-    "types": ["vitest/globals", "vitest/importMeta", "node", "vitest"],
+    "types": ["vitest/globals", "node"],
     "moduleResolution": "bundler",
     "isolatedModules": true
   },
