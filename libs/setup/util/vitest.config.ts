@@ -2,6 +2,7 @@ import { defineConfig } from 'vitest/config';
 import { resolve } from 'path';
 
 export default defineConfig({
+  cacheDir: resolve(process.cwd(), 'node_modules/.vite'),
   test: {
     globals: true,
     environment: 'node',
