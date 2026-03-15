@@ -1,6 +1,11 @@
 # CHIRIMEN Lite Console
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 20.x.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 20.x. It uses [Nx](https://nx.dev) as the monorepo build system.
+
+## プロジェクト構成
+
+- **apps/console** — メインの Web アプリ（CHIRIMEN Lite 接続・ターミナル・エディタ・Wi‑Fi 設定など）
+- **libs/** — 機能別ライブラリ（connect, console-shell, dialogs, editor, example, file-manager, i2cdetect, pin-assign-panel, remote, setup, shared, terminal, web-serial, wifi など）。`tsconfig.base.json` の `paths` と [CONTRIBUTING.md](CONTRIBUTING.md) のスコープ一覧を参照してください。
 
 ## 📚 リファクタリング履歴
 
@@ -13,26 +18,49 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 詳細は各ステップの `README.md` を参照してください。
 
-## Development server
+## 開発サーバー
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+```bash
+pnpm start
+```
 
-## Code scaffolding
+または
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```bash
+pnpm nx run console:serve
+```
 
-## Build
+ブラウザで `http://localhost:4200/` を開きます。ソース変更時に自動リロードされます。
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## ビルド
 
-## Running unit tests
+```bash
+pnpm build
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+または
 
-## Running end-to-end tests
+```bash
+pnpm nx run-many -t build
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+ビルド成果物は `dist/` に出力されます。
 
-## Further help
+## ユニットテスト
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```bash
+pnpm test
+```
+
+または
+
+```bash
+pnpm nx run-many -t test
+```
+
+Vitest で全プロジェクトのユニットテストを実行します。
+
+## その他
+
+- コード生成や開発のルールは [CONTRIBUTING.md](CONTRIBUTING.md) を参照してください。
+- Angular CLI の詳細は [Angular CLI Overview](https://angular.dev/tools/cli) を参照してください。
