@@ -13,7 +13,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      reportsDirectory: resolve(__dirname, '../../coverage/apps/dashboard'),
+      reportsDirectory: resolve(__dirname, '../../coverage/apps/console'),
     },
     include: [
       resolve(
