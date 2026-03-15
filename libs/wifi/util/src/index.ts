@@ -1,4 +1,3 @@
-export * from './lib/wifi.model';
 export {
   parseWifiIfconfigOutput,
   parseWifiIwconfigOutput,

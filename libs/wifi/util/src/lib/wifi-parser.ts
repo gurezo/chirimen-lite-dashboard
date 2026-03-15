@@ -1,4 +1,4 @@
-import { WiFiInfo } from './wifi.model';
+import type { WiFiInfo } from '@libs-shared-types';
 
 /**
  * iwlist scanコマンドの出力をパース

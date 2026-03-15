@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
-import type { WiFiInfo } from '@libs-wifi-util';
+import type { WiFiInfo } from '@libs-shared-types';
 import { WifiInfoComponent } from '../wifi-info/wifi-info.component';
 
 /**
