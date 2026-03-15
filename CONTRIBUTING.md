@@ -36,7 +36,6 @@
 | `unsupported-browser` | 非対応ブラウザ lib |
 | `editor` | エディタ lib（data-access / feature / ui / util） |
 | `terminal` | ターミナル lib（feature / ui / util） |
-| `chirimen-panel` | CHIRIMEN パネル lib |
 | `file-manager` | ファイルマネージャ lib（data-access / feature / ui / util） |
 | `i2cdetect` / `i2cdetect-ui` / `i2cdetect-data-access` / `i2cdetect-util` | I2C 検出 lib（ui / data-access / util に分割） |
 | `pin-assign-panel` | ピン割り当てパネル lib（feature / ui / util） |

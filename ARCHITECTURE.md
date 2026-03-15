@@ -16,7 +16,7 @@
 | 機能 | example, wifi, setup, file-manager, pin-assign-panel, remote, i2cdetect | サンプル一覧・Wi‑Fi・セットアップ・ファイル操作・ピン割り当て・リモート・I2C 検出 |
 | 共通 | dialogs, shared-ui, shared-guards, shared-util, shared-types | ダイアログ・共有 UI コンポーネント・ガード・ユーティリティ・型 |
 | 基盤 | web-serial | Web Serial API のラップ・状態管理 |
-| その他 | page-not-found, unsupported-browser, chirimen-panel | 404・非対応ブラウザ表示・CHIRIMEN パネル |
+| その他 | page-not-found, unsupported-browser | 404・非対応ブラウザ表示 |
 
 ## 依存関係
 

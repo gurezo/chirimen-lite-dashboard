@@ -20,7 +20,6 @@ module.exports = {
         'unsupported-browser',
         'editor',
         'terminal',
-        'chirimen-panel',
         'pin-assign-panel',
         'shared-ui',
         'shared-guards',
