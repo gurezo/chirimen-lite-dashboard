@@ -15,8 +15,10 @@
     },
     "test": {
       "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "command": "echo \"test libs-editor-ui\""
+        "command": "vitest run --config libs/editor/ui/vitest.config.ts",
+        "cwd": "{workspaceRoot}"
       }
     },
     "lint": {
