@@ -12,6 +12,14 @@
         "command": "echo \"build libs-web-serial-util\""
       }
     },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "command": "vitest run --config libs/web-serial/util/vitest.config.ts",
+        "cwd": "{workspaceRoot}"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "options": {
