@@ -1,5 +1,5 @@
 {
-  "name": "libs-console-guards",
+  "name": "libs-shared-guards",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/guards/src",
   "prefix": "choh",
