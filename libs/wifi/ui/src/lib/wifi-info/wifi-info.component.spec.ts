@@ -1,3 +1,4 @@
+/// <reference types="vitest/globals" />
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { WiFiInfo } from '@libs-shared-types';
 import { WifiInfoComponent } from './wifi-info.component';
