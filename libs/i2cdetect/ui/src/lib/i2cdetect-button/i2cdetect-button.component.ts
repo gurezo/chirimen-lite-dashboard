@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { DialogService } from '@libs-dialogs-util';
-import { ButtonComponent } from '@libs-ui';
+import { ButtonComponent } from '@libs-shared-ui';
 
 @Component({
   selector: 'choh-i2cdetect',
