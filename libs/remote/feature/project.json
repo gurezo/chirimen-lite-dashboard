@@ -12,6 +12,14 @@
         "command": "echo \"build libs-remote-feature\""
       }
     },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "command": "vitest run --config libs/remote/feature/vitest.config.ts",
+        "cwd": "{workspaceRoot}"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint"
     }
