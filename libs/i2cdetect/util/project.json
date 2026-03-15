@@ -8,26 +8,13 @@
     "domain:i2cdetect"
   ],
   "targets": {
-    "prepare-package": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "node scripts/generate-lib-package.js {projectRoot}",
-        "cwd": "{workspaceRoot}"
-      }
-    },
     "build": {
-      "dependsOn": ["^build", "prepare-package"],
-      "executor": "@nx/angular:package",
+      "dependsOn": ["^build"],
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
-        "project": "libs/i2cdetect/util/ng-package.json",
-        "tsConfig": "libs/i2cdetect/util/tsconfig.lib.json"
-      },
-      "configurations": {
-        "production": {},
-        "development": {}
-      },
-      "defaultConfiguration": "production"
+        "command": "echo \"build libs-i2cdetect-util\""
+      }
     },
     "test": {
       "executor": "nx:run-commands",
