@@ -21,8 +21,8 @@ const rootPackagePath = path.join(workspaceRoot, 'package.json');
 const rootPackage = JSON.parse(fs.readFileSync(rootPackagePath, 'utf8'));
 
 const nameByRoot = {
-  'libs/shared/guards': '@libs-console-guards',
-  'libs/shared/ui': '@libs-ui',
+  'libs/shared/guards': '@libs-shared-guards',
+  'libs/shared/ui': '@libs-shared-ui',
 };
 const packageName =
   nameByRoot[projectRoot] ||
