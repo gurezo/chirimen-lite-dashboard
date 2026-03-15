@@ -8,26 +8,13 @@
     "domain:dialogs"
   ],
   "targets": {
-    "prepare-package": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "node scripts/generate-lib-package.js {projectRoot}",
-        "cwd": "{workspaceRoot}"
-      }
-    },
     "build": {
-      "dependsOn": ["^build", "prepare-package"],
-      "executor": "@nx/angular:package",
+      "dependsOn": ["^build"],
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
-        "project": "libs/dialogs/util/ng-package.json",
-        "tsConfig": "libs/dialogs/util/tsconfig.lib.json"
-      },
-      "configurations": {
-        "production": {},
-        "development": {}
-      },
-      "defaultConfiguration": "production"
+        "command": "echo \"build libs-dialogs-util\""
+      }
     },
     "test": {
       "executor": "nx:run-commands",
