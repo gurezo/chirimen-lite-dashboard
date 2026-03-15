@@ -1,0 +1,30 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { WiFiInfo } from '@libs-shared-types';
+import { WifiInfoComponent } from './wifi-info.component';
+
+describe('WifiInfoComponent', () => {
+  let component: WifiInfoComponent;
+  let fixture: ComponentFixture<WifiInfoComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [WifiInfoComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(WifiInfoComponent);
+    component = fixture.componentInstance;
+    component.wifiInfo = {
+      ssid: 'test-ssid',
+      address: '00:00:00:00:00:00',
+      channel: 1,
+      frequency: 2400,
+      quality: 70,
+      spec: '802.11n',
+    } as WiFiInfo;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
