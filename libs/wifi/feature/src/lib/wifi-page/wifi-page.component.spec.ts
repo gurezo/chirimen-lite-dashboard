@@ -1,4 +1,6 @@
+/// <reference types="vitest/globals" />
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 import { DialogService } from '@libs-dialogs-util';
 import { WifiPageComponent } from './wifi-page.component';
 
@@ -10,7 +12,7 @@ describe('WifiPageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [WifiPageComponent],
       providers: [
-        { provide: DialogService, useValue: { close: () => {} } },
+        { provide: DialogService, useValue: { close: vi.fn() } },
       ],
     }).compileComponents();
 
