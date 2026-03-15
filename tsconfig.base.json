@@ -34,6 +34,7 @@
       "@libs-example-util": ["libs/example/util/src/index.ts"],
       "@libs-example-data-access": ["libs/example/data-access/src/index.ts"],
       "@libs-example-ui": ["libs/example/ui/src/index.ts"],
+      "@libs-example-ui/example-list/example-list.component": ["libs/example/ui/src/lib/example-list/example-list.component.ts"],
       "@libs-example-feature": ["libs/example/feature/src/index.ts"],
       "@libs-file-manager-data-access": [
         "libs/file-manager/data-access/src/index.ts"
@@ -68,6 +69,7 @@
       "@libs-terminal-ui": ["libs/terminal/ui/src/index.ts"],
       "@libs-terminal-util": ["libs/terminal/util/src/index.ts"],
       "@libs-shared-ui": ["libs/shared/ui/src/index.ts"],
+      "@libs-shared-ui/components/button/button.component": ["libs/shared/ui/src/lib/components/button/button.component.ts"],
       "@libs-unsupported-browser": ["libs/unsupported-browser/src/index.ts"],
       "@libs-web-serial-util": ["libs/web-serial/util/src/index.ts"],
       "@libs-web-serial-data-access": [
