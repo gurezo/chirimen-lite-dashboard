@@ -52,6 +52,23 @@
 
 初回クローン後は、必ずリポジトリルートで `pnpm install` を実行してください。
 
+## パスエイリアス（tsconfig.base.json）
+
+インポートには `tsconfig.base.json` の `compilerOptions.paths` で定義したエイリアスを使用します。
+
+- **アプリ**: `@app/*` → `apps/console/src/app/*`
+- **lib 群**: `@libs-<lib名>` 形式（例: `@libs-shared-guards`, `@libs-shared-ui`, `@libs-wifi-feature`）
+- 一覧は `tsconfig.base.json` の `paths` を参照してください。
+
+### 後方互換について
+
+以下の旧エイリアスは廃止済みです。後方互換は行っていません。
+
+| 廃止したエイリアス | 統一後のエイリアス |
+|-------------------|-------------------|
+| `@libs-console-guards` | `@libs-shared-guards` |
+| `@libs-ui` | `@libs-shared-ui` |
+
 ## プルリクエスト
 
 - ブランチ名は Conventional Commits の意図が分かるようにしてください（例: `feat/console/add-dark-mode`）。
