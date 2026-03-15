@@ -5,7 +5,7 @@ import {
   parseWifiIwconfigOutput,
   parseWifiIwlistOutput,
 } from '@libs-wifi-util';
-import type { WiFiInfo } from '@libs-wifi-util';
+import type { WiFiInfo } from '@libs-shared-types';
 
 /**
  * WiFi スキャン・状態取得を担当

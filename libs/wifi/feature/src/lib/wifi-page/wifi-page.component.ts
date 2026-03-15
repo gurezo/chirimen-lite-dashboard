@@ -2,8 +2,8 @@ import { Component, inject } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { DialogService } from '@libs-dialogs-util';
 import { ButtonComponent } from '@libs-shared-ui';
-import { dummyWiFiInfo } from '@libs-wifi-util';
-import type { WiFiInfo } from '@libs-wifi-util';
+import { dummyWiFiInfo } from '@libs-shared-types';
+import type { WiFiInfo } from '@libs-shared-types';
 import {
   WifiListComponent,
   WifiFormComponent,

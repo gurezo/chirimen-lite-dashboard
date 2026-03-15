@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import type { WiFiInfo } from '@libs-wifi-util';
+import type { WiFiInfo } from '@libs-shared-types';
 
 /**
  * 1 件の WiFi ネットワーク情報を表示するカード
