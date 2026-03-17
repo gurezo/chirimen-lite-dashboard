@@ -22,6 +22,10 @@ export class IconService {
     { name: 'file_open', path: '/file_open.png' },
     { name: 'schema', path: '/schema.png' },
     { name: 'segment', path: '/segment.png' },
+    { name: 'left_panel_open', path: '/left_panel_open.png' },
+    { name: 'left_panel_close', path: '/left_panel_close.png' },
+    { name: 'right_panel_open', path: '/right_panel_open.png' },
+    { name: 'right_panel_close', path: '/right_panel_close.png' },
   ] as const;
 
   registIcons() {
