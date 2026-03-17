@@ -15,4 +15,6 @@ export class HeaderToolbarComponent {
   connected$ = input<Observable<boolean>>(of(false));
   eventConnect = output<void>();
   eventDisConnect = output<void>();
+  rightNavOpen = input<boolean>(true);
+  toggleRightSidebar = output<void>();
 }

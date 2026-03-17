@@ -1,7 +1,9 @@
 <lib-header-toolbar
   [connected$]="connected$"
+  [rightNavOpen]="rightNavOpen()"
   (eventConnect)="onConnect()"
   (eventDisConnect)="onDisConnect()"
+  (toggleRightSidebar)="onToggleRightSidebar()"
 />
 @if (connected$ | async; as connected) {
   <div class="grid grid-cols-[auto_1fr_auto] grid-rows-[auto_1fr] gap-2 h-screen">
@@ -14,7 +16,7 @@
     <div class="min-h-0 overflow-auto">
       @switch (activePanel()) {
         @case ('terminal') {
-          <choh-pin-assign />
+          <p>Terminal panel (stub)</p>
         }
         @case ('editor') {
           <p>Editor panel (stub)</p>

@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
+import { PinAssignComponent } from '@libs-pin-assign-panel-ui';
 
 @Component({
   selector: 'lib-right-sidebar',
   standalone: true,
+  imports: [PinAssignComponent],
   template: `
-    <div class="right-sidebar">
-      <p>Right sidebar (stub)</p>
+    <div class="right-sidebar min-h-0 overflow-auto">
+      <choh-pin-assign />
     </div>
   `,
 })
