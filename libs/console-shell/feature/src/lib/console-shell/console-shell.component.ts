@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import {
   ConnectButtonComponent,
   ConnectionStatusComponent,
@@ -15,6 +15,7 @@ import {
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { ConsoleShellStore } from './console-shell.store';
 
 @Component({
   selector: 'lib-console-shell',
@@ -30,8 +31,13 @@ import { filter } from 'rxjs/operators';
 export class ConsoleShellComponent implements OnInit, OnDestroy {
   private store = inject(Store);
   private serialNotification = inject(SerialNotificationService);
+  private shellStore = inject(ConsoleShellStore);
 
   connected$ = this.store.select((state) => state.webSerial.isConnected);
+
+  readonly activePanel = this.shellStore.activePanel;
+  readonly leftNavOpen = this.shellStore.leftNavOpen;
+  readonly rightNavOpen = this.shellStore.rightNavOpen;
 
   private subscriptions = new Subscription();
 
@@ -54,6 +60,12 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
         .subscribe((errorMessage) => {
           this.serialNotification.notifyConnectionError(errorMessage);
         }),
+    );
+
+    this.subscriptions.add(
+      this.connected$.subscribe((isConnected) => {
+        this.shellStore.setConnectionStatus(isConnected);
+      }),
     );
   }
 

@@ -4,12 +4,32 @@
   (eventDisConnect)="onDisConnect()"
 />
 @if (connected$ | async; as connected) {
-  <div
-    class="grid grid-cols-[1fr_auto_1.5fr_2.5fr] grid-rows-[auto_1fr] gap-2 h-screen"
-  >
+  <div class="grid grid-cols-[auto_1fr_auto] grid-rows-[auto_1fr] gap-2 h-screen">
+    @if (leftNavOpen()) {
+      <div class="min-h-0 overflow-auto">
+        <lib-left-sidebar />
+      </div>
+    }
+
     <div class="min-h-0 overflow-auto">
-      <choh-pin-assign />
+      @switch (activePanel()) {
+        @case ('terminal') {
+          <choh-pin-assign />
+        }
+        @case ('editor') {
+          <p>Editor panel (stub)</p>
+        }
+        @case ('example') {
+          <p>Example panel (stub)</p>
+        }
+      }
     </div>
+
+    @if (rightNavOpen()) {
+      <div class="min-h-0 overflow-auto">
+        <lib-right-sidebar />
+      </div>
+    }
   </div>
 } @else {
   <div
