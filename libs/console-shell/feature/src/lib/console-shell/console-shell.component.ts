@@ -4,8 +4,11 @@ import {
   ConnectButtonComponent,
   ConnectionStatusComponent,
 } from '@libs-connect-ui';
-import { HeaderToolbarComponent } from '@libs-console-shell-ui';
-import { PinAssignComponent } from '@libs-pin-assign-panel-ui';
+import {
+  HeaderToolbarComponent,
+  LeftSidebarComponent,
+  RightSidebarComponent,
+} from '@libs-console-shell-ui';
 import { SerialNotificationService } from '@libs-web-serial-data-access';
 import {
   selectConnectionMessage,
@@ -21,10 +24,11 @@ import { ConsoleShellStore } from './console-shell.store';
   selector: 'lib-console-shell',
   imports: [
     AsyncPipe,
-    PinAssignComponent,
     ConnectButtonComponent,
     ConnectionStatusComponent,
     HeaderToolbarComponent,
+    LeftSidebarComponent,
+    RightSidebarComponent,
   ],
   templateUrl: './console-shell.component.html',
 })
@@ -79,5 +83,9 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
 
   onDisConnect() {
     this.store.dispatch(WebSerialActions.onDisConnect());
+  }
+
+  onToggleRightSidebar() {
+    this.shellStore.toggleRightNav();
   }
 }

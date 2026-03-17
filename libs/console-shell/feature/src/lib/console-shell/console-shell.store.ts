@@ -19,7 +19,7 @@ export class ConsoleShellStore {
   private readonly stateSignal = signal<ConsoleShellState>({
     activePanel: 'terminal',
     leftNavOpen: true,
-    rightNavOpen: false,
+    rightNavOpen: true,
     isConnected: false,
   });
 
