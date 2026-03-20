@@ -3,8 +3,22 @@ export function ensureSerialSupport(): boolean {
   return 'serial' in navigator;
 }
 
-export function createConnectClient(): never {
-  // TODO: Web Serial 接続クライアントの実装を追加する。
-  throw new Error('createConnectClient is not implemented yet.');
+export interface ConnectClient {
+  /**
+   * 期待するシェルプロンプト（Raspberry Pi Zero 前提）
+   * prompt 待機や結果判定のために利用します。
+   */
+  prompt: string;
+  /**
+   * 初期化（TZ 設定など）で実行するコマンド列
+   */
+  timezoneCommands: string[];
+}
+
+export function createConnectClient(): ConnectClient {
+  return {
+    prompt: 'pi@raspberrypi:',
+    timezoneCommands: ['sudo timedatectl set-timezone Asia/Tokyo'],
+  };
 }
 

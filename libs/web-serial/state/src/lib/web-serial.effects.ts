@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, from, map, switchMap } from 'rxjs';
+import { catchError, from, map, of, switchMap } from 'rxjs';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
+import { createConnectClient } from '@libs-connect-util';
 import { WebSerialActions } from './web-serial.actions';
 
 // エラーメッセージ定数
@@ -23,6 +24,25 @@ export class WebSerialEffects {
   actions$ = inject(Actions);
   service = inject(SerialFacadeService);
 
+  private async initializeAfterConnect(): Promise<void> {
+    const client = createConnectClient();
+    try {
+      // まずログイン済み/シェル待ちを軽く確認
+      await this.service.readUntilPrompt(client.prompt, 5000, 0);
+
+      // TZ 設定は best-effort（sudo/prompt 問題で失敗しても接続成功扱い）
+      for (const cmd of client.timezoneCommands) {
+        try {
+          await this.service.exec(cmd, client.prompt, 10000, 0);
+        } catch (error) {
+          console.warn(`Initial command failed: ${cmd}`, error);
+        }
+      }
+    } catch {
+      // readUntilPrompt が失敗しても接続成功扱い
+    }
+  }
+
   init$ = createEffect(
     () => this.actions$.pipe(ofType(WebSerialActions.init)),
     { dispatch: false }
@@ -33,18 +53,23 @@ export class WebSerialEffects {
       ofType(WebSerialActions.onConnect),
       switchMap(() =>
         from(this.service.connect()).pipe(
-          map((success) => {
-            if (success) {
-              return WebSerialActions.onConnectSuccess({
-                isConnected: true,
-                message: ERROR_MESSAGES.CONNECTION_SUCCESS,
-              });
-            } else {
-              return WebSerialActions.onConnectFail({
-                isConnected: false,
-                errorMessage: ERROR_MESSAGES.UNSUPPORTED_DEVICE,
-              });
+          switchMap((success) => {
+            if (!success) {
+              return of(
+                WebSerialActions.onConnectFail({
+                  isConnected: false,
+                  errorMessage: ERROR_MESSAGES.UNSUPPORTED_DEVICE,
+                })
+              );
             }
+            return from(this.initializeAfterConnect()).pipe(
+              map(() =>
+                WebSerialActions.onConnectSuccess({
+                  isConnected: true,
+                  message: ERROR_MESSAGES.CONNECTION_SUCCESS,
+                })
+              )
+            );
           }),
           catchError((error) => {
             let errorMessage: string = ERROR_MESSAGES.CONNECTION_FAILED;
