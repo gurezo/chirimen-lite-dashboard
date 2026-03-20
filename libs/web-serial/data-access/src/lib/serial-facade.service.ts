@@ -1,8 +1,10 @@
 /// <reference types="@types/w3c-web-serial" />
 
 import { Injectable, inject } from '@angular/core';
-import { firstValueFrom, take, type Subscription } from 'rxjs';
+import { firstValueFrom, map, Observable, take, type Subscription } from 'rxjs';
 import {
+  CommandExecOptions,
+  CommandResult,
   CommandExecutionConfig,
   SerialCommandService,
 } from './serial-command.service';
@@ -136,13 +138,24 @@ export class SerialFacadeService {
   /**
    * コマンドを実行し、指定されたプロンプトまで待機
    */
+  exec(cmd: string, options: CommandExecOptions = {}): Observable<CommandResult> {
+    return this.command.exec(cmd, (data) => this.write(data), options);
+  }
+
+  /**
+   * コマンドを実行し、指定されたプロンプトまで待機
+   *
+   * @deprecated Use exec() instead
+   */
   async executeCommand(
     cmd: string,
     prompt: string,
     timeout = 10000,
   ): Promise<string> {
     const config: CommandExecutionConfig = { prompt, timeout };
-    return this.command.executeCommand(cmd, config, (data) => this.write(data));
+    return firstValueFrom(
+      this.exec(cmd, config).pipe(map((result) => result.stdout))
+    );
   }
 
   isConnected(): boolean {
