@@ -1,10 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
 import {
   EditorToolbarComponent,
   FileNameDisplayComponent,
   MonacoEditorComponent,
 } from '@libs-editor-ui';
-import { MonacoEditorService } from '@libs-editor-data-access';
+import { EditorService, MonacoEditorService } from '@libs-editor-data-access';
 
 const DEFAULT_CODE = `
     onload = async function () {
@@ -40,6 +40,28 @@ const DEFAULT_CODE = `
     </div>
   `,
 })
-export class EditorPageComponent {
+export class EditorPageComponent implements OnInit {
   code = signal(DEFAULT_CODE.trim());
+
+  private editorService = inject(EditorService);
+  private readonly filePath = '/home/pi/edited.js';
+
+  async ngOnInit(): Promise<void> {
+    try {
+      const loaded = await this.editorService.loadTextFile(this.filePath);
+      this.code.set(loaded);
+    } catch {
+      // ファイルが存在しない等の場合はデフォルトコードのまま
+    }
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  async onKeydown(event: KeyboardEvent): Promise<void> {
+    const isSaveShortcut =
+      (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's';
+    if (!isSaveShortcut) return;
+
+    event.preventDefault();
+    await this.editorService.saveTextFile(this.filePath, this.code());
+  }
 }
