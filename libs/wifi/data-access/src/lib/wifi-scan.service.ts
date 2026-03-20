@@ -22,17 +22,12 @@ export class WifiScanService {
     ipaddr?: string;
   }> {
     try {
-      const ifconfigOutput = await this.serial.executeCommand(
-        'ifconfig',
-        'pi@raspberrypi:',
-        10000
-      );
-
-      const iwconfigOutput = await this.serial.executeCommand(
-        'iwconfig',
-        'pi@raspberrypi:',
-        10000
-      );
+      const ifconfigOutput = (
+        await this.serial.exec('ifconfig', 'pi@raspberrypi:', 10000)
+      ).stdout;
+      const iwconfigOutput = (
+        await this.serial.exec('iwconfig', 'pi@raspberrypi:', 10000)
+      ).stdout;
 
       const { ipInfo, ipaddr } = parseWifiIfconfigOutput(ifconfigOutput);
       const wlInfo = parseWifiIwconfigOutput(iwconfigOutput);
@@ -47,11 +42,13 @@ export class WifiScanService {
 
   async scanNetworks(): Promise<{ rawData: string[]; wifiInfos: WiFiInfo[] }> {
     try {
-      const output = await this.serial.executeCommand(
-        'sudo iwlist wlan0 scan',
-        'pi@raspberrypi:',
-        30000
-      );
+      const output = (
+        await this.serial.exec(
+          'sudo iwlist wlan0 scan',
+          'pi@raspberrypi:',
+          30000
+        )
+      ).stdout;
 
       const lines = output.split('\n');
       const wifiInfos = parseWifiIwlistOutput(output);
@@ -66,13 +63,9 @@ export class WifiScanService {
 
   async getDetailedWifiStatus(): Promise<string> {
     try {
-      const result = await this.serial.executeCommand(
-        'iwconfig wlan0',
-        'pi@raspberrypi:',
-        10000
-      );
-
-      return result;
+      return (
+        await this.serial.exec('iwconfig wlan0', 'pi@raspberrypi:', 10000)
+      ).stdout;
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
@@ -82,13 +75,11 @@ export class WifiScanService {
 
   async getIpAddress(): Promise<string> {
     try {
-      const result = await this.serial.executeCommand(
-        'hostname -I',
-        'pi@raspberrypi:',
-        10000
-      );
+      const stdout = (
+        await this.serial.exec('hostname -I', 'pi@raspberrypi:', 10000)
+      ).stdout;
 
-      const lines = result.split('\n');
+      const lines = stdout.split('\n');
       const firstLine = lines[0]?.trim() || '';
       const ipAddresses = firstLine.split(/\s+/);
       return ipAddresses[0] || '';
@@ -101,13 +92,13 @@ export class WifiScanService {
 
   async showNetworkConfig(): Promise<string> {
     try {
-      const result = await this.serial.executeCommand(
-        'cat /etc/network/interfaces',
-        'pi@raspberrypi:',
-        10000
-      );
-
-      return result;
+      return (
+        await this.serial.exec(
+          'cat /etc/network/interfaces',
+          'pi@raspberrypi:',
+          10000
+        )
+      ).stdout;
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';

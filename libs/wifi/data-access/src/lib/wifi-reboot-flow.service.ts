@@ -15,13 +15,13 @@ export class WifiRebootFlowService {
    */
   async restartWifiService(): Promise<void> {
     try {
-      await this.serial.executeCommand(
+      await this.serial.exec(
         'sudo systemctl restart wpa_supplicant',
         'pi@raspberrypi:',
         10000
       );
 
-      await this.serial.executeCommand(
+      await this.serial.exec(
         'sudo systemctl restart networking',
         'pi@raspberrypi:',
         10000
@@ -38,7 +38,7 @@ export class WifiRebootFlowService {
    */
   async enableWifi(): Promise<void> {
     try {
-      await this.serial.executeCommand(
+      await this.serial.exec(
         'sudo ifconfig wlan0 up',
         'pi@raspberrypi:',
         10000
@@ -55,7 +55,7 @@ export class WifiRebootFlowService {
    */
   async disableWifi(): Promise<void> {
     try {
-      await this.serial.executeCommand(
+      await this.serial.exec(
         'sudo ifconfig wlan0 down',
         'pi@raspberrypi:',
         10000

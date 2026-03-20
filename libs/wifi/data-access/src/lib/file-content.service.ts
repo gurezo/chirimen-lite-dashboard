@@ -25,11 +25,13 @@ export class FileContentService {
 
   async readFile(path: string): Promise<FileContentInfo> {
     try {
-      const result = await this.serial.executeCommand(
-        `base64 -- ${FileUtils.escapePath(path)}`,
-        'pi@raspberrypi:',
-        30000
-      );
+      const result = (
+        await this.serial.exec(
+          `base64 -- ${FileUtils.escapePath(path)}`,
+          'pi@raspberrypi:',
+          30000
+        )
+      ).stdout;
 
       const lines = result.split('\n').map((line) => line.trim());
       let content = '';
@@ -66,7 +68,7 @@ export class FileContentService {
   async writeTextFile(path: string, content: string): Promise<void> {
     try {
       const command = FileUtils.generateHeredocCommand(path, content);
-      await this.serial.executeCommand(command, 'EOL', 10000);
+      await this.serial.exec(command, 'EOL', 10000);
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
@@ -81,7 +83,7 @@ export class FileContentService {
       await this.serial.write('\x03');
       await this.sleep(100);
 
-      await this.serial.executeCommand(
+      await this.serial.exec(
         `base64 -d > ${FileUtils.escapePath(path)}`,
         '\n',
         10000
@@ -90,13 +92,13 @@ export class FileContentService {
       const lineLength = 512;
       for (let i = 0; i <= Math.floor(base64.length / lineLength); i++) {
         const line = base64.substring(i * lineLength, (i + 1) * lineLength);
-        await this.serial.executeCommand(line, '\n', 1000);
+        await this.serial.exec(line, '\n', 1000);
         await this.sleep(1);
       }
 
       await this.serial.write('\x04');
       await this.sleep(10);
-      await this.serial.executeCommand('', '\\$', 1000);
+      await this.serial.exec('', '\\$', 1000);
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
@@ -107,7 +109,7 @@ export class FileContentService {
   async appendToFile(path: string, content: string): Promise<void> {
     try {
       const command = FileUtils.generateAppendCommand(path, content);
-      await this.serial.executeCommand(command, 'EOL', 10000);
+      await this.serial.exec(command, 'EOL', 10000);
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
