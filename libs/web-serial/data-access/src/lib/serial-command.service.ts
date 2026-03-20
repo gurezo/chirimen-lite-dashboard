@@ -1,6 +1,7 @@
 /// <reference types="@types/w3c-web-serial" />
 
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 /**
  * コマンド実行設定
@@ -10,6 +11,17 @@ export interface CommandExecutionConfig {
   prompt: string;
   /** タイムアウト時間（ミリ秒） */
   timeout: number;
+}
+
+export interface CommandResult {
+  stdout: string;
+  stderr?: string;
+  exitCode?: number;
+}
+
+export interface CommandExecOptions {
+  prompt?: string;
+  timeout?: number;
 }
 
 /**
@@ -27,12 +39,37 @@ export class SerialCommandService {
   private pendingCommands = new Map<
     string,
     {
-      resolve: (value: string) => void;
+      resolve: (value: CommandResult) => void;
       reject: (reason: unknown) => void;
       timeoutId: number;
       config: CommandExecutionConfig;
+      rawOutput: string;
+      commandText: string;
     }
   >();
+
+  private readonly defaultPrompt = '$ ';
+  private readonly defaultTimeout = 10000;
+
+  exec(
+    command: string,
+    writeFunction: (data: string) => Promise<void>,
+    options: CommandExecOptions = {}
+  ): Observable<CommandResult> {
+    const config: CommandExecutionConfig = {
+      prompt: options.prompt ?? this.defaultPrompt,
+      timeout: options.timeout ?? this.defaultTimeout,
+    };
+
+    return new Observable<CommandResult>((subscriber) => {
+      this.executeCommand(command, config, writeFunction)
+        .then((result) => {
+          subscriber.next(result);
+          subscriber.complete();
+        })
+        .catch((error) => subscriber.error(error));
+    });
+  }
 
   /**
    * コマンド実行を開始し、指定されたプロンプトが返されるまで待機
@@ -46,7 +83,7 @@ export class SerialCommandService {
     commandId: string,
     config: CommandExecutionConfig,
     writeFunction: (data: string) => Promise<void>
-  ): Promise<string> {
+  ): Promise<CommandResult> {
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
         this.pendingCommands.delete(commandId);
@@ -58,6 +95,8 @@ export class SerialCommandService {
         reject,
         timeoutId,
         config,
+        rawOutput: '',
+        commandText: commandId,
       });
 
       // コマンドを送信
@@ -78,11 +117,12 @@ export class SerialCommandService {
    */
   processInput(input: string): string | null {
     for (const [commandId, command] of this.pendingCommands) {
-      if (input.match(command.config.prompt)) {
+      if (this.isPromptMatched(input, command.config.prompt)) {
         // コマンド完了
         clearTimeout(command.timeoutId);
         this.pendingCommands.delete(commandId);
-        command.resolve(input);
+        command.rawOutput = input;
+        command.resolve(this.toCommandResult(command.rawOutput, command.commandText));
         return input;
       }
     }
@@ -148,5 +188,46 @@ export class SerialCommandService {
         resolve('Pattern matched');
       }, 100);
     });
+  }
+
+  private isPromptMatched(input: string, prompt: string): boolean {
+    if (!prompt) {
+      return false;
+    }
+
+    try {
+      return new RegExp(prompt).test(input);
+    } catch {
+      return input.includes(prompt);
+    }
+  }
+
+  private toCommandResult(raw: string, command: string): CommandResult {
+    const normalized = raw.replace(/\r/g, '');
+    const lines = normalized.split('\n');
+    const filtered = lines.filter((line) => line.trim() !== command.trim());
+
+    const outputLines = [...filtered];
+    if (outputLines.length > 0) {
+      const last = outputLines[outputLines.length - 1]?.trim() ?? '';
+      if (this.looksLikePrompt(last)) {
+        outputLines.pop();
+      }
+    }
+
+    return {
+      stdout: outputLines.join('\n').trim(),
+    };
+  }
+
+  private looksLikePrompt(line: string): boolean {
+    return (
+      line.endsWith('$') ||
+      line.endsWith('$ ') ||
+      line.endsWith('#') ||
+      line.endsWith('# ') ||
+      line.endsWith(':') ||
+      line.includes('@raspberrypi:')
+    );
   }
 }
