@@ -20,6 +20,21 @@
 - **scope**: 変更対象のスコープ（下記一覧から指定）
 - **description**: 簡潔な説明（命令形・小文字始まり推奨）
 
+### ヘッダ / ボディ / フッタ
+
+Angular のコミットガイドラインに合わせ、コミットメッセージは「ヘッダ・ボディ・フッタ」で構成し、ヘッダとボディの間には空行を入れます。
+
+- ヘッダ（必須）: `<type>(<scope>): <description>`
+- ボディ（任意）: 変更の理由や背景（`docs` 型は省略可）
+- フッタ（任意）: `BREAKING CHANGE:` など、互換性やリリース生成に関する情報
+
+### 破壊的変更（BREAKING CHANGE）
+
+破壊的変更を含む場合は、次のいずれかで明示してください。
+
+- ヘッダに `!` を付ける: `<type>(<scope>)!: <description>`
+- footer に `BREAKING CHANGE: <summary>` を書く（その後に移行手順・詳細を記載）
+
 ### スコープ一覧
 
 | スコープ | 説明 |
@@ -52,6 +67,13 @@
 - `fix(terminal): prevent resize on reconnect`
 - `build(workspace): add commitlint and husky for Conventional Commits`
 - `docs(workspace): update CONTRIBUTING with scope list`
+
+### Nx Release（Conventional Commits による自動バージョン決定）
+
+Nx Release は、`nx.json` の `release.version.conventionalCommits` を `true` に設定した場合、最後のリリース以降の commit message を Conventional Commits として解釈し、バージョン bump を決めます。
+
+- `fix` -> `patch`
+- `feat` -> `minor`
 
 ## Git フック（husky）
 
