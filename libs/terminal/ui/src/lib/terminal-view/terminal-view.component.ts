@@ -10,6 +10,7 @@ import { Terminal } from '@xterm/xterm';
 import { xtermConsoleConfigOptions } from '@libs-terminal-util';
 import { attachTerminalInput } from '../terminal-input';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
+import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 
 @Component({
   selector: 'choh-terminal-view',
@@ -20,7 +21,7 @@ export class TerminalViewComponent implements AfterViewInit {
   /**
    * シリアル側のシェルプロンプト（CommandService の prompt 待機に利用）
    */
-  readonly remotePrompt = input<string>('pi@raspberrypi:');
+  readonly remotePrompt = input<string>(PI_ZERO_PROMPT);
 
   @ViewChild('consoleDom', { read: ElementRef })
   private consoleDomRef?: ElementRef<HTMLElement>;

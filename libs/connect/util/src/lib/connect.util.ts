@@ -1,3 +1,5 @@
+import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
+
 export function ensureSerialSupport(): boolean {
   // TODO: Web Serial API のサポート確認ロジックを実装する。
   return 'serial' in navigator;
@@ -17,7 +19,7 @@ export interface ConnectClient {
 
 export function createConnectClient(): ConnectClient {
   return {
-    prompt: 'pi@raspberrypi:',
+    prompt: PI_ZERO_PROMPT,
     timezoneCommands: ['sudo timedatectl set-timezone Asia/Tokyo'],
   };
 }

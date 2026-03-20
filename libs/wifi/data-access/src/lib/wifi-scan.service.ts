@@ -5,6 +5,7 @@ import {
   parseWifiIwconfigOutput,
   parseWifiIwlistOutput,
 } from '@libs-wifi-util';
+import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 import type { WiFiInfo } from '@libs-shared-types';
 
 /**
@@ -23,10 +24,10 @@ export class WifiScanService {
   }> {
     try {
       const ifconfigOutput = (
-        await this.serial.exec('ifconfig', 'pi@raspberrypi:', 10000)
+        await this.serial.exec('ifconfig', PI_ZERO_PROMPT, 10000)
       ).stdout;
       const iwconfigOutput = (
-        await this.serial.exec('iwconfig', 'pi@raspberrypi:', 10000)
+        await this.serial.exec('iwconfig', PI_ZERO_PROMPT, 10000)
       ).stdout;
 
       const { ipInfo, ipaddr } = parseWifiIfconfigOutput(ifconfigOutput);
@@ -45,7 +46,7 @@ export class WifiScanService {
       const output = (
         await this.serial.exec(
           'sudo iwlist wlan0 scan',
-          'pi@raspberrypi:',
+          PI_ZERO_PROMPT,
           30000
         )
       ).stdout;
@@ -64,7 +65,7 @@ export class WifiScanService {
   async getDetailedWifiStatus(): Promise<string> {
     try {
       return (
-        await this.serial.exec('iwconfig wlan0', 'pi@raspberrypi:', 10000)
+        await this.serial.exec('iwconfig wlan0', PI_ZERO_PROMPT, 10000)
       ).stdout;
     } catch (error: unknown) {
       const errorMessage =
@@ -76,7 +77,7 @@ export class WifiScanService {
   async getIpAddress(): Promise<string> {
     try {
       const stdout = (
-        await this.serial.exec('hostname -I', 'pi@raspberrypi:', 10000)
+        await this.serial.exec('hostname -I', PI_ZERO_PROMPT, 10000)
       ).stdout;
 
       const lines = stdout.split('\n');
@@ -95,7 +96,7 @@ export class WifiScanService {
       return (
         await this.serial.exec(
           'cat /etc/network/interfaces',
-          'pi@raspberrypi:',
+          PI_ZERO_PROMPT,
           10000
         )
       ).stdout;

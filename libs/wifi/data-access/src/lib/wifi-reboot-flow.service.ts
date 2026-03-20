@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
+import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 
 /**
  * WiFi 再起動・有効/無効のフローを担当
@@ -17,13 +18,13 @@ export class WifiRebootFlowService {
     try {
       await this.serial.exec(
         'sudo systemctl restart wpa_supplicant',
-        'pi@raspberrypi:',
+        PI_ZERO_PROMPT,
         10000
       );
 
       await this.serial.exec(
         'sudo systemctl restart networking',
-        'pi@raspberrypi:',
+        PI_ZERO_PROMPT,
         10000
       );
     } catch (error: unknown) {
@@ -40,7 +41,7 @@ export class WifiRebootFlowService {
     try {
       await this.serial.exec(
         'sudo ifconfig wlan0 up',
-        'pi@raspberrypi:',
+        PI_ZERO_PROMPT,
         10000
       );
     } catch (error: unknown) {
@@ -57,7 +58,7 @@ export class WifiRebootFlowService {
     try {
       await this.serial.exec(
         'sudo ifconfig wlan0 down',
-        'pi@raspberrypi:',
+        PI_ZERO_PROMPT,
         10000
       );
     } catch (error: unknown) {
