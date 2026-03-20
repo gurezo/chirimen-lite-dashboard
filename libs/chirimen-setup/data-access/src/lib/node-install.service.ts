@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
+import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 
 export interface NodeInstallOptions {
   /**
@@ -17,7 +18,7 @@ export interface NodeInstallOptions {
 @Injectable({ providedIn: 'root' })
 export class NodeInstallService {
   private serial = inject(SerialFacadeService);
-  private readonly prompt = 'pi@raspberrypi:';
+  private readonly prompt = PI_ZERO_PROMPT;
 
   /**
    * Node.js をインストールして、chirimen 用の依存まで導入します。

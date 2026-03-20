@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { FileUtils } from '@libs-wifi-util';
+import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 
 /**
  * ファイル内容情報
@@ -28,7 +29,7 @@ export class FileContentService {
       const result = (
         await this.serial.exec(
           `base64 -- ${FileUtils.escapePath(path)}`,
-          'pi@raspberrypi:',
+          PI_ZERO_PROMPT,
           30000
         )
       ).stdout;

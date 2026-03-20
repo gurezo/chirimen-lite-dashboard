@@ -3,6 +3,7 @@ import { FileContentService } from './file-content.service';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { FileUtils } from '@libs-wifi-util';
 import { WifiRebootFlowService } from './wifi-reboot-flow.service';
+import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 
 /**
  * WiFi 設定（setWiFi / configureWifi）を担当
@@ -20,10 +21,10 @@ export class WifiConfigService {
    */
   async setWiFi(ssid: string, password: string): Promise<void> {
     try {
-      await this.serial.exec('cd', 'pi@raspberrypi:', 10000);
+      await this.serial.exec('cd', PI_ZERO_PROMPT, 10000);
       await this.serial.exec(
         'sudo touch /boot/ssh',
-        'pi@raspberrypi:',
+        PI_ZERO_PROMPT,
         10000
       );
 
@@ -33,7 +34,7 @@ export class WifiConfigService {
 
       await this.serial.exec(
         `chmod +x wifi_setup.sh && ./wifi_setup.sh "${ssid}" "${password}"`,
-        'pi@raspberrypi:',
+        PI_ZERO_PROMPT,
         30000
       );
     } catch (error: unknown) {
@@ -102,7 +103,7 @@ network={
     try {
       await this.serial.exec(
         'sudo cp /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf.backup',
-        'pi@raspberrypi:',
+        PI_ZERO_PROMPT,
         10000
       );
 

@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { ExtraSetupService } from './extra-setup.service';
 import { NodeInstallService } from './node-install.service';
+import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 
 export interface SetupCommandOptions {
   /**
@@ -16,7 +17,7 @@ export class SetupCommandService {
   private extraSetup = inject(ExtraSetupService);
   private nodeInstall = inject(NodeInstallService);
 
-  private readonly prompt = 'pi@raspberrypi:';
+  private readonly prompt = PI_ZERO_PROMPT;
 
   /**
    * CHIRIMEN 初期セットアップを実行します。
