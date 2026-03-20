@@ -27,6 +27,10 @@ export class EditorService {
     _container: HTMLElement,
     _options?: editor.IStandaloneEditorConstructionOptions,
   ): void {
+    // 未使用だが API の互換のために引数は残す
+    void _container;
+    void _options;
+
     // Note: Monaco Editor は ngx-monaco-editor-v2 経由で使用されるため、
     // 直接 create() を呼ぶのではなく、コンポーネント側で初期化される
     // const defaultOptions: editor.IStandaloneEditorConstructionOptions = {

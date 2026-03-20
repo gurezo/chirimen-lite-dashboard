@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { ExtraSetupService } from './extra-setup.service';
-import { NodeInstallOptions, NodeInstallService } from './node-install.service';
+import { NodeInstallService } from './node-install.service';
 
 export interface SetupCommandOptions {
   /**
