@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
+import { firstValueFrom } from 'rxjs';
 import {
   parseWifiIfconfigOutput,
   parseWifiIwconfigOutput,
@@ -15,6 +16,17 @@ import type { WiFiInfo } from '@libs-shared-types';
 })
 export class WifiScanService {
   private serial = inject(SerialFacadeService);
+  private readonly defaultPrompt = 'pi@raspberrypi:';
+
+  private async run(command: string, timeout: number): Promise<string> {
+    const result = await firstValueFrom(
+      this.serial.exec(command, {
+        prompt: this.defaultPrompt,
+        timeout,
+      })
+    );
+    return result.stdout;
+  }
 
   async getWifiStatus(): Promise<{
     ipInfo: string;
@@ -22,17 +34,9 @@ export class WifiScanService {
     ipaddr?: string;
   }> {
     try {
-      const ifconfigOutput = await this.serial.executeCommand(
-        'ifconfig',
-        'pi@raspberrypi:',
-        10000
-      );
+      const ifconfigOutput = await this.run('ifconfig', 10000);
 
-      const iwconfigOutput = await this.serial.executeCommand(
-        'iwconfig',
-        'pi@raspberrypi:',
-        10000
-      );
+      const iwconfigOutput = await this.run('iwconfig', 10000);
 
       const { ipInfo, ipaddr } = parseWifiIfconfigOutput(ifconfigOutput);
       const wlInfo = parseWifiIwconfigOutput(iwconfigOutput);
@@ -47,11 +51,7 @@ export class WifiScanService {
 
   async scanNetworks(): Promise<{ rawData: string[]; wifiInfos: WiFiInfo[] }> {
     try {
-      const output = await this.serial.executeCommand(
-        'sudo iwlist wlan0 scan',
-        'pi@raspberrypi:',
-        30000
-      );
+      const output = await this.run('sudo iwlist wlan0 scan', 30000);
 
       const lines = output.split('\n');
       const wifiInfos = parseWifiIwlistOutput(output);
@@ -66,11 +66,7 @@ export class WifiScanService {
 
   async getDetailedWifiStatus(): Promise<string> {
     try {
-      const result = await this.serial.executeCommand(
-        'iwconfig wlan0',
-        'pi@raspberrypi:',
-        10000
-      );
+      const result = await this.run('iwconfig wlan0', 10000);
 
       return result;
     } catch (error: unknown) {
@@ -82,11 +78,7 @@ export class WifiScanService {
 
   async getIpAddress(): Promise<string> {
     try {
-      const result = await this.serial.executeCommand(
-        'hostname -I',
-        'pi@raspberrypi:',
-        10000
-      );
+      const result = await this.run('hostname -I', 10000);
 
       const lines = result.split('\n');
       const firstLine = lines[0]?.trim() || '';
@@ -101,11 +93,7 @@ export class WifiScanService {
 
   async showNetworkConfig(): Promise<string> {
     try {
-      const result = await this.serial.executeCommand(
-        'cat /etc/network/interfaces',
-        'pi@raspberrypi:',
-        10000
-      );
+      const result = await this.run('cat /etc/network/interfaces', 10000);
 
       return result;
     } catch (error: unknown) {

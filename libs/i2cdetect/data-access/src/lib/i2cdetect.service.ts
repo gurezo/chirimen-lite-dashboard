@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { formatI2cdetectResult } from '@libs-i2cdetect-util';
+import { firstValueFrom } from 'rxjs';
 
 /**
  * I2C デバイス検出サービス
@@ -13,6 +14,7 @@ import { formatI2cdetectResult } from '@libs-i2cdetect-util';
 })
 export class I2cdetectService {
   private serial = inject(SerialFacadeService);
+  private readonly defaultPrompt = 'pi@raspberrypi:';
 
   /**
    * I2C デバイスを検出
@@ -21,11 +23,13 @@ export class I2cdetectService {
    */
   async detectI2cDevices(): Promise<string> {
     try {
-      const output = await this.serial.executeCommand(
-        'i2cdetect -y 1',
-        'pi@raspberrypi:',
-        10000
+      const result = await firstValueFrom(
+        this.serial.exec('i2cdetect -y 1', {
+          prompt: this.defaultPrompt,
+          timeout: 10000,
+        })
       );
+      const output = result.stdout;
 
       return formatI2cdetectResult(output);
     } catch (error: unknown) {

@@ -3,6 +3,7 @@ import { FileContentService } from './file-content.service';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { FileUtils } from '@libs-wifi-util';
 import { WifiRebootFlowService } from './wifi-reboot-flow.service';
+import { firstValueFrom } from 'rxjs';
 
 /**
  * WiFi 設定（setWiFi / configureWifi）を担当
@@ -14,26 +15,33 @@ export class WifiConfigService {
   private serial = inject(SerialFacadeService);
   private fileContent = inject(FileContentService);
   private rebootFlow = inject(WifiRebootFlowService);
+  private readonly defaultPrompt = 'pi@raspberrypi:';
+
+  private async run(command: string, prompt: string, timeout: number): Promise<string> {
+    const result = await firstValueFrom(
+      this.serial.exec(command, {
+        prompt,
+        timeout,
+      })
+    );
+    return result.stdout;
+  }
 
   /**
    * WiFi を設定（スクリプト方式）
    */
   async setWiFi(ssid: string, password: string): Promise<void> {
     try {
-      await this.serial.executeCommand('cd', 'pi@raspberrypi:', 10000);
-      await this.serial.executeCommand(
-        'sudo touch /boot/ssh',
-        'pi@raspberrypi:',
-        10000
-      );
+      await this.run('cd', this.defaultPrompt, 10000);
+      await this.run('sudo touch /boot/ssh', this.defaultPrompt, 10000);
 
       const wifiSetupScript = this.generateWifiSetupScript();
 
       await this.fileContent.writeTextFile('wifi_setup.sh', wifiSetupScript);
 
-      await this.serial.executeCommand(
+      await this.run(
         `chmod +x wifi_setup.sh && ./wifi_setup.sh "${ssid}" "${password}"`,
-        'pi@raspberrypi:',
+        this.defaultPrompt,
         30000
       );
     } catch (error: unknown) {
@@ -100,9 +108,9 @@ network={
 
   private async saveWifiConfig(configContent: string): Promise<void> {
     try {
-      await this.serial.executeCommand(
+      await this.run(
         'sudo cp /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf.backup',
-        'pi@raspberrypi:',
+        this.defaultPrompt,
         10000
       );
 
@@ -113,12 +121,12 @@ network={
       await this.serial.write('\x03');
       await this.sleep(100);
 
-      await this.serial.executeCommand(
+      await this.run(
         'sudo tee /etc/wpa_supplicant/wpa_supplicant.conf > /dev/null',
         '\n',
         10000
       );
-      await this.serial.executeCommand(base64, '\n', 1000);
+      await this.run(base64, '\n', 1000);
 
       await this.serial.write('\x04');
       await this.sleep(10);

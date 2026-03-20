@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
+import { firstValueFrom } from 'rxjs';
 
 /**
  * WiFi 再起動・有効/無効のフローを担当
@@ -9,23 +10,26 @@ import { SerialFacadeService } from '@libs-web-serial-data-access';
 })
 export class WifiRebootFlowService {
   private serial = inject(SerialFacadeService);
+  private readonly defaultPrompt = 'pi@raspberrypi:';
+
+  private async run(command: string, timeout: number): Promise<string> {
+    const result = await firstValueFrom(
+      this.serial.exec(command, {
+        prompt: this.defaultPrompt,
+        timeout,
+      })
+    );
+    return result.stdout;
+  }
 
   /**
    * WiFi サービスを再起動（wpa_supplicant + networking）
    */
   async restartWifiService(): Promise<void> {
     try {
-      await this.serial.executeCommand(
-        'sudo systemctl restart wpa_supplicant',
-        'pi@raspberrypi:',
-        10000
-      );
+      await this.run('sudo systemctl restart wpa_supplicant', 10000);
 
-      await this.serial.executeCommand(
-        'sudo systemctl restart networking',
-        'pi@raspberrypi:',
-        10000
-      );
+      await this.run('sudo systemctl restart networking', 10000);
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
@@ -38,11 +42,7 @@ export class WifiRebootFlowService {
    */
   async enableWifi(): Promise<void> {
     try {
-      await this.serial.executeCommand(
-        'sudo ifconfig wlan0 up',
-        'pi@raspberrypi:',
-        10000
-      );
+      await this.run('sudo ifconfig wlan0 up', 10000);
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
@@ -55,11 +55,7 @@ export class WifiRebootFlowService {
    */
   async disableWifi(): Promise<void> {
     try {
-      await this.serial.executeCommand(
-        'sudo ifconfig wlan0 down',
-        'pi@raspberrypi:',
-        10000
-      );
+      await this.run('sudo ifconfig wlan0 down', 10000);
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
