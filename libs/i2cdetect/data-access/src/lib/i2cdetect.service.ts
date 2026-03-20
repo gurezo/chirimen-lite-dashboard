@@ -21,11 +21,9 @@ export class I2cdetectService {
    */
   async detectI2cDevices(): Promise<string> {
     try {
-      const output = await this.serial.executeCommand(
-        'i2cdetect -y 1',
-        'pi@raspberrypi:',
-        10000
-      );
+      const output = (
+        await this.serial.exec('i2cdetect -y 1', 'pi@raspberrypi:', 10000)
+      ).stdout;
 
       return formatI2cdetectResult(output);
     } catch (error: unknown) {
