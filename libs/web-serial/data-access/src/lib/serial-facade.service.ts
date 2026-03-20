@@ -135,11 +135,12 @@ export class SerialFacadeService {
   }
 
   /**
-   * コマンドを実行し、指定されたプロンプトまで待機
+   * @deprecated Use `exec()` / `execRaw()` / `readUntilPrompt()` instead.
+   * コマンドを実行し、指定されたプロンプトまで待機（後方互換）
    */
   async executeCommand(
     cmd: string,
-    prompt: string,
+    prompt: string | RegExp,
     timeout = 10000,
   ): Promise<string> {
     const result = await this.exec(cmd, prompt, timeout);
@@ -262,7 +263,7 @@ export class SerialFacadeService {
    */
   async portWritelnWaitfor(
     cmd: string,
-    prompt: string,
+    prompt: string | RegExp,
     timeout = 10000,
   ): Promise<string> {
     return this.executeCommand(cmd, prompt, timeout);
