@@ -157,6 +157,9 @@ export class SerialCommandService {
         lastError = error;
         // pending が残らないようにクリア
         this.cancelCommand(id);
+        // cancelCommand() により promise が reject されるが、ここでは待機しないため
+        // unhandled rejection を防ぐ
+        void promise.catch(() => undefined);
         if (attempt === retry) {
           throw error;
         }
