@@ -9,6 +9,9 @@ import {
   LeftSidebarComponent,
   RightSidebarComponent,
 } from '@libs-console-shell-ui';
+import { TerminalPageComponent } from '@libs-terminal-feature';
+import { EditorPageComponent } from '@libs-editor-feature';
+import { ExampleComponent } from '@libs-example-feature';
 import { SerialNotificationService } from '@libs-web-serial-data-access';
 import {
   selectConnectionMessage,
@@ -29,6 +32,9 @@ import { ConsoleShellStore } from './console-shell.store';
     HeaderToolbarComponent,
     LeftSidebarComponent,
     RightSidebarComponent,
+    TerminalPageComponent,
+    EditorPageComponent,
+    ExampleComponent,
   ],
   templateUrl: './console-shell.component.html',
 })
