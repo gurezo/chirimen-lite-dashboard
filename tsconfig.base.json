@@ -60,10 +60,6 @@
       "@libs-remote-feature": ["libs/remote/feature/src/index.ts"],
       "@libs-remote-ui": ["libs/remote/ui/src/index.ts"],
       "@libs-remote-util": ["libs/remote/util/src/index.ts"],
-      "@libs-setup-data-access": ["libs/setup/data-access/src/index.ts"],
-      "@libs-setup-feature": ["libs/setup/feature/src/index.ts"],
-      "@libs-setup-ui": ["libs/setup/ui/src/index.ts"],
-      "@libs-setup-util": ["libs/setup/util/src/index.ts"],
       "@libs-shared-types": ["libs/shared/types/src/index.ts"],
       "@libs-shared-util": ["libs/shared/util/src/index.ts"],
       "@libs-terminal-feature": ["libs/terminal/feature/src/index.ts"],
@@ -82,7 +78,15 @@
       "@libs-wifi-util": ["libs/wifi/util/src/index.ts"],
       "@libs-wifi-data-access": ["libs/wifi/data-access/src/index.ts"],
       "@libs-wifi-ui": ["libs/wifi/ui/src/index.ts"],
-      "@libs-wifi-feature": ["libs/wifi/feature/src/index.ts"]
+      "@libs-wifi-feature": ["libs/wifi/feature/src/index.ts"],
+      "@libs-chirimen-setup-data-access": [
+        "libs/chirimen-setup/data-access/src/index.ts"
+      ],
+      "@libs-chirimen-setup-feature": [
+        "libs/chirimen-setup/feature/src/index.ts"
+      ],
+      "@libs-chirimen-setup-ui": ["libs/chirimen-setup/ui/src/index.ts"],
+      "@libs-chirimen-setup-util": ["libs/chirimen-setup/util/src/index.ts"]
     }
   }
 }

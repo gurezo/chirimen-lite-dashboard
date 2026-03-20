@@ -4,9 +4,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
   selector: 'lib-setup-execute-button',
   standalone: true,
   template: `
-    <button type="button" (click)="handleClick()">
-      Execute Setup
-    </button>
+    <button type="button" (click)="handleClick()">Execute Setup</button>
   `,
 })
 export class SetupExecuteButtonComponent {
