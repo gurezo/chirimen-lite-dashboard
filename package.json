@@ -52,6 +52,7 @@
     "@angular/cli": "21.1.5",
     "@angular/compiler-cli": "21.1.6",
     "@commitlint/cli": "19.8.1",
+    "@commitlint/config-angular": "19.8.1",
     "@commitlint/config-conventional": "19.8.1",
     "@nx/angular": "22.5.3",
     "@nx/eslint-plugin": "22.5.3",
