@@ -16,7 +16,7 @@
 [optional footer(s)]
 ```
 
-- **type**: 変更の種類（`feat`, `fix`, `docs`, `style`, `refactor`, `test`, `build`, `ci`, `chore` など）
+- **type**: 変更の種類（`feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `revert`）
 - **scope**: 変更対象のスコープ（下記一覧から指定）
 - **description**: 簡潔な説明（命令形・小文字始まり推奨）
 
@@ -37,29 +37,35 @@ Angular のコミットガイドラインに合わせ、コミットメッセー
 
 ### スコープ一覧
 
-| スコープ | 説明 |
-|----------|------|
-| `console` | メインアプリ (apps/console) |
-| `workspace` | ルート・共通設定（package.json, nx, ツール設定など） |
-| `connect` | 接続 lib（feature / ui / util） |
-| `console-shell` | コンソールシェル lib（feature / ui / util） |
-| `page-not-found` | 404 ページ lib |
-| `web-serial` | Web Serial lib（util / data-access / state） |
-| `example` | サンプル lib（util / data-access / ui / feature） |
-| `wifi` | Wi‑Fi lib（util / data-access / ui / feature） |
-| `dialogs` | ダイアログ lib（feature / ui / util） |
-| `unsupported-browser` | 非対応ブラウザ lib |
-| `editor` | エディタ lib（data-access / feature / ui / util） |
-| `terminal` | ターミナル lib（feature / ui / util） |
-| `file-manager` | ファイルマネージャ lib（data-access / feature / ui / util） |
-| `i2cdetect` / `i2cdetect-ui` / `i2cdetect-data-access` / `i2cdetect-util` | I2C 検出 lib（ui / data-access / util に分割） |
-| `pin-assign-panel` | ピン割り当てパネル lib（feature / ui / util） |
-| `remote` | リモート lib（data-access / feature / ui / util） |
-| `setup` | セットアップ lib（data-access / feature / ui / util） |
-| `shared-ui` | 共有 UI lib |
-| `shared-guards` | 共有ガード lib |
-| `shared-types` | 共有型定義 lib |
-| `shared-util` | 共有ユーティリティ lib |
+| スコープ              | 説明                                                           |
+| --------------------- | -------------------------------------------------------------- |
+| `console`             | メインアプリ (apps/console)                                    |
+| `workspace`           | ルート・共通設定（package.json, nx, ツール設定など）           |
+| `connect`             | 接続 lib（feature / ui / util）                                |
+| `console-shell`       | コンソールシェル lib（feature / ui / util）                    |
+| `page-not-found`      | 404 ページ lib                                                 |
+| `web-serial`          | Web Serial lib（util / data-access / state）                   |
+| `web-serial-util`     | Web Serial util lib                                           |
+| `web-serial-data-access` | Web Serial data-access lib                                   |
+| `web-serial-state`   | Web Serial state lib                                          |
+| `example`             | サンプル lib（util / data-access / ui / feature）              |
+| `wifi`                | Wi‑Fi lib（util / data-access / ui / feature）                 |
+| `dialogs`             | ダイアログ lib（feature / ui / util）                          |
+| `unsupported-browser` | 非対応ブラウザ lib                                             |
+| `editor`              | エディタ lib（data-access / feature / ui / util）              |
+| `terminal`            | ターミナル lib（feature / ui / util）                          |
+| `file-manager`        | ファイルマネージャ lib（data-access / feature / ui / util）    |
+| `i2cdetect`           | I2C 検出 lib（ui / data-access / util に分割）                  |
+| `i2cdetect-ui`        | I2C 検出 ui lib                                               |
+| `i2cdetect-data-access` | I2C 検出 data-access lib                                   |
+| `i2cdetect-util`      | I2C 検出 util lib                                             |
+| `pin-assign-panel`    | ピン割り当てパネル lib（feature / ui / util）                  |
+| `remote`              | リモート lib（data-access / feature / ui / util）              |
+| `setup`               | セットアップ lib（data-access / feature / ui / util）          |
+| `shared-ui`           | 共有 UI lib                                                    |
+| `shared-guards`       | 共有ガード lib                                                 |
+| `shared-types`        | 共有型定義 lib                                                 |
+| `shared-util`         | 共有ユーティリティ lib                                         |
 
 ### 例
 
@@ -88,15 +94,6 @@ Nx Release は、`nx.json` の `release.version.conventionalCommits` を `true` 
 - **アプリ**: `@app/*` → `apps/console/src/app/*`
 - **lib 群**: `@libs-<lib名>` 形式（例: `@libs-shared-guards`, `@libs-shared-ui`, `@libs-wifi-feature`）
 - 一覧は `tsconfig.base.json` の `paths` を参照してください。
-
-### 後方互換について
-
-以下の旧エイリアスは廃止済みです。後方互換は行っていません。
-
-| 廃止したエイリアス | 統一後のエイリアス |
-|-------------------|-------------------|
-| `@libs-console-guards` | `@libs-shared-guards` |
-| `@libs-ui` | `@libs-shared-ui` |
 
 ## プルリクエスト
 
