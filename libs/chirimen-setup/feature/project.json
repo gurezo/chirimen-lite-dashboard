@@ -4,20 +4,27 @@
   "sourceRoot": "libs/chirimen-setup/feature/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["type:feature", "domain:chirimen-setup"],
+  "tags": [
+    "type:feature",
+    "domain:chirimen-setup"
+  ],
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/dist/{projectRoot}"
+      ],
       "options": {
         "command": "echo \"build libs-chirimen-setup-feature\""
       }
     },
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
-        "reportsDirectory": "../../../coverage/libs/chirimen-setup/feature"
+        "reportsDirectory": "{projectRoot}/../../../coverage/libs/chirimen-setup/feature"
       }
     },
     "lint": {
