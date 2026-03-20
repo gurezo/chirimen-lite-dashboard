@@ -4,6 +4,7 @@ import { Injectable, inject } from '@angular/core';
 import { firstValueFrom, take, type Subscription } from 'rxjs';
 import {
   CommandExecutionConfig,
+  type CommandResult,
   SerialCommandService,
 } from './serial-command.service';
 import { SerialTransportService } from './serial-transport.service';
@@ -141,8 +142,60 @@ export class SerialFacadeService {
     prompt: string,
     timeout = 10000,
   ): Promise<string> {
-    const config: CommandExecutionConfig = { prompt, timeout };
-    return this.command.executeCommand(cmd, config, (data) => this.write(data));
+    const result = await this.exec(cmd, prompt, timeout);
+    return result.stdout;
+  }
+
+  /**
+   * コマンド実行（stdout 相当を返す）
+   */
+  async exec(
+    cmd: string,
+    prompt: string | RegExp,
+    timeout = 10000,
+    retry = 0
+  ): Promise<CommandResult> {
+    const config: CommandExecutionConfig = { prompt, timeout, retry };
+    const clearReadBuffer = () => {
+      this.readBuffer = '';
+    };
+    return this.command.exec(cmd, config, (data) => this.write(data), clearReadBuffer);
+  }
+
+  /**
+   * raw コマンド実行（改行制御が必要なケース向け）
+   */
+  async execRaw(
+    cmdRaw: string,
+    prompt: string | RegExp,
+    timeout = 10000,
+    retry = 0
+  ): Promise<CommandResult> {
+    const config: CommandExecutionConfig = { prompt, timeout, retry };
+    const clearReadBuffer = () => {
+      this.readBuffer = '';
+    };
+    return this.command.execRaw(
+      cmdRaw,
+      config,
+      (data) => this.write(data),
+      clearReadBuffer
+    );
+  }
+
+  /**
+   * 送信せずに prompt まで待機
+   */
+  async readUntilPrompt(
+    prompt: string | RegExp,
+    timeout = 10000,
+    retry = 0
+  ): Promise<CommandResult> {
+    const config: CommandExecutionConfig = { prompt, timeout, retry };
+    const clearReadBuffer = () => {
+      this.readBuffer = '';
+    };
+    return this.command.readUntilPrompt(config, clearReadBuffer);
   }
 
   isConnected(): boolean {

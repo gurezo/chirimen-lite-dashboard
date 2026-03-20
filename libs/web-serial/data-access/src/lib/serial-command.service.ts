@@ -7,9 +7,23 @@ import { Injectable } from '@angular/core';
  */
 export interface CommandExecutionConfig {
   /** 期待するプロンプト文字列 */
-  prompt: string;
+  prompt: string | RegExp;
   /** タイムアウト時間（ミリ秒） */
   timeout: number;
+  /** タイムアウト等失敗時の再試行回数 */
+  retry?: number;
+}
+
+/**
+ * シリアル上でのコマンド実行結果
+ *
+ * Web Serial の API では exit code や stderr を分離して取得できないため、
+ * 現状は stdout 相当の文字列のみを格納します。
+ */
+export interface CommandResult {
+  stdout: string;
+  stderr?: string;
+  exitCode?: number;
 }
 
 /**
@@ -24,6 +38,7 @@ export interface CommandExecutionConfig {
   providedIn: 'root',
 })
 export class SerialCommandService {
+  private commandSeq = 0;
   private pendingCommands = new Map<
     string,
     {
@@ -33,6 +48,19 @@ export class SerialCommandService {
       config: CommandExecutionConfig;
     }
   >();
+
+  private nextCommandId(): string {
+    return `cmd-${++this.commandSeq}-${Date.now()}`;
+  }
+
+  private matchesPrompt(input: string, prompt: string | RegExp): boolean {
+    if (typeof prompt === 'string') {
+      return input.includes(prompt);
+    }
+    // RegExp#test は lastIndex があると壊れるため都度 lastIndex をリセット
+    prompt.lastIndex = 0;
+    return prompt.test(input);
+  }
 
   /**
    * コマンド実行を開始し、指定されたプロンプトが返されるまで待機
@@ -47,27 +75,118 @@ export class SerialCommandService {
     config: CommandExecutionConfig,
     writeFunction: (data: string) => Promise<void>
   ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const timeoutId = setTimeout(() => {
-        this.pendingCommands.delete(commandId);
-        reject(new Error('Command execution timeout'));
-      }, config.timeout) as unknown as number;
+    const result = await this.exec(commandId, config, writeFunction);
+    return result.stdout;
+  }
 
-      this.pendingCommands.set(commandId, {
-        resolve,
-        reject,
-        timeoutId,
-        config,
-      });
+  /**
+   * コマンド実行（stdin に `cmd + '\n'` を送信し、prompt まで待機）
+   */
+  async exec(
+    cmd: string,
+    config: CommandExecutionConfig,
+    writeFunction: (data: string) => Promise<void>,
+    onAttemptStart?: () => void
+  ): Promise<CommandResult> {
+    return this.execInternal(cmd + '\n', config, writeFunction, onAttemptStart);
+  }
 
-      // コマンドを送信
-      writeFunction(commandId + '\n').catch((error) => {
-        // writeFunction が失敗した場合、コマンドを削除してエラーを返す
-        this.pendingCommands.delete(commandId);
-        clearTimeout(timeoutId);
-        reject(error);
-      });
-    });
+  /**
+   * raw コマンド実行（stdin に `cmdRaw` をそのまま送信）
+   *
+   * base64 送信など、改行制御が必要なケースを想定しています。
+   */
+  async execRaw(
+    cmdRaw: string,
+    config: CommandExecutionConfig,
+    writeFunction: (data: string) => Promise<void>,
+    onAttemptStart?: () => void
+  ): Promise<CommandResult> {
+    return this.execInternal(cmdRaw, config, writeFunction, onAttemptStart);
+  }
+
+  /**
+   * 読み取りのみ（送信せず prompt まで待機）
+   */
+  async readUntilPrompt(
+    config: CommandExecutionConfig,
+    onAttemptStart?: () => void
+  ): Promise<CommandResult> {
+    const retry = config.retry ?? 0;
+    let lastError: unknown;
+
+    for (let attempt = 0; attempt <= retry; attempt++) {
+      onAttemptStart?.();
+
+      const { id, promise } = this.registerWait(config);
+      try {
+        const stdout = await promise;
+        return { stdout };
+      } catch (error: unknown) {
+        lastError = error;
+        if (attempt === retry) {
+          throw error;
+        }
+      } finally {
+        this.cancelCommand(id);
+      }
+    }
+
+    throw lastError ?? new Error('readUntilPrompt failed');
+  }
+
+  private async execInternal(
+    sendData: string,
+    config: CommandExecutionConfig,
+    writeFunction: (data: string) => Promise<void>,
+    onAttemptStart?: () => void
+  ): Promise<CommandResult> {
+    const retry = config.retry ?? 0;
+    let lastError: unknown;
+
+    for (let attempt = 0; attempt <= retry; attempt++) {
+      onAttemptStart?.();
+
+      const { id, promise } = this.registerWait(config);
+      try {
+        // コマンドを送信
+        await writeFunction(sendData);
+        const stdout = await promise;
+        return { stdout };
+      } catch (error: unknown) {
+        lastError = error;
+        // pending が残らないようにクリア
+        this.cancelCommand(id);
+        if (attempt === retry) {
+          throw error;
+        }
+      }
+    }
+
+    throw lastError ?? new Error('exec failed');
+  }
+
+  private registerWait(
+    config: CommandExecutionConfig
+  ): { id: string; promise: Promise<string> } {
+    const id = this.nextCommandId();
+
+    return {
+      id,
+      promise: new Promise((resolve, reject) => {
+        const timeoutId = setTimeout(() => {
+          this.pendingCommands.delete(id);
+          reject(new Error('Command execution timeout'));
+        }, config.timeout) as unknown as number;
+
+        this.pendingCommands.set(id, {
+          resolve,
+          reject,
+          timeoutId,
+          config,
+        });
+      }),
+    };
   }
 
   /**
@@ -78,7 +197,7 @@ export class SerialCommandService {
    */
   processInput(input: string): string | null {
     for (const [commandId, command] of this.pendingCommands) {
-      if (input.match(command.config.prompt)) {
+      if (this.matchesPrompt(input, command.config.prompt)) {
         // コマンド完了
         clearTimeout(command.timeoutId);
         this.pendingCommands.delete(commandId);
