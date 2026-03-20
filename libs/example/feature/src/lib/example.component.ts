@@ -2,10 +2,14 @@ import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { DialogService } from '@libs-dialogs-util';
 import { ButtonComponent } from '@libs-shared-ui';
-import { BehaviorSubject, forkJoin } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, forkJoin } from 'rxjs';
 import { ExampleItem } from '@libs-example-util';
 import { ExampleListComponent } from '@libs-example-ui';
-import { ExampleDataService } from '@libs-example-data-access';
+import { EditorService } from '@libs-editor-data-access';
+import {
+  ExampleDataService,
+  ExampleService,
+} from '@libs-example-data-access';
 
 @Component({
   selector: 'choh-example',
@@ -15,6 +19,8 @@ import { ExampleDataService } from '@libs-example-data-access';
 export class ExampleComponent implements OnInit {
   private dialogService = inject(DialogService);
   private exampleDataService = inject(ExampleDataService);
+  private exampleService = inject(ExampleService);
+  private editorService = inject(EditorService);
 
   exampleSubject = new BehaviorSubject<
     [ExampleItem[], ExampleItem[], ExampleItem[]]
@@ -31,5 +37,17 @@ export class ExampleComponent implements OnInit {
 
   closeModal(): void {
     this.dialogService.close();
+  }
+
+  async onSaveExample(example: ExampleItem): Promise<void> {
+    try {
+      const blob = await firstValueFrom(
+        this.exampleService.downloadMainJs(example.id),
+      );
+      const text = await blob.text();
+      await this.editorService.saveTextFile(`/home/pi/${example.id}.js`, text);
+    } catch (error) {
+      console.warn('Failed to save example', error);
+    }
   }
 }

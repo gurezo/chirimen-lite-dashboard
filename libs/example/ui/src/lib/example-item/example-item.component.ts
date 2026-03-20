@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -12,6 +12,7 @@ import { ExampleItem } from '@libs-example-util';
 export class ExampleItemComponent {
   @Input() label!: string;
   @Input() exampleItem!: ExampleItem[];
+  @Output() readonly saveExample = new EventEmitter<ExampleItem>();
   displayedColumns: string[] = [
     'id',
     'title',
@@ -20,4 +21,8 @@ export class ExampleItemComponent {
     'circuit',
     // 'link',
   ];
+
+  onSave(element: ExampleItem): void {
+    this.saveExample.emit(element);
+  }
 }
