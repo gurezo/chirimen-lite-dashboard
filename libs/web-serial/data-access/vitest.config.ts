@@ -3,6 +3,11 @@ import { resolve } from 'path';
 
 export default defineConfig({
   cacheDir: resolve(process.cwd(), 'node_modules/.vite'),
+  resolve: {
+    alias: {
+      '@libs-web-serial-util': resolve(__dirname, '../util/src/index.ts'),
+    },
+  },
   test: {
     globals: true,
     environment: 'node',
