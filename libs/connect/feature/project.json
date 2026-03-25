@@ -10,6 +10,7 @@
   ],
   "implicitDependencies": [
     "libs-connect-ui",
+    "libs-console-shell-feature",
     "libs-web-serial-state"
   ],
   "targets": {
