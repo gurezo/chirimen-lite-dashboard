@@ -1,17 +1,29 @@
 import { describe, expect, it, vi } from 'vitest';
 import { attachTerminalInput } from './terminal-input';
 
+type DomEvent = {
+  altKey: boolean;
+  ctrlKey: boolean;
+  metaKey: boolean;
+  code: string;
+  key: string;
+};
+
+type TerminalKeyEvent = {
+  domEvent: DomEvent;
+};
+
 describe('attachTerminalInput', () => {
   it('ignores input when input is disabled', () => {
-    let keyHandler: ((e: { domEvent: any }) => void) | undefined;
+    let keyHandler: ((e: TerminalKeyEvent) => void) | undefined;
 
     const terminal = {
-      onKey: (cb: (e: { domEvent: any }) => void) => {
+      onKey: (cb: (e: TerminalKeyEvent) => void) => {
         keyHandler = cb;
       },
       write: vi.fn(),
       writeln: vi.fn(),
-    } as any;
+    } as unknown as Parameters<typeof attachTerminalInput>[0];
 
     const onCommand = vi.fn(async () => 'OK');
 
@@ -42,15 +54,15 @@ describe('attachTerminalInput', () => {
   });
 
   it('executes command when input is enabled', async () => {
-    let keyHandler: ((e: { domEvent: any }) => void) | undefined;
+    let keyHandler: ((e: TerminalKeyEvent) => void) | undefined;
 
     const terminal = {
-      onKey: (cb: (e: { domEvent: any }) => void) => {
+      onKey: (cb: (e: TerminalKeyEvent) => void) => {
         keyHandler = cb;
       },
       write: vi.fn(),
       writeln: vi.fn(),
-    } as any;
+    } as unknown as Parameters<typeof attachTerminalInput>[0];
 
     let resolveCommand: ((value: string) => void) | undefined;
     const onCommand = vi.fn(
