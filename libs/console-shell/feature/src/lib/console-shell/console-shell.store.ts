@@ -90,6 +90,10 @@ export class ConsoleShellStore {
     }));
   }
 
+  setConnected(connected: boolean): void {
+    this.setConnectionStatus(connected);
+  }
+
   setConnectionStatus(isConnected: boolean): void {
     this.stateSignal.update((state) => ({
       ...state,
