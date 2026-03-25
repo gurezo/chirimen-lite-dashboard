@@ -18,7 +18,7 @@ import {
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { ConsoleShellStore } from './console-shell.store';
+import { ConsoleShellStore } from '@libs-console-shell-util';
 
 @Component({
   selector: 'lib-console-shell',
