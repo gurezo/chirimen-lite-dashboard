@@ -5,7 +5,7 @@ import {
   ConnectionStatusComponent,
   type ConnectStatus,
 } from '@libs-connect-ui';
-import { ConsoleShellStore } from '@libs-console-shell-feature';
+import { ConsoleShellStore } from '@libs-console-shell-util';
 import { WebSerialActions } from '@libs-web-serial-state';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';

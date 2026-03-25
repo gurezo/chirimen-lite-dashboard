@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ConsoleShellStore } from '@libs-console-shell-feature';
+import { ConsoleShellStore } from '@libs-console-shell-util';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
