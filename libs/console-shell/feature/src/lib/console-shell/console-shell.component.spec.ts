@@ -19,7 +19,8 @@ describe('ConsoleShellComponent', () => {
       .fn()
       .mockReturnValueOnce(of(false))
       .mockReturnValueOnce(of(''))
-      .mockReturnValueOnce(of(''));
+      .mockReturnValueOnce(of(''))
+      .mockReturnValueOnce(of(false));
     storeDispatch = vi.fn();
 
     notifyConnectionSuccess = vi.fn();
