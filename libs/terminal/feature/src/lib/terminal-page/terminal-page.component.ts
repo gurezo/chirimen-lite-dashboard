@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { TerminalViewComponent } from '@libs-terminal-ui';
 import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 
@@ -8,7 +7,6 @@ import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
   standalone: true,
   imports: [TerminalViewComponent],
   template: ` <choh-terminal-view [remotePrompt]="remotePrompt" /> `,
-  providers: [SerialFacadeService],
 })
 export default class TerminalPageComponent {
   readonly remotePrompt = PI_ZERO_PROMPT;
