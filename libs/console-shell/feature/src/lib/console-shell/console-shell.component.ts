@@ -1,9 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import {
-  ConnectButtonComponent,
-  ConnectionStatusComponent,
-} from '@libs-connect-ui';
+import { ConnectPageComponent } from '@libs-connect-feature';
 import {
   HeaderToolbarComponent,
   LeftSidebarComponent,
@@ -27,8 +24,7 @@ import { ConsoleShellStore } from './console-shell.store';
   selector: 'lib-console-shell',
   imports: [
     AsyncPipe,
-    ConnectButtonComponent,
-    ConnectionStatusComponent,
+    ConnectPageComponent,
     HeaderToolbarComponent,
     LeftSidebarComponent,
     RightSidebarComponent,
@@ -70,12 +66,6 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
         .subscribe((errorMessage) => {
           this.serialNotification.notifyConnectionError(errorMessage);
         }),
-    );
-
-    this.subscriptions.add(
-      this.connected$.subscribe((isConnected) => {
-        this.shellStore.setConnectionStatus(isConnected);
-      }),
     );
   }
 
