@@ -61,14 +61,18 @@ export class TerminalViewComponent implements AfterViewInit {
     this.xterminal.reset();
     this.xterminal.writeln('$ ');
 
-    attachTerminalInput(this.xterminal, async (command) => {
-      const { stdout } = await this.serial.exec(
-        command,
-        this.remotePrompt(),
-        10000,
-        0
-      );
-      return this.sanitizeStdout(stdout, command);
-    });
+    attachTerminalInput(
+      this.xterminal,
+      async (command) => {
+        const { stdout } = await this.serial.exec(
+          command,
+          this.remotePrompt(),
+          10000,
+          0
+        );
+        return this.sanitizeStdout(stdout, command);
+      },
+      () => this.serial.isConnected(),
+    );
   }
 }

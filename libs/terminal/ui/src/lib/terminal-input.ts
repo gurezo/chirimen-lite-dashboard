@@ -1,6 +1,7 @@
 import { Terminal } from '@xterm/xterm';
 
 type CommandHandler = (command: string) => Promise<string>;
+type InputEnabledHandler = () => boolean;
 
 /**
  * Attaches key input handling to an xterm Terminal instance.
@@ -9,12 +10,20 @@ type CommandHandler = (command: string) => Promise<string>;
 export function attachTerminalInput(
   terminal: Terminal,
   onCommand?: CommandHandler,
+  isInputEnabled?: InputEnabledHandler,
 ): void {
   let inputBuffer = '';
 
   terminal.onKey((e) => {
     const ev = e.domEvent;
+    const inputEnabled = isInputEnabled ? isInputEnabled() : true;
     const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey;
+
+    // 未接続時は入力を完全に無視する（xterm 側の入力も出さない）
+    if (!inputEnabled) {
+      inputBuffer = '';
+      return;
+    }
 
     if (ev.code === 'Enter') {
       const command = inputBuffer.trim();
