@@ -1,13 +1,15 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
   ConnectButtonComponent,
   ConnectionStatusComponent,
   type ConnectStatus,
 } from '@libs-connect-ui';
+import { ConsoleShellStore } from '@libs-console-shell-feature';
 import { WebSerialActions } from '@libs-web-serial-state';
 import { Store } from '@ngrx/store';
-import { map } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { filter, map } from 'rxjs';
 
 @Component({
   selector: 'lib-connect-page',
@@ -33,8 +35,9 @@ import { map } from 'rxjs';
     </section>
   `,
 })
-export class ConnectPageComponent {
+export class ConnectPageComponent implements OnInit, OnDestroy {
   private store = inject(Store);
+  private shellStore = inject(ConsoleShellStore);
 
   disconnectedMessage =
     'Raspberry Pi Zero と PC を USB で繋いだ後、Connect ボタンをクリックして、Web Serail を接続して下さい';
@@ -42,17 +45,33 @@ export class ConnectPageComponent {
   imageAlt = 'PiZeroW_OTG';
   connectButtonLabel = 'Web Serial Connect';
 
-  connectionStatus$ = this.store
-    .select(
-      (state: { webSerial: { isConnected: boolean } }) =>
-        state.webSerial.isConnected,
-    )
-    .pipe(
-      map(
-        (connected): ConnectStatus =>
-          connected ? 'connected' : 'disconnected',
-      ),
+  private connected$ = this.store.select(
+    (state: { webSerial: { isConnected: boolean } }) =>
+      state.webSerial.isConnected,
+  );
+
+  connectionStatus$ = this.connected$.pipe(
+    map(
+      (connected): ConnectStatus =>
+        connected ? 'connected' : 'disconnected',
+    ),
+  );
+
+  private subscriptions = new Subscription();
+
+  ngOnInit(): void {
+    this.subscriptions.add(
+      this.connected$
+        .pipe(filter((isConnected) => isConnected))
+        .subscribe(() => {
+          this.shellStore.setConnected(true);
+        }),
     );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
 
   onConnect(): void {
     this.store.dispatch(WebSerialActions.onConnect());
