@@ -22,4 +22,14 @@ describe('HeaderToolbarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should emit toolbarAction when action icon is clicked', () => {
+    const emitSpy = vi.spyOn(component.toolbarAction, 'emit');
+    const editorButton: HTMLButtonElement | null =
+      fixture.nativeElement.querySelector('button[aria-label="editor"]');
+
+    editorButton?.click();
+
+    expect(emitSpy).toHaveBeenCalledWith('editor');
+  });
 });

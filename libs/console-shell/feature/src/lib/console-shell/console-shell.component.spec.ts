@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { DialogService } from '@libs-dialogs-util';
+import { ConsoleShellStore } from '@libs-console-shell-util';
 import { Store } from '@ngrx/store';
 import { SerialNotificationService } from '@libs-web-serial-data-access';
 import { of } from 'rxjs';
@@ -13,6 +15,11 @@ describe('ConsoleShellComponent', () => {
   let storeDispatch: ReturnType<typeof vi.fn>;
   let notifyConnectionSuccess: ReturnType<typeof vi.fn>;
   let notifyConnectionError: ReturnType<typeof vi.fn>;
+  let openDialog: ReturnType<typeof vi.fn>;
+  let closeAllDialog: ReturnType<typeof vi.fn>;
+  let setActivePanel: ReturnType<typeof vi.fn>;
+  let closeDialog: ReturnType<typeof vi.fn>;
+  let openShellDialog: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
     storeSelect = vi
@@ -25,6 +32,11 @@ describe('ConsoleShellComponent', () => {
 
     notifyConnectionSuccess = vi.fn();
     notifyConnectionError = vi.fn();
+    openDialog = vi.fn().mockReturnValue({ closed: of(undefined) });
+    closeAllDialog = vi.fn();
+    setActivePanel = vi.fn();
+    closeDialog = vi.fn();
+    openShellDialog = vi.fn();
 
     await TestBed.configureTestingModule({
       imports: [ConsoleShellComponent],
@@ -39,6 +51,22 @@ describe('ConsoleShellComponent', () => {
           useValue: {
             notifyConnectionSuccess,
             notifyConnectionError,
+          },
+        },
+        {
+          provide: DialogService,
+          useValue: { open: openDialog, closeAll: closeAllDialog },
+        },
+        {
+          provide: ConsoleShellStore,
+          useValue: {
+            activePanel: () => 'terminal',
+            leftNavOpen: () => true,
+            rightNavOpen: () => true,
+            setActivePanel,
+            toggleRightNav: vi.fn(),
+            openDialog: openShellDialog,
+            closeDialog,
           },
         },
       ],
@@ -67,5 +95,20 @@ describe('ConsoleShellComponent', () => {
     storeDispatch.mockClear();
     component.onDisConnect();
     expect(storeDispatch).toHaveBeenCalledTimes(1);
+  });
+
+  it('should switch pane when editor action is clicked', () => {
+    component.onToolbarAction('editor');
+
+    expect(closeDialog).toHaveBeenCalledTimes(1);
+    expect(closeAllDialog).toHaveBeenCalledTimes(1);
+    expect(setActivePanel).toHaveBeenCalledWith('editor');
+  });
+
+  it('should open dialog when wifi action is clicked', () => {
+    component.onToolbarAction('wifi');
+
+    expect(openShellDialog).toHaveBeenCalledWith('wifi');
+    expect(openDialog).toHaveBeenCalledTimes(1);
   });
 });
