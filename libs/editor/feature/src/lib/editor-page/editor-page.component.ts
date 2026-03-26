@@ -11,7 +11,7 @@ import {
   FileNameDisplayComponent,
   MonacoEditorComponent,
 } from '@libs-editor-ui';
-import { EditorService, MonacoEditorService } from '@libs-editor-data-access';
+import { EditorService } from '@libs-editor-data-access';
 import { ConsoleShellStore } from '@libs-console-shell-util';
 
 const DEFAULT_CODE = `
@@ -39,17 +39,28 @@ const DEFAULT_CODE = `
     EditorToolbarComponent,
     FileNameDisplayComponent,
   ],
-  providers: [MonacoEditorService],
   template: `
     <div class="editor-page">
-      <choh-editor-toolbar />
-      <choh-file-name-display />
-      <choh-monaco-editor [code]="code()" (codeChange)="code.set($event)" />
+      <choh-editor-toolbar
+        [saveDisabled]="!isDirty() || isSaving()"
+        (saveRequested)="saveCurrentFile()"
+      />
+      <choh-file-name-display
+        [fileName]="currentFileName()"
+        [isDirty]="isDirty()"
+      />
+      <choh-monaco-editor
+        [code]="code()"
+        (codeChange)="code.set($event)"
+        (contentEdited)="isDirty.set(true)"
+      />
     </div>
   `,
 })
 export class EditorPageComponent implements OnInit {
   code = signal(DEFAULT_CODE.trim());
+  isDirty = signal(false);
+  isSaving = signal(false);
 
   private editorService = inject(EditorService);
   private shellStore = inject(ConsoleShellStore);
@@ -73,12 +84,31 @@ export class EditorPageComponent implements OnInit {
     return this.shellStore.selectedFilePath() ?? this.defaultFilePath;
   }
 
+  currentFileName(): string {
+    return this.currentFilePath().split('/').pop() ?? this.currentFilePath();
+  }
+
   private async loadFile(path: string): Promise<void> {
     try {
       const loaded = await this.editorService.loadTextFile(path);
       this.code.set(loaded);
+      this.isDirty.set(false);
     } catch {
       // ファイルが存在しない等の場合はデフォルトコードのまま
+    }
+  }
+
+  async saveCurrentFile(): Promise<void> {
+    if (this.isSaving()) {
+      return;
+    }
+
+    this.isSaving.set(true);
+    try {
+      await this.editorService.saveTextFile(this.currentFilePath(), this.code());
+      this.isDirty.set(false);
+    } finally {
+      this.isSaving.set(false);
     }
   }
 
@@ -89,6 +119,6 @@ export class EditorPageComponent implements OnInit {
     if (!isSaveShortcut) return;
 
     event.preventDefault();
-    await this.editorService.saveTextFile(this.currentFilePath(), this.code());
+    await this.saveCurrentFile();
   }
 }

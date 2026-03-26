@@ -1,12 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'choh-editor-toolbar',
   standalone: true,
   template: `
     <div class="editor-toolbar">
-      <!-- TODO: フォーマット・保存・その他ツールバー -->
+      <button type="button" [disabled]="saveDisabled()" (click)="saveRequested.emit()">
+        Save
+      </button>
     </div>
   `,
 })
-export class EditorToolbarComponent {}
+export class EditorToolbarComponent {
+  saveDisabled = input(false);
+  saveRequested = output<void>();
+}

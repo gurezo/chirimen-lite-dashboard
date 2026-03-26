@@ -7,6 +7,9 @@ import { Component, input } from '@angular/core';
     <div class="file-name-display">
       @if (fileName()) {
         <span>{{ fileName() }}</span>
+        @if (isDirty()) {
+          <span> *</span>
+        }
       } @else {
         <span>—</span>
       }
@@ -15,4 +18,5 @@ import { Component, input } from '@angular/core';
 })
 export class FileNameDisplayComponent {
   fileName = input<string | null>(null);
+  isDirty = input(false);
 }
