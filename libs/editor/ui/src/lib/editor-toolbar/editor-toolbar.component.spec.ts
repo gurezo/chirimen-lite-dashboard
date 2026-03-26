@@ -19,4 +19,23 @@ describe('EditorToolbarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should emit saveRequested when save button is clicked', () => {
+    const emitSpy = vi.spyOn(component.saveRequested, 'emit');
+    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    button.click();
+
+    expect(emitSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should disable save button when saveDisabled is true', async () => {
+    fixture.componentRef.setInput('saveDisabled', true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    expect(button.disabled).toBe(true);
+  });
 });
