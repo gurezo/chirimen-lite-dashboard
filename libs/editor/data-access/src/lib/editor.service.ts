@@ -23,33 +23,14 @@ export class EditorService {
    * @param container エディターのコンテナ要素
    * @param options エディターオプション
    */
-  initializeEditor(
-    _container: HTMLElement,
-    _options?: editor.IStandaloneEditorConstructionOptions,
-  ): void {
-    // 未使用だが API の互換のために引数は残す
-    void _container;
-    void _options;
-
-    // Note: Monaco Editor は ngx-monaco-editor-v2 経由で使用されるため、
-    // 直接 create() を呼ぶのではなく、コンポーネント側で初期化される
-    // const defaultOptions: editor.IStandaloneEditorConstructionOptions = {
-    //   value: '',
-    //   language: 'javascript',
-    //   theme: 'vs-dark',
-    //   automaticLayout: true,
-    //   minimap: { enabled: false },
-    //   fontSize: 14,
-    //   ...options,
-    // };
-    // this.editor = editor.create(container, defaultOptions);
-
-    // エディターがセットされている場合のみ変更を監視
-    if (this.editor) {
-      this.editor.onDidChangeModelContent(() => {
-        this.editedFlag = true;
-      });
-    }
+  initializeEditor(editorInstance: editor.IStandaloneCodeEditor): void {
+    this.editor = editorInstance;
+    this.editor.onDidChangeModelContent((event) => {
+      if (event.isFlush) {
+        return;
+      }
+      this.editedFlag = true;
+    });
   }
 
   /**
