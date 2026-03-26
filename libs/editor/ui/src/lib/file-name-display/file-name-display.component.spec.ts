@@ -19,4 +19,14 @@ describe('FileNameDisplayComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should render file name with dirty marker', async () => {
+    fixture.componentRef.setInput('fileName', 'main.js');
+    fixture.componentRef.setInput('isDirty', true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.textContent).toContain('main.js');
+    expect(fixture.nativeElement.textContent).toContain('*');
+  });
 });
