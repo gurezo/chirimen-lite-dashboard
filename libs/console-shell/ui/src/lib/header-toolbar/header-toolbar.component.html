@@ -8,6 +8,16 @@
       />
     </div>
     <div class="flex items-center gap-2">
+      @for (action of toolbarActions; track action.name) {
+        <button
+          mat-icon-button
+          [attr.aria-label]="action.name"
+          type="button"
+          (click)="toolbarAction.emit(action.name)"
+        >
+          <mat-icon [svgIcon]="action.icon"></mat-icon>
+        </button>
+      }
       <button mat-icon-button (click)="toggleRightSidebar.emit()">
         <mat-icon>
           @if (rightNavOpen()) {
