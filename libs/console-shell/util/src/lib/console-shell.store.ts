@@ -2,6 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 type ConsoleShellPanel = 'terminal' | 'editor' | 'example';
+type ConsoleShellDialog = 'none' | 'wifi' | 'i2c' | 'setup' | 'remote';
 
 export interface ConsoleShellState {
   activePanel: ConsoleShellPanel;
@@ -9,6 +10,7 @@ export interface ConsoleShellState {
   rightNavOpen: boolean;
   isConnected: boolean;
   selectedFilePath: string | null;
+  activeDialog: ConsoleShellDialog;
 }
 
 @Injectable({
@@ -23,6 +25,7 @@ export class ConsoleShellStore {
     rightNavOpen: true,
     isConnected: false,
     selectedFilePath: null,
+    activeDialog: 'none',
   });
 
   readonly state = this.stateSignal.asReadonly();
@@ -45,6 +48,10 @@ export class ConsoleShellStore {
 
   readonly selectedFilePath = computed(
     () => this.stateSignal().selectedFilePath,
+  );
+
+  readonly activeDialog = computed(
+    () => this.stateSignal().activeDialog,
   );
 
   setActivePanel(panel: ConsoleShellPanel): void {
@@ -111,6 +118,20 @@ export class ConsoleShellStore {
     this.stateSignal.update((state) => ({
       ...state,
       selectedFilePath,
+    }));
+  }
+
+  openDialog(dialog: Exclude<ConsoleShellDialog, 'none'>): void {
+    this.stateSignal.update((state) => ({
+      ...state,
+      activeDialog: dialog,
+    }));
+  }
+
+  closeDialog(): void {
+    this.stateSignal.update((state) => ({
+      ...state,
+      activeDialog: 'none',
     }));
   }
 }
