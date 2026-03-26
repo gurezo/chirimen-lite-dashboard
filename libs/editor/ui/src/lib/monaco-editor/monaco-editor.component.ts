@@ -21,6 +21,7 @@ import type { editor } from 'monaco-editor';
 export class MonacoEditorComponent {
   code = model<string>('');
   contentEdited = output<void>();
+  editorInitialized = output<editor.IStandaloneCodeEditor>();
 
   editorOptions = input({
     theme: 'vs-dark',
@@ -29,6 +30,7 @@ export class MonacoEditorComponent {
   });
 
   onEditorInit(editorInstance: editor.IStandaloneCodeEditor): void {
+    this.editorInitialized.emit(editorInstance);
     editorInstance.onDidChangeModelContent((event) => {
       if (event.isFlush) {
         return;

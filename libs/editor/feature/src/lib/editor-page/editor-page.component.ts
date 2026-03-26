@@ -6,6 +6,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
+import type { editor } from 'monaco-editor';
 import {
   EditorToolbarComponent,
   FileNameDisplayComponent,
@@ -52,6 +53,7 @@ const DEFAULT_CODE = `
       <choh-monaco-editor
         [code]="code()"
         (codeChange)="code.set($event)"
+        (editorInitialized)="onEditorInitialized($event)"
         (contentEdited)="isDirty.set(true)"
       />
     </div>
@@ -99,7 +101,7 @@ export class EditorPageComponent implements OnInit {
   }
 
   async saveCurrentFile(): Promise<void> {
-    if (this.isSaving()) {
+    if (!this.isDirty() || this.isSaving()) {
       return;
     }
 
@@ -110,6 +112,10 @@ export class EditorPageComponent implements OnInit {
     } finally {
       this.isSaving.set(false);
     }
+  }
+
+  onEditorInitialized(editorInstance: editor.IStandaloneCodeEditor): void {
+    this.editorService.initializeEditor(editorInstance);
   }
 
   @HostListener('window:keydown', ['$event'])
