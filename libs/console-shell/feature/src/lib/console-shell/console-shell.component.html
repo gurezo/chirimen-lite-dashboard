@@ -3,6 +3,7 @@
   [rightNavOpen]="rightNavOpen()"
   (eventConnect)="onConnect()"
   (eventDisConnect)="onDisConnect()"
+  (toolbarAction)="onToolbarAction($event)"
   (toggleRightSidebar)="onToggleRightSidebar()"
 />
 @if (connected$ | async; as connected) {

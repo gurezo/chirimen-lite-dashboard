@@ -5,11 +5,17 @@ import {
   HeaderToolbarComponent,
   LeftSidebarComponent,
   RightSidebarComponent,
+  ToolbarAction,
 } from '@libs-console-shell-ui';
 import { TerminalPageComponent } from '@libs-terminal-feature';
 import { EditorPageComponent } from '@libs-editor-feature';
 import { ExampleComponent } from '@libs-example-feature';
+import { WifiPageComponent } from '@libs-wifi-feature';
+import { I2cdetectButtonComponent } from '@libs-i2cdetect-ui';
+import { SetupPageComponent } from '@libs-chirimen-setup-feature';
+import { RemotePageComponent } from '@libs-remote-feature';
 import { SerialNotificationService } from '@libs-web-serial-data-access';
+import { DialogService } from '@libs-dialogs-util';
 import {
   selectConnectionMessage,
   selectErrorMessage,
@@ -38,6 +44,7 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
   private store = inject(Store);
   private serialNotification = inject(SerialNotificationService);
   private shellStore = inject(ConsoleShellStore);
+  private dialogService = inject(DialogService);
 
   connected$ = this.store.select((state) => state.webSerial.isConnected);
 
@@ -83,5 +90,35 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
 
   onToggleRightSidebar() {
     this.shellStore.toggleRightNav();
+  }
+
+  onToolbarAction(action: ToolbarAction): void {
+    if (action === 'editor' || action === 'example') {
+      this.shellStore.closeDialog();
+      this.dialogService.closeAll();
+      this.shellStore.setActivePanel(action);
+      return;
+    }
+
+    this.shellStore.openDialog(action);
+    const componentMap = {
+      wifi: WifiPageComponent,
+      i2c: I2cdetectButtonComponent,
+      setup: SetupPageComponent,
+      remote: RemotePageComponent,
+    } as const;
+
+    const component = componentMap[action];
+    const dialogRef = this.dialogService.open(component, {
+      width: '80vw',
+      height: '80vh',
+      disableClose: true,
+    });
+
+    this.subscriptions.add(
+      dialogRef.closed.subscribe(() => {
+        this.shellStore.closeDialog();
+      }),
+    );
   }
 }
