@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ConsoleShellStore } from '@libs-console-shell-util';
 import { FileTreeFeatureComponent } from '@libs-file-manager-feature';
 
 @Component({
@@ -7,8 +8,15 @@ import { FileTreeFeatureComponent } from '@libs-file-manager-feature';
   imports: [FileTreeFeatureComponent],
   template: `
     <div class="left-sidebar h-full border-r border-gray-200">
-      <lib-file-tree-feature />
+      <lib-file-tree-feature (fileSelected)="onFileSelected($event)" />
     </div>
   `,
 })
-export class LeftSidebarComponent {}
+export class LeftSidebarComponent {
+  private shellStore = inject(ConsoleShellStore);
+
+  onFileSelected(path: string): void {
+    this.shellStore.setSelectedFilePath(path);
+    this.shellStore.setActivePanel('editor');
+  }
+}

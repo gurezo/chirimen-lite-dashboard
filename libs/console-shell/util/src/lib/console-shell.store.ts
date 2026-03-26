@@ -8,6 +8,7 @@ export interface ConsoleShellState {
   leftNavOpen: boolean;
   rightNavOpen: boolean;
   isConnected: boolean;
+  selectedFilePath: string | null;
 }
 
 @Injectable({
@@ -21,6 +22,7 @@ export class ConsoleShellStore {
     leftNavOpen: true,
     rightNavOpen: true,
     isConnected: false,
+    selectedFilePath: null,
   });
 
   readonly state = this.stateSignal.asReadonly();
@@ -39,6 +41,10 @@ export class ConsoleShellStore {
 
   readonly isConnected = computed(
     () => this.stateSignal().isConnected,
+  );
+
+  readonly selectedFilePath = computed(
+    () => this.stateSignal().selectedFilePath,
   );
 
   setActivePanel(panel: ConsoleShellPanel): void {
@@ -98,6 +104,13 @@ export class ConsoleShellStore {
     this.stateSignal.update((state) => ({
       ...state,
       isConnected,
+    }));
+  }
+
+  setSelectedFilePath(selectedFilePath: string | null): void {
+    this.stateSignal.update((state) => ({
+      ...state,
+      selectedFilePath,
     }));
   }
 }

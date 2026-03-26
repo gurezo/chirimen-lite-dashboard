@@ -1,10 +1,18 @@
-import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  HostListener,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import {
   EditorToolbarComponent,
   FileNameDisplayComponent,
   MonacoEditorComponent,
 } from '@libs-editor-ui';
 import { EditorService, MonacoEditorService } from '@libs-editor-data-access';
+import { ConsoleShellStore } from '@libs-console-shell-util';
 
 const DEFAULT_CODE = `
     onload = async function () {
@@ -44,11 +52,30 @@ export class EditorPageComponent implements OnInit {
   code = signal(DEFAULT_CODE.trim());
 
   private editorService = inject(EditorService);
-  private readonly filePath = '/home/pi/edited.js';
+  private shellStore = inject(ConsoleShellStore);
+  private readonly defaultFilePath = '/home/pi/edited.js';
+
+  constructor() {
+    effect(() => {
+      const selectedPath = this.shellStore.selectedFilePath();
+      if (!selectedPath) {
+        return;
+      }
+      void this.loadFile(selectedPath);
+    });
+  }
 
   async ngOnInit(): Promise<void> {
+    await this.loadFile(this.currentFilePath());
+  }
+
+  private currentFilePath(): string {
+    return this.shellStore.selectedFilePath() ?? this.defaultFilePath;
+  }
+
+  private async loadFile(path: string): Promise<void> {
     try {
-      const loaded = await this.editorService.loadTextFile(this.filePath);
+      const loaded = await this.editorService.loadTextFile(path);
       this.code.set(loaded);
     } catch {
       // ファイルが存在しない等の場合はデフォルトコードのまま
@@ -62,6 +89,6 @@ export class EditorPageComponent implements OnInit {
     if (!isSaveShortcut) return;
 
     event.preventDefault();
-    await this.editorService.saveTextFile(this.filePath, this.code());
+    await this.editorService.saveTextFile(this.currentFilePath(), this.code());
   }
 }
