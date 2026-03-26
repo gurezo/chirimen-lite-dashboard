@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { FileUtils } from '@libs-wifi-util';
 import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
+import { FileTreeNode, parseLsOutput } from '@libs-file-manager-util';
 
 @Injectable({ providedIn: 'root' })
 export class FileListService {
@@ -26,5 +27,13 @@ export class FileListService {
       .split('\n')
       .map((line) => line.trim())
       .filter(Boolean);
+  }
+
+  /**
+   * ディレクトリ直下をツリー表示向けに整形して返します。
+   */
+  async list(path: string): Promise<FileTreeNode[]> {
+    const lines = await this.listFiles(path);
+    return parseLsOutput(lines, path);
   }
 }
