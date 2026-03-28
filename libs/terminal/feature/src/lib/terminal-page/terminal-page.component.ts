@@ -4,7 +4,6 @@ import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 
 @Component({
   selector: 'choh-terminal',
-  standalone: true,
   imports: [TerminalViewComponent],
   template: ` <choh-terminal-view [remotePrompt]="remotePrompt" /> `,
 })
