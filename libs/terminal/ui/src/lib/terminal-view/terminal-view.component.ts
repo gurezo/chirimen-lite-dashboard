@@ -20,7 +20,6 @@ import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 
 @Component({
   selector: 'choh-terminal-view',
-  standalone: true,
   template: ` <div #consoleDom class="mt-2"></div> `,
 })
 export class TerminalViewComponent implements AfterViewInit, OnDestroy {
