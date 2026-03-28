@@ -67,4 +67,15 @@ export class WifiRebootFlowService {
       throw new Error(`Failed to disable WiFi: ${errorMessage}`);
     }
   }
+
+  /**
+   * デバイスを再起動（プロンプトが返らない場合があるため短めのタイムアウト）
+   */
+  async rebootDevice(): Promise<void> {
+    try {
+      await this.serial.exec('sudo reboot', PI_ZERO_PROMPT, 8000);
+    } catch {
+      // 再起動でシリアルが切れるとタイムアウトや切断エラーになり得る
+    }
+  }
 }

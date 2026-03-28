@@ -108,6 +108,24 @@ export class WifiScanService {
   }
 
   /**
+   * tutorial.chirimen.org への疎通確認（#412 診断コマンドに準拠）
+   */
+  async checkChirimenTutorialReachability(): Promise<string> {
+    try {
+      const { stdout } = await this.serial.exec(
+        'wget --spider -nv https://tutorial.chirimen.org/',
+        PI_ZERO_PROMPT,
+        60000
+      );
+      return stdout;
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`Connectivity check failed: ${errorMessage}`);
+    }
+  }
+
+  /**
    * @deprecated Use getWifiStatus() instead
    */
   async wifiStat(): Promise<{
