@@ -36,7 +36,7 @@ export class HeaderToolbarComponent {
   toggleRightSidebar = output<void>();
 
   readonly toolbarActions = [
-    { name: 'wifi', icon: 'lan' },
+    { name: 'wifi', icon: 'signal_wifi_4_bar' },
     { name: 'editor', icon: 'terminal' },
     { name: 'example', icon: 'javascript' },
     { name: 'i2c', icon: 'schema' },
