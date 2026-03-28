@@ -39,7 +39,7 @@ export class HeaderToolbarComponent {
     { name: 'wifi', icon: 'signal_wifi_4_bar' },
     { name: 'editor', icon: 'terminal' },
     { name: 'example', icon: 'javascript' },
-    { name: 'i2c', icon: 'schema' },
+    { name: 'i2c', icon: 'lan' },
     { name: 'setup', icon: 'settings' },
     { name: 'remote', icon: 'sync' },
   ] as const;
