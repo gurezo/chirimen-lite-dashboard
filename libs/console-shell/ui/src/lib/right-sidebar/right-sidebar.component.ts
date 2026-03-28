@@ -3,7 +3,6 @@ import { PinAssignComponent } from '@libs-pin-assign-panel-ui';
 
 @Component({
   selector: 'lib-right-sidebar',
-  standalone: true,
   imports: [PinAssignComponent],
   template: `
     <div class="right-sidebar min-h-0 overflow-auto">
