@@ -1,0 +1,60 @@
+<div class="flex justify-center items-center h-screen overflow-hidden">
+  <div
+    class="bg-white flex flex-col gap-4 justify-center items-stretch p-5 shadow-lg max-h-[85vh] w-[95%] max-w-3xl"
+  >
+    <p class="text-sm text-gray-600">
+      <code class="text-xs bg-gray-100 px-1 rounded">forever list --plain</code>
+      で一覧を表示し、スクリプトパスから
+      <code class="text-xs bg-gray-100 px-1 rounded">forever start -w</code>
+      で起動します。再起動後の自動起動は端末側で crontab の
+      <code class="text-xs bg-gray-100 px-1 rounded">&#64;reboot</code>
+      などの設定が別途必要です。
+    </p>
+
+    <lib-remote-status-list
+      [processes]="processes"
+      [selected]="selected"
+      (rowSelected)="onRowSelected($event)"
+    />
+
+    <mat-divider />
+
+    <div class="flex flex-col gap-2">
+      <label class="text-sm font-medium" for="remote-script-path">起動するスクリプトパス（リモート）</label>
+      <input
+        id="remote-script-path"
+        class="border border-gray-300 rounded px-2 py-1.5 w-full text-sm font-mono"
+        type="text"
+        [(ngModel)]="scriptPath"
+        placeholder="/home/pi/RelayServer.js"
+        [disabled]="actionInProgress()"
+      />
+    </div>
+
+    <mat-divider />
+
+    <div class="flex flex-wrap gap-2 justify-between w-full">
+      <lib-remote-run-button
+        [disabled]="actionInProgress() || !scriptPath.trim()"
+        (runClick)="startScript()"
+      />
+      <lib-remote-stop-button
+        label="選択を停止"
+        [disabled]="actionInProgress() || !selected"
+        (stopClick)="stopSelected()"
+      />
+      <lib-remote-stop-button
+        label="すべて停止"
+        [disabled]="actionInProgress()"
+        (stopClick)="confirmStopAll()"
+      />
+      <choh-button
+        [label]="listInProgress() ? '更新中…' : '更新'"
+        type="button"
+        (clickEvent)="refreshList()"
+        [disabled]="listInProgress() || actionInProgress()"
+      />
+      <choh-button label="閉じる" type="button" (clickEvent)="closeModal()" />
+    </div>
+  </div>
+</div>
