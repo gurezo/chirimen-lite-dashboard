@@ -1,17 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { IconService } from '@libs-shared-ui';
 
 @Component({
   selector: 'choh-root',
   imports: [RouterOutlet],
   templateUrl: './app.component.html',
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'CHIRIMEN Lite Console';
-  iconService = inject(IconService);
-
-  ngOnInit(): void {
-    this.iconService.registIcons();
-  }
 }
