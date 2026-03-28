@@ -8,6 +8,9 @@
 />
 @if (connected$ | async; as connected) {
   <div class="grid grid-cols-[auto_1fr_auto] grid-rows-[auto_1fr] gap-2 h-screen">
+    <div class="col-span-3 min-h-0 shrink-0">
+      <lib-breadcrumb [segments]="breadcrumbSegments()" />
+    </div>
     @if (leftNavOpen()) {
       <div class="min-h-0 overflow-auto">
         <lib-left-sidebar />

@@ -1,7 +1,15 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit, Type } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  OnDestroy,
+  OnInit,
+  Type,
+} from '@angular/core';
 import { ConnectPageComponent } from '@libs-connect-feature';
 import {
+  BreadcrumbComponent,
   HeaderToolbarComponent,
   LeftSidebarComponent,
   RightSidebarComponent,
@@ -23,13 +31,17 @@ import {
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { ConsoleShellStore } from '@libs-console-shell-util';
+import {
+  buildConsoleShellBreadcrumbSegments,
+  ConsoleShellStore,
+} from '@libs-console-shell-util';
 import { TerminalCommandRequestService } from '@libs-terminal-util';
 
 @Component({
   selector: 'lib-console-shell',
   imports: [
     AsyncPipe,
+    BreadcrumbComponent,
     ConnectPageComponent,
     HeaderToolbarComponent,
     LeftSidebarComponent,
@@ -52,6 +64,14 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
   readonly activePanel = this.shellStore.activePanel;
   readonly leftNavOpen = this.shellStore.leftNavOpen;
   readonly rightNavOpen = this.shellStore.rightNavOpen;
+
+  readonly breadcrumbSegments = computed(() =>
+    buildConsoleShellBreadcrumbSegments({
+      activePanel: this.shellStore.activePanel(),
+      activeDialog: this.shellStore.activeDialog(),
+      selectedFilePath: this.shellStore.selectedFilePath(),
+    }),
+  );
 
   private subscriptions = new Subscription();
 
