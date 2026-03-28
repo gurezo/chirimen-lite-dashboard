@@ -2,24 +2,43 @@ import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 
+export interface ExtraSetupStep {
+  label: string;
+  command: string;
+}
+
+/** デバイス側の追加設定（タイムゾーン）。raspi-config は NodeInstall に集約。 */
+export const EXTRA_SETUP_STEPS: readonly ExtraSetupStep[] = [
+  {
+    label: 'タイムゾーンを Asia/Tokyo に設定',
+    command: 'sudo timedatectl set-timezone Asia/Tokyo || true',
+  },
+];
+
+export { EXTRA_SETUP_STEP_COUNT } from './extra-setup.constants';
+
 @Injectable({ providedIn: 'root' })
 export class ExtraSetupService {
   private serial = inject(SerialFacadeService);
   private readonly prompt = PI_ZERO_PROMPT;
 
-  async apply(): Promise<void> {
-    // Issue #412 に記載されているデバイス側の追加設定（最小セット）
-    const cmds: string[] = [
-      'sudo timedatectl set-timezone Asia/Tokyo || true',
-      'sudo raspi-config nonint do_camera 0 || true',
-      'sudo raspi-config nonint do_legacy 0 || true',
-    ];
-
-    for (const cmd of cmds) {
+  /**
+   * @param onAfterStep 各コマンド完了時（失敗時も best-effort で通知）
+   */
+  async apply(
+    onAfterStep?: (step: ExtraSetupStep, stdout: string) => void,
+  ): Promise<void> {
+    for (const step of EXTRA_SETUP_STEPS) {
       try {
-        await this.serial.exec(cmd, this.prompt, 60000, 0);
+        const { stdout } = await this.serial.exec(
+          step.command,
+          this.prompt,
+          60000,
+          0,
+        );
+        onAfterStep?.(step, stdout);
       } catch {
-        // best-effort
+        onAfterStep?.(step, '');
       }
     }
   }
