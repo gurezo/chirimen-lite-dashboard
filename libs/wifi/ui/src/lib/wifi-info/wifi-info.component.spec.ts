@@ -18,10 +18,10 @@ describe('WifiInfoComponent', () => {
       ssid: 'test-ssid',
       address: '00:00:00:00:00:00',
       channel: 1,
-      frequency: 2400,
-      quality: 70,
+      frequency: '2.4 GHz',
+      quality: '70/70',
       spec: '802.11n',
-    } as WiFiInfo;
+    } satisfies WiFiInfo;
     fixture.detectChanges();
   });
 
