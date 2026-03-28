@@ -11,7 +11,6 @@ import { TerminalPageComponent } from '@libs-terminal-feature';
 import { EditorPageComponent } from '@libs-editor-feature';
 import { ExampleComponent } from '@libs-example-feature';
 import { WifiPageComponent } from '@libs-wifi-feature';
-import { I2cdetectButtonComponent } from '@libs-i2cdetect-ui';
 import { SetupPageComponent } from '@libs-chirimen-setup-feature';
 import { RemotePageComponent } from '@libs-remote-feature';
 import { SerialNotificationService } from '@libs-web-serial-data-access';
@@ -25,6 +24,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ConsoleShellStore } from '@libs-console-shell-util';
+import { TerminalCommandRequestService } from '@libs-terminal-util';
 
 @Component({
   selector: 'lib-console-shell',
@@ -45,6 +45,7 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
   private serialNotification = inject(SerialNotificationService);
   private shellStore = inject(ConsoleShellStore);
   private dialogService = inject(DialogService);
+  private terminalCommands = inject(TerminalCommandRequestService);
 
   connected$ = this.store.select((state) => state.webSerial.isConnected);
 
@@ -100,10 +101,17 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (action === 'i2c') {
+      this.shellStore.closeDialog();
+      this.dialogService.closeAll();
+      this.shellStore.setActivePanel('terminal');
+      this.terminalCommands.requestCommand('i2cdetect -y 1');
+      return;
+    }
+
     this.shellStore.openDialog(action);
     const componentMap = {
       wifi: WifiPageComponent,
-      i2c: I2cdetectButtonComponent,
       setup: SetupPageComponent,
       remote: RemotePageComponent,
     } as const;

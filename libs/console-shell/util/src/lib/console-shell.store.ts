@@ -2,7 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 type ConsoleShellPanel = 'terminal' | 'editor' | 'example';
-type ConsoleShellDialog = 'none' | 'wifi' | 'i2c' | 'setup' | 'remote';
+type ConsoleShellDialog = 'none' | 'wifi' | 'setup' | 'remote';
 
 export interface ConsoleShellState {
   activePanel: ConsoleShellPanel;

@@ -11,7 +11,8 @@
     "libs-web-serial-state",
     "libs-web-serial-data-access",
     "libs-console-shell-ui",
-    "libs-shared-ui"
+    "libs-shared-ui",
+    "libs-terminal-util"
   ],
   "targets": {
     "build": {
