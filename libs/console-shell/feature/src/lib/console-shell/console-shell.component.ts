@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, Type } from '@angular/core';
 import { ConnectPageComponent } from '@libs-connect-feature';
 import {
   HeaderToolbarComponent,
@@ -117,7 +117,7 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
     } as const;
 
     const component = componentMap[action];
-    const dialogRef = this.dialogService.open(component, {
+    const dialogRef = this.dialogService.open(component as Type<unknown>, {
       width: '80vw',
       height: '80vh',
       disableClose: true,
