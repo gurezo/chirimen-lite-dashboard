@@ -34,7 +34,6 @@ const DEFAULT_CODE = `
 
 @Component({
   selector: 'choh-editor-page',
-  standalone: true,
   imports: [
     MonacoEditorComponent,
     EditorToolbarComponent,

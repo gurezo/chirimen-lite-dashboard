@@ -2,7 +2,6 @@ import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'choh-file-name-display',
-  standalone: true,
   template: `
     <div class="file-name-display">
       @if (fileName()) {
