@@ -13,7 +13,6 @@ export interface WifiFormSubmit {
  */
 @Component({
   selector: 'choh-wifi-form',
-  standalone: true,
   imports: [FormsModule, MatFormFieldModule, MatInputModule],
   template: `
     <form class="flex flex-row items-center" (ngSubmit)="onSubmit($event)">

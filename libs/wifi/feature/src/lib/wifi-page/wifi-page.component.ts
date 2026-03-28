@@ -23,7 +23,6 @@ import { SerialFacadeService } from '@libs-web-serial-data-access';
  */
 @Component({
   selector: 'choh-wifi-page',
-  standalone: true,
   imports: [ButtonComponent, WifiListComponent, MatDividerModule],
   templateUrl: './wifi-page.component.html',
 })

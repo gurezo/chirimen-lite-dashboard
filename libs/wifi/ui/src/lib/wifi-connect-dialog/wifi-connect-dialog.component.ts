@@ -13,7 +13,6 @@ export interface WifiConnectDialogData {
 
 @Component({
   selector: 'choh-wifi-connect-dialog',
-  standalone: true,
   imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule],
   template: `
     <div class="flex flex-col gap-4 p-4 min-w-[280px]">
