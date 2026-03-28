@@ -16,7 +16,6 @@ export type ToolbarAction =
 
 @Component({
   selector: 'lib-header-toolbar',
-  standalone: true,
   imports: [
     AsyncPipe,
     MatIconButton,
