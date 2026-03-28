@@ -6,6 +6,8 @@ export interface ConfirmDialogData {
   message?: string;
   confirmLabel?: string;
   cancelLabel?: string;
+  /** true のときキャンセルボタンを出さない（情報表示のみ） */
+  hideCancel?: boolean;
 }
 
 @Component({
@@ -20,7 +22,9 @@ export interface ConfirmDialogData {
         <p>{{ message }}</p>
       }
       <div class="dialog-actions">
-        <button type="button" (click)="cancel()">{{ cancelLabel }}</button>
+        @if (!hideCancel) {
+          <button type="button" (click)="cancel()">{{ cancelLabel }}</button>
+        }
         <button type="button" (click)="confirm()">{{ confirmLabel }}</button>
       </div>
     </div>
@@ -47,6 +51,7 @@ export class ConfirmDialogComponent implements OnInit {
   @Input() message = 'Are you sure?';
   @Input() confirmLabel = 'OK';
   @Input() cancelLabel = 'Cancel';
+  @Input() hideCancel = false;
 
   ngOnInit(): void {
     if (this.data) {
@@ -54,6 +59,7 @@ export class ConfirmDialogComponent implements OnInit {
       if (this.data.message != null) this.message = this.data.message;
       if (this.data.confirmLabel != null) this.confirmLabel = this.data.confirmLabel;
       if (this.data.cancelLabel != null) this.cancelLabel = this.data.cancelLabel;
+      if (this.data.hideCancel === true) this.hideCancel = true;
     }
   }
 
