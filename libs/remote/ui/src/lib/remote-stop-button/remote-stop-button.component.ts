@@ -3,7 +3,6 @@ import { ButtonComponent } from '@libs-shared-ui';
 
 @Component({
   selector: 'lib-remote-stop-button',
-  standalone: true,
   imports: [ButtonComponent],
   template: `
     <choh-button
