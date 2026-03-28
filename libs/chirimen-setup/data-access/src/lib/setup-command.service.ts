@@ -1,14 +1,27 @@
 import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
-import { ExtraSetupService } from './extra-setup.service';
-import { NodeInstallService } from './node-install.service';
 import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
+import {
+  EXTRA_SETUP_STEPS,
+  ExtraSetupService,
+  type ExtraSetupStep,
+} from './extra-setup.service';
+import { NodeInstallService, type NodeInstallStep } from './node-install.service';
+import type { SetupStepProgress } from './setup-progress.types';
 
 export interface SetupCommandOptions {
   /**
    * Node.js tarball URL（unofficial-builds）
    */
   nodeTarUrl: string;
+  /**
+   * chirimenSetup 配下の作業ディレクトリ（任意）
+   */
+  projectSubdir?: string;
+}
+
+export interface SetupRunOptions extends SetupCommandOptions {
+  onProgress?: (progress: SetupStepProgress) => void;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -22,20 +35,57 @@ export class SetupCommandService {
   /**
    * CHIRIMEN 初期セットアップを実行します。
    *
-   * 現時点では issue #412 のコマンド分類に沿って「TZ/デバイス設定 + Node/依存導入」のみを best-effort で実行します。
+   * issue #412 のコマンド分類に沿って「TZ/デバイス設定 + Node/依存導入」を実行します。
    */
-  async run(options: SetupCommandOptions): Promise<void> {
-    await this.extraSetup.apply();
+  async run(options: SetupRunOptions): Promise<void> {
+    const { onProgress, ...cmdOptions } = options;
 
-    await this.nodeInstall.install({
-      nodeTarUrl: options.nodeTarUrl,
+    const postStep = {
+      label: 'forever プロセスを停止（整地）',
+      command: 'forever stopall',
+    } as const;
+
+    const extraSteps = EXTRA_SETUP_STEPS;
+    const nodeSteps = this.nodeInstall.buildInstallSteps(cmdOptions);
+    const total = extraSteps.length + nodeSteps.length + 1;
+
+    let stepIndex = 0;
+
+    const emit = (
+      phase: SetupStepProgress['phase'],
+      label: string,
+      command: string,
+      stdout: string,
+    ) => {
+      onProgress?.({
+        stepIndex,
+        stepTotal: total,
+        phase,
+        label,
+        command,
+        stdout,
+      });
+      stepIndex += 1;
+    };
+
+    await this.extraSetup.apply((step: ExtraSetupStep, stdout: string) => {
+      emit('extra', step.label, step.command, stdout);
     });
 
-    // forever 側は後工程で利用される前提なので、最低限の整地だけ行います
+    await this.nodeInstall.install(cmdOptions, (step: NodeInstallStep, stdout) => {
+      emit('node', step.label, step.command, stdout);
+    });
+
     try {
-      await this.serial.exec('forever stopall', this.prompt, 60000, 0);
+      const { stdout } = await this.serial.exec(
+        postStep.command,
+        this.prompt,
+        60000,
+        0,
+      );
+      emit('post', postStep.label, postStep.command, stdout);
     } catch {
-      // best-effort
+      emit('post', postStep.label, postStep.command, '');
     }
   }
 }
