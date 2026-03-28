@@ -1,5 +1,5 @@
-/// <reference types="vitest/globals" />
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { RemoteStopButtonComponent } from './remote-stop-button.component';
 
 describe('RemoteStopButtonComponent', () => {
@@ -18,5 +18,15 @@ describe('RemoteStopButtonComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('emits stopClick when inner button is clicked', () => {
+    const spy = vi.fn();
+    component.stopClick.subscribe(spy);
+    const btn = fixture.nativeElement.querySelector(
+      'button',
+    ) as HTMLButtonElement;
+    btn.click();
+    expect(spy).toHaveBeenCalled();
   });
 });
