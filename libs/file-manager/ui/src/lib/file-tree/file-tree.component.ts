@@ -3,7 +3,6 @@ import { FileTreeNode } from '@libs-file-manager-util';
 
 @Component({
   selector: 'lib-file-tree',
-  standalone: true,
   template: `
     <div class="file-tree text-sm">
       @if (!nodes.length) {

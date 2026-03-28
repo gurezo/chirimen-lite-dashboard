@@ -5,7 +5,6 @@ import { FileTreeNode, joinPath } from '@libs-file-manager-util';
 
 @Component({
   selector: 'lib-file-tree-feature',
-  standalone: true,
   imports: [FileTreeComponent],
   template: `
     <section class="p-2 space-y-2">
