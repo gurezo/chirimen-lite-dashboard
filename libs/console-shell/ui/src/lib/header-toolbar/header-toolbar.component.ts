@@ -1,7 +1,8 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, input, output } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
@@ -16,7 +17,15 @@ export type ToolbarAction =
 @Component({
   selector: 'lib-header-toolbar',
   standalone: true,
-  imports: [AsyncPipe, MatIconModule, MatMenuModule, RouterLink],
+  imports: [
+    AsyncPipe,
+    MatIconButton,
+    MatIcon,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger,
+    RouterLink,
+  ],
   templateUrl: './header-toolbar.component.html',
 })
 export class HeaderToolbarComponent {

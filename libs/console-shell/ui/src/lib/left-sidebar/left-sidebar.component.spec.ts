@@ -1,5 +1,6 @@
 /// <reference types="vitest/globals" />
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { LeftSidebarComponent } from './left-sidebar.component';
 
 describe('LeftSidebarComponent', () => {
@@ -9,6 +10,7 @@ describe('LeftSidebarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LeftSidebarComponent],
+      providers: [provideMockStore()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LeftSidebarComponent);

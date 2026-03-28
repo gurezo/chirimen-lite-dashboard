@@ -2,6 +2,7 @@
   "name": "libs-console-shell-ui",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/console-shell/ui/src",
+  "prefix": "lib",
   "projectType": "library",
   "implicitDependencies": ["libs-console-shell-util"],
   "tags": ["type:ui", "domain:console-shell"],
@@ -22,7 +23,13 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/console-shell/ui/**/*.ts",
+          "libs/console-shell/ui/**/*.html"
+        ]
+      }
     }
   }
 }
