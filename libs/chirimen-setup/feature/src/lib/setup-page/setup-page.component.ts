@@ -26,7 +26,6 @@ import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'lib-setup-page',
-  standalone: true,
   imports: [
     MatDividerModule,
     SetupProgressComponent,
