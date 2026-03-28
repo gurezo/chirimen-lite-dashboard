@@ -4,6 +4,7 @@ import { DialogService } from '@libs-dialogs-util';
 import { ConsoleShellStore } from '@libs-console-shell-util';
 import { Store } from '@ngrx/store';
 import { SerialNotificationService } from '@libs-web-serial-data-access';
+import { TerminalCommandRequestService } from '@libs-terminal-util';
 import { of } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ConsoleShellComponent } from './console-shell.component';
@@ -20,6 +21,7 @@ describe('ConsoleShellComponent', () => {
   let setActivePanel: ReturnType<typeof vi.fn>;
   let closeDialog: ReturnType<typeof vi.fn>;
   let openShellDialog: ReturnType<typeof vi.fn>;
+  let requestTerminalCommand: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
     storeSelect = vi
@@ -37,6 +39,7 @@ describe('ConsoleShellComponent', () => {
     setActivePanel = vi.fn();
     closeDialog = vi.fn();
     openShellDialog = vi.fn();
+    requestTerminalCommand = vi.fn();
 
     await TestBed.configureTestingModule({
       imports: [ConsoleShellComponent],
@@ -68,6 +71,10 @@ describe('ConsoleShellComponent', () => {
             openDialog: openShellDialog,
             closeDialog,
           },
+        },
+        {
+          provide: TerminalCommandRequestService,
+          useValue: { requestCommand: requestTerminalCommand },
         },
       ],
     }).compileComponents();
@@ -110,5 +117,16 @@ describe('ConsoleShellComponent', () => {
 
     expect(openShellDialog).toHaveBeenCalledWith('wifi');
     expect(openDialog).toHaveBeenCalledTimes(1);
+  });
+
+  it('should request i2cdetect in terminal when i2c action is clicked', () => {
+    component.onToolbarAction('i2c');
+
+    expect(closeDialog).toHaveBeenCalledTimes(1);
+    expect(closeAllDialog).toHaveBeenCalledTimes(1);
+    expect(setActivePanel).toHaveBeenCalledWith('terminal');
+    expect(requestTerminalCommand).toHaveBeenCalledWith('i2cdetect -y 1');
+    expect(openShellDialog).not.toHaveBeenCalled();
+    expect(openDialog).not.toHaveBeenCalled();
   });
 });
