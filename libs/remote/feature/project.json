@@ -4,6 +4,18 @@
   "sourceRoot": "libs/remote/feature/src",
   "projectType": "library",
   "tags": ["type:feature", "domain:remote"],
+  "implicitDependencies": [
+    "libs-remote-ui",
+    "libs-remote-data-access",
+    "libs-remote-util",
+    "libs-dialogs-util",
+    "libs-dialogs-ui",
+    "libs-shared-ui",
+    "libs-shared-types",
+    "libs-terminal-util",
+    "libs-web-serial-data-access",
+    "libs-web-serial-util"
+  ],
   "targets": {
     "build": {
       "executor": "nx:run-commands",
