@@ -1,40 +1,182 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
+import { firstValueFrom } from 'rxjs';
+import { ConfirmDialogComponent } from '@libs-dialogs-ui';
 import { DialogService } from '@libs-dialogs-util';
-import { ButtonComponent } from '@libs-shared-ui';
-import { dummyWiFiInfo } from '@libs-shared-types';
+import { ButtonComponent, NotificationService } from '@libs-shared-ui';
 import type { WiFiInfo } from '@libs-shared-types';
 import {
+  WifiRebootFlowService,
+  WifiScanService,
+} from '@libs-wifi-data-access';
+import {
+  WifiConnectDialogComponent,
+  type WifiConnectDialogData,
   WifiListComponent,
-  WifiFormComponent,
 } from '@libs-wifi-ui';
+import { SerialFacadeService } from '@libs-web-serial-data-access';
 
 /**
  * WiFi 設定画面（スマートコンポーネント）
  *
- * ui の list / form と data-access のサービスを組み合わせる
+ * ui の list と data-access のサービスを組み合わせる
  */
 @Component({
   selector: 'choh-wifi-page',
   standalone: true,
-  imports: [
-    ButtonComponent,
-    WifiListComponent,
-    WifiFormComponent,
-    MatDividerModule,
-  ],
+  imports: [ButtonComponent, WifiListComponent, MatDividerModule],
   templateUrl: './wifi-page.component.html',
 })
 export class WifiPageComponent {
-  wifiInfoList: WiFiInfo[] = dummyWiFiInfo;
-  private dialogService = inject(DialogService);
+  wifiInfoList: WiFiInfo[] = [];
+  readonly scanInProgress = signal(false);
+  readonly actionInProgress = signal(false);
+
+  private readonly dialogService = inject(DialogService);
+  private readonly notify = inject(NotificationService);
+  private readonly serial = inject(SerialFacadeService);
+  private readonly wifiScan = inject(WifiScanService);
+  private readonly wifiReboot = inject(WifiRebootFlowService);
 
   closeModal(): void {
     this.dialogService.close();
   }
 
-  onSubmit(_event: Event): void {
-    _event.preventDefault();
-    // TODO: Implement WiFi configuration logic (WifiConfigService)
+  private ensureSerial(): boolean {
+    if (!this.serial.isConnected()) {
+      this.notify.warning('WiFi', 'シリアル接続してください');
+      return false;
+    }
+    return true;
+  }
+
+  async runWifiScan(): Promise<void> {
+    if (!this.ensureSerial()) {
+      return;
+    }
+    this.scanInProgress.set(true);
+    try {
+      const { wifiInfos } = await this.wifiScan.scanNetworks();
+      this.wifiInfoList = wifiInfos;
+      this.notify.success(
+        'WiFi',
+        `ネットワークを ${wifiInfos.length} 件取得しました`,
+      );
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'スキャンに失敗しました';
+      this.notify.error('WiFi', msg);
+    } finally {
+      this.scanInProgress.set(false);
+    }
+  }
+
+  openConnectDialog(initialSsid?: string): void {
+    if (!this.ensureSerial()) {
+      return;
+    }
+    this.dialogService.open(WifiConnectDialogComponent, {
+      width: '400px',
+      data: { initialSsid } satisfies WifiConnectDialogData,
+    });
+  }
+
+  onNetworkSelected(info: WiFiInfo): void {
+    const ssid = info.ssid?.trim();
+    this.openConnectDialog(ssid || undefined);
+  }
+
+  async showWifiInfo(): Promise<void> {
+    if (!this.ensureSerial()) {
+      return;
+    }
+    this.actionInProgress.set(true);
+    try {
+      const { ipInfo, wlInfo, ipaddr } = await this.wifiScan.getWifiStatus();
+      const body = [ipInfo, wlInfo, ipaddr ? `IP: ${ipaddr}` : '']
+        .filter(Boolean)
+        .join('\n\n');
+      this.dialogService.open(ConfirmDialogComponent, {
+        width: '520px',
+        data: {
+          title: 'WiFi / ネットワーク情報',
+          message: body || '情報を取得できませんでした',
+          confirmLabel: '閉じる',
+          hideCancel: true,
+        },
+      });
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : '取得に失敗しました';
+      this.notify.error('WiFi', msg);
+    } finally {
+      this.actionInProgress.set(false);
+    }
+  }
+
+  async resetWifi(): Promise<void> {
+    if (!this.ensureSerial()) {
+      return;
+    }
+    this.actionInProgress.set(true);
+    try {
+      await this.wifiReboot.restartWifiService();
+      this.notify.success('WiFi', 'WiFi サービスを再起動しました');
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : '再起動に失敗しました';
+      this.notify.error('WiFi', msg);
+    } finally {
+      this.actionInProgress.set(false);
+    }
+  }
+
+  async rebootDevice(): Promise<void> {
+    if (!this.ensureSerial()) {
+      return;
+    }
+    const ref = this.dialogService.open(ConfirmDialogComponent, {
+      data: {
+        title: 'デバイスを再起動',
+        message: 'シリアル接続が切れる場合があります。続行しますか？',
+        confirmLabel: '再起動',
+        cancelLabel: 'キャンセル',
+      },
+    });
+    const confirmed = await firstValueFrom(ref.closed);
+    if (!confirmed) {
+      return;
+    }
+    this.actionInProgress.set(true);
+    try {
+      await this.wifiReboot.rebootDevice();
+      this.notify.info('WiFi', '再起動を送信しました');
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : '再起動に失敗しました';
+      this.notify.error('WiFi', msg);
+    } finally {
+      this.actionInProgress.set(false);
+    }
+  }
+
+  async checkConnectivity(): Promise<void> {
+    if (!this.ensureSerial()) {
+      return;
+    }
+    this.actionInProgress.set(true);
+    try {
+      const out = await this.wifiScan.checkChirimenTutorialReachability();
+      this.dialogService.open(ConfirmDialogComponent, {
+        width: '480px',
+        data: {
+          title: '疎通確認（tutorial.chirimen.org）',
+          message: out.trim() || '完了（出力なし）',
+          confirmLabel: '閉じる',
+          hideCancel: true,
+        },
+      });
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : '疎通確認に失敗しました';
+      this.notify.error('WiFi', msg);
+    } finally {
+      this.actionInProgress.set(false);
+    }
   }
 }

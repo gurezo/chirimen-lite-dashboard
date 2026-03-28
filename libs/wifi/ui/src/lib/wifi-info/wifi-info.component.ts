@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, output } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import type { WiFiInfo } from '@libs-shared-types';
 
@@ -13,4 +13,11 @@ import type { WiFiInfo } from '@libs-shared-types';
 })
 export class WifiInfoComponent {
   @Input() wifiInfo!: WiFiInfo;
+
+  /** カードクリックで接続ダイアログ用に選択 */
+  readonly selectNetwork = output<WiFiInfo>();
+
+  onCardActivate(): void {
+    this.selectNetwork.emit(this.wifiInfo);
+  }
 }
