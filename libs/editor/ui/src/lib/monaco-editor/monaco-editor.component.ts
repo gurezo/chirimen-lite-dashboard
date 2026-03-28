@@ -5,7 +5,6 @@ import type { editor } from 'monaco-editor';
 
 @Component({
   selector: 'choh-monaco-editor',
-  standalone: true,
   imports: [FormsModule, MonacoEditorModule],
   template: `
     <div>
