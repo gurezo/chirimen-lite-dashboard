@@ -12,7 +12,6 @@ export interface ConfirmDialogData {
 
 @Component({
   selector: 'lib-confirm-dialog',
-  standalone: true,
   template: `
     <div class="dialog-content">
       @if (title) {

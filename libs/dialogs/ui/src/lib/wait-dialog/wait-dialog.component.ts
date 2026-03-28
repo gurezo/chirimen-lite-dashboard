@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'lib-wait-dialog',
-  standalone: true,
   template: `
     <div class="dialog-content">
       @if (message) {
