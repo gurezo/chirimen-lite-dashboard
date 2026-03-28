@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { FileContentService } from './file-content.service';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
-import { FileUtils } from '@libs-wifi-util';
+import { FileUtils, shellSingleQuote } from '@libs-wifi-util';
 import { WifiRebootFlowService } from './wifi-reboot-flow.service';
 import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 
@@ -32,8 +32,10 @@ export class WifiConfigService {
 
       await this.fileContent.writeTextFile('wifi_setup.sh', wifiSetupScript);
 
+      const qSsid = shellSingleQuote(ssid);
+      const qPass = shellSingleQuote(password);
       await this.serial.exec(
-        `chmod +x wifi_setup.sh && ./wifi_setup.sh "${ssid}" "${password}"`,
+        `chmod +x wifi_setup.sh && ./wifi_setup.sh ${qSsid} ${qPass}`,
         PI_ZERO_PROMPT,
         30000
       );
