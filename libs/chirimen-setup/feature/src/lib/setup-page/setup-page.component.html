@@ -1,0 +1,81 @@
+<div class="flex justify-center items-center h-screen overflow-hidden p-2">
+  <div
+    class="bg-white flex flex-col gap-4 max-h-[85vh] w-[95%] max-w-3xl p-5 shadow-lg overflow-hidden"
+  >
+    <h1 class="text-xl font-semibold text-gray-900">CHIRIMEN 初期セットアップ</h1>
+    <p class="text-sm text-gray-600">
+      Web Serial 経由で Raspberry Pi 上に Node.js と CHIRIMEN 依存を導入します。数十分かかる場合があります。
+    </p>
+
+    <div class="flex flex-col gap-2 min-w-0">
+      <label class="text-sm font-medium text-gray-800" for="node-tar-url">
+        Node.js tarball URL（linux-armv6l / unofficial-builds）
+      </label>
+      <input
+        id="node-tar-url"
+        class="border border-gray-300 rounded px-3 py-2 text-sm w-full min-w-0"
+        type="url"
+        autocomplete="off"
+        [disabled]="inProgress()"
+        [value]="nodeTarUrl()"
+        (input)="onTarUrlInput($event)"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="flex items-center gap-2 text-sm text-gray-800 cursor-pointer">
+        <input
+          type="checkbox"
+          [checked]="useProjectSubdir()"
+          [disabled]="inProgress()"
+          (change)="onUseSubdirChange($event)"
+        />
+        chirimenSetup 配下にプロジェクトフォルダを作成する（チュートリアル手順）
+      </label>
+      @if (useProjectSubdir()) {
+        <input
+          class="border border-gray-300 rounded px-3 py-2 text-sm max-w-xs"
+          type="text"
+          [disabled]="inProgress()"
+          [value]="projectSubdir()"
+          (input)="onSubdirInput($event)"
+          aria-label="プロジェクトサブディレクトリ名"
+        />
+      }
+    </div>
+
+    <lib-setup-progress
+      [progress]="progressPercent()"
+      [currentLabel]="currentLabel()"
+      [indeterminate]="inProgress() && progressPercent() === 0"
+    />
+
+    <mat-divider />
+
+    <div class="flex flex-col gap-1 min-h-0 flex-1">
+      <span class="text-sm font-medium text-gray-800">ログ</span>
+      <textarea
+        #logArea
+        class="border border-gray-300 rounded p-2 text-xs font-mono bg-gray-50 min-h-[180px] max-h-[40vh] overflow-auto resize-y w-full"
+        readonly
+        [value]="logText()"
+      ></textarea>
+    </div>
+
+    <div class="flex flex-wrap gap-2 justify-end">
+      <lib-setup-execute-button
+        [disabled]="inProgress()"
+        [loading]="inProgress()"
+        (execute)="runSetup()"
+      />
+      <button
+        type="button"
+        class="px-4 py-2 text-sm border border-gray-300 rounded bg-white hover:bg-gray-50"
+        [disabled]="inProgress()"
+        (click)="closeModal()"
+      >
+        閉じる
+      </button>
+    </div>
+  </div>
+</div>
