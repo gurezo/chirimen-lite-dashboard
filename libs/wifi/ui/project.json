@@ -4,7 +4,11 @@
   "sourceRoot": "libs/wifi/ui/src",
   "projectType": "library",
   "tags": ["type:ui", "domain:wifi"],
-  "implicitDependencies": ["libs-wifi-util", "libs-shared-ui"],
+  "implicitDependencies": [
+    "libs-wifi-util",
+    "libs-wifi-data-access",
+    "libs-shared-ui"
+  ],
   "targets": {
     "build": {
       "executor": "nx:run-commands",

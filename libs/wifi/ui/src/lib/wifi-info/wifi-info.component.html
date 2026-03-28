@@ -1,4 +1,12 @@
-<mat-card appearance="outlined" class="w-[500px] max-h-[300px] overflow-y-auto">
+<mat-card
+  appearance="outlined"
+  role="button"
+  tabindex="0"
+  class="w-[500px] max-h-[300px] overflow-y-auto cursor-pointer hover:bg-gray-50 focus-visible:ring-2"
+  (click)="onCardActivate()"
+  (keydown.enter)="onCardActivate()"
+  (keydown.space)="$event.preventDefault(); onCardActivate()"
+>
   <mat-card-header>
     <mat-card-title>SSID: {{ wifiInfo.ssid }}</mat-card-title>
   </mat-card-header>
