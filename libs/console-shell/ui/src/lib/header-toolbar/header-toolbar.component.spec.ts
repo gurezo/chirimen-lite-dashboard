@@ -1,5 +1,6 @@
 /// <reference types="vitest/globals" />
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { HeaderToolbarComponent } from './header-toolbar.component';
 
@@ -10,12 +11,12 @@ describe('HeaderToolbarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HeaderToolbarComponent],
-      providers: [],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderToolbarComponent);
     component = fixture.componentInstance;
-    component.connected$ = of(false);
+    fixture.componentRef.setInput('connected$', of(false));
     fixture.detectChanges();
   });
 
