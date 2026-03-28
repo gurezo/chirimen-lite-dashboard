@@ -1,10 +1,16 @@
 import { defineConfig } from 'vitest/config';
+import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { resolve } from 'path';
 import angular from '@analogjs/vite-plugin-angular';
 
 export default defineConfig({
   cacheDir: resolve(process.cwd(), 'node_modules/.vite'),
-  plugins: [angular()],
+  plugins: [
+    angular({
+      tsconfig: resolve(__dirname, 'tsconfig.spec.json'),
+    }),
+    nxViteTsPaths(),
+  ],
   test: {
     globals: true,
     environment: 'jsdom',
