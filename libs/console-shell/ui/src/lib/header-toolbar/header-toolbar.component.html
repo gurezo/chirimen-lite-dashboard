@@ -15,7 +15,7 @@
           type="button"
           (click)="toolbarAction.emit(action.name)"
         >
-          <mat-icon [svgIcon]="action.icon"></mat-icon>
+          <mat-icon>{{ action.icon }}</mat-icon>
         </button>
       }
       <button mat-icon-button (click)="toggleRightSidebar.emit()">
