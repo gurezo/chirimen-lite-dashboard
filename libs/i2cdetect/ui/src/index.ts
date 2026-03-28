@@ -1,1 +1,5 @@
-export * from './lib/i2cdetect-button/i2cdetect-button.component';
+/**
+ * I2C ツールバーはコンソールシェルからターミナル経由で i2cdetect を実行します。
+ * 将来の I2C 専用 UI 用にライブラリを維持しています。
+ */
+export {};
