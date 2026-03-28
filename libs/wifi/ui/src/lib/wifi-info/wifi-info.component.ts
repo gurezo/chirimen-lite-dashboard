@@ -7,7 +7,6 @@ import type { WiFiInfo } from '@libs-shared-types';
  */
 @Component({
   selector: 'choh-wifi-info',
-  standalone: true,
   imports: [MatCardModule],
   templateUrl: './wifi-info.component.html',
 })

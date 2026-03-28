@@ -8,7 +8,6 @@ import { WifiInfoComponent } from '../wifi-info/wifi-info.component';
  */
 @Component({
   selector: 'choh-wifi-list',
-  standalone: true,
   imports: [WifiInfoComponent, MatDividerModule],
   template: `
     <div>

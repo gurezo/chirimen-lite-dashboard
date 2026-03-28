@@ -11,7 +11,6 @@ export interface WifiStatusData {
  */
 @Component({
   selector: 'choh-wifi-status',
-  standalone: true,
   template: `
     @if (status) {
       <div class="wifi-status">
