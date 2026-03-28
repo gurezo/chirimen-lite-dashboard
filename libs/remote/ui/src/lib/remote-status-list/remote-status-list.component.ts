@@ -3,7 +3,6 @@ import type { ForeverProcess } from '@libs-shared-types';
 
 @Component({
   selector: 'lib-remote-status-list',
-  standalone: true,
   template: `
     <div>
       <h3 class="text-base font-semibold mb-2">実行中のアプリ (forever)</h3>

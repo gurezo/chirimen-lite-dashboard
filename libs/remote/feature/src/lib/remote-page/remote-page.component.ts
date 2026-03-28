@@ -25,7 +25,6 @@ const FOREVER_LIST_CMD = 'forever list --plain';
 
 @Component({
   selector: 'lib-remote-page',
-  standalone: true,
   imports: [
     FormsModule,
     MatDividerModule,
