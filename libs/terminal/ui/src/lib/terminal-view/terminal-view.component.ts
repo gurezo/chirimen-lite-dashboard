@@ -2,12 +2,18 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  OnDestroy,
   ViewChild,
   inject,
   input,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Terminal } from '@xterm/xterm';
-import { xtermConsoleConfigOptions } from '@libs-terminal-util';
+import {
+  TerminalCommandRequestService,
+  sanitizeSerialStdout,
+  xtermConsoleConfigOptions,
+} from '@libs-terminal-util';
 import { attachTerminalInput } from '../terminal-input';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
@@ -17,7 +23,7 @@ import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
   standalone: true,
   template: ` <div #consoleDom class="mt-2"></div> `,
 })
-export class TerminalViewComponent implements AfterViewInit {
+export class TerminalViewComponent implements AfterViewInit, OnDestroy {
   /**
    * シリアル側のシェルプロンプト（CommandService の prompt 待機に利用）
    */
@@ -27,30 +33,30 @@ export class TerminalViewComponent implements AfterViewInit {
   private consoleDomRef?: ElementRef<HTMLElement>;
 
   private serial = inject(SerialFacadeService);
+  private commandRequests = inject(TerminalCommandRequestService);
 
   readonly xterminal = new Terminal(xtermConsoleConfigOptions);
+
+  /** Serializes interactive and toolbar-initiated exec so only one runs at a time. */
+  private execTail: Promise<void> = Promise.resolve();
+
+  private commandRequestSub?: Subscription;
 
   ngAfterViewInit(): void {
     this.configTerminal();
   }
 
-  private sanitizeStdout(stdout: string, command: string): string {
-    const prompt = this.remotePrompt();
-    let out = stdout;
+  ngOnDestroy(): void {
+    this.commandRequestSub?.unsubscribe();
+  }
 
-    // 受信側にコマンド echo が含まれる場合があるため、その部分を削る
-    const cmdIdx = out.indexOf(command);
-    if (cmdIdx >= 0) {
-      out = out.slice(cmdIdx + command.length);
-    }
-
-    // prompt 以降は次のローカル prompt 表示に任せる
-    const promptIdx = out.lastIndexOf(prompt);
-    if (promptIdx >= 0) {
-      out = out.slice(0, promptIdx);
-    }
-
-    return out.replace(/^[\r\n]+/, '');
+  private enqueueExec<T>(job: () => Promise<T>): Promise<T> {
+    const run = this.execTail.then(() => job());
+    this.execTail = run.then(
+      () => undefined,
+      () => undefined,
+    );
+    return run;
   }
 
   private configTerminal(): void {
@@ -64,15 +70,53 @@ export class TerminalViewComponent implements AfterViewInit {
     attachTerminalInput(
       this.xterminal,
       async (command) => {
-        const { stdout } = await this.serial.exec(
-          command,
-          this.remotePrompt(),
-          10000,
-          0
-        );
-        return this.sanitizeStdout(stdout, command);
+        return this.enqueueExec(async () => {
+          const { stdout } = await this.serial.exec(
+            command,
+            this.remotePrompt(),
+            10000,
+            0,
+          );
+          return sanitizeSerialStdout(stdout, command, this.remotePrompt());
+        });
       },
       () => this.serial.isConnected(),
+    );
+
+    this.commandRequestSub = this.commandRequests.commandRequests$.subscribe(
+      (cmd) => {
+        void this.enqueueExec(async () => {
+          if (!this.serial.isConnected()) {
+            this.xterminal.writeln(`$ ${cmd}`);
+            this.xterminal.writeln('Command failed: Serial port not connected');
+            this.xterminal.write('$ ');
+            return;
+          }
+          this.xterminal.writeln(`$ ${cmd}`);
+          try {
+            const { stdout } = await this.serial.exec(
+              cmd,
+              this.remotePrompt(),
+              10000,
+              0,
+            );
+            const out = sanitizeSerialStdout(
+              stdout,
+              cmd,
+              this.remotePrompt(),
+            );
+            if (out) {
+              this.xterminal.write(out);
+            }
+            this.xterminal.write('\r\n$ ');
+          } catch (error: unknown) {
+            const message =
+              error instanceof Error ? error.message : String(error);
+            this.xterminal.writeln(`\r\nCommand failed: ${message}`);
+            this.xterminal.write('$ ');
+          }
+        });
+      },
     );
   }
 }
