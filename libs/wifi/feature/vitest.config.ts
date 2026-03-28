@@ -1,27 +1,24 @@
-import { defineConfig } from 'vitest/config';
-import { resolve } from 'path';
+/// <reference types="vitest" />
+import { defineConfig } from 'vite';
 import angular from '@analogjs/vite-plugin-angular';
+import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 
-export default defineConfig({
-  cacheDir: resolve(process.cwd(), 'node_modules/.vite'),
-  plugins: [angular()],
+export default defineConfig(() => ({
+  root: __dirname,
+  cacheDir: '../../../node_modules/.vite/wifi/feature',
+  plugins: [angular(), nxViteTsPaths(), nxCopyAssetsPlugin(['*.md'])],
   test: {
+    name: 'libs-wifi-feature',
+    watch: false,
     globals: true,
     environment: 'jsdom',
-    setupFiles: [resolve(__dirname, './src/test-setup.ts')],
-    passWithNoTests: true,
-    include: [
-      resolve(
-        __dirname,
-        './src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
-      ),
-    ],
+    include: ['{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    setupFiles: ['src/test-setup.ts'],
+    reporters: ['default'],
     coverage: {
-      provider: 'v8',
-      reportsDirectory: resolve(
-        __dirname,
-        '../../../coverage/libs/wifi/feature',
-      ),
+      reportsDirectory: '../../../coverage/libs/wifi/feature',
+      provider: 'v8' as const,
     },
   },
-});
+}));
