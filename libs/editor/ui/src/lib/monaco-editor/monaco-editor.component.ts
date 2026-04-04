@@ -7,8 +7,9 @@ import type { editor } from 'monaco-editor';
   selector: 'choh-monaco-editor',
   imports: [FormsModule, MonacoEditorModule],
   template: `
-    <div>
+    <div class="flex h-full min-h-0 min-w-0 flex-col">
       <ngx-monaco-editor
+        class="block min-h-0 min-w-0 flex-1"
         [options]="editorOptions()"
         [ngModel]="code()"
         (ngModelChange)="code.set($event)"
