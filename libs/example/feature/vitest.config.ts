@@ -1,37 +1,25 @@
-import { defineConfig } from 'vitest/config';
-import { resolve } from 'path';
+/// <reference types="vitest" />
+import { defineConfig } from 'vite';
 import angular from '@analogjs/vite-plugin-angular';
+import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 
-export default defineConfig({
-  cacheDir: resolve(process.cwd(), 'node_modules/.vite'),
-  plugins: [angular()],
+export default defineConfig(() => ({
+  root: __dirname,
+  cacheDir: '../../../node_modules/.vite/example/feature',
+  plugins: [angular(), nxViteTsPaths(), nxCopyAssetsPlugin(['*.md'])],
   test: {
+    name: 'libs-example-feature',
+    watch: false,
     globals: true,
     environment: 'jsdom',
-    setupFiles: [resolve(__dirname, './src/test-setup.ts')],
+    include: ['{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    setupFiles: ['src/test-setup.ts'],
+    reporters: ['default'],
     passWithNoTests: true,
-    include: [
-      resolve(
-        __dirname,
-        './src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
-      ),
-    ],
     coverage: {
-      provider: 'v8',
-      reportsDirectory: resolve(
-        __dirname,
-        '../../../coverage/libs/example/feature',
-      ),
+      reportsDirectory: '../../../coverage/libs/example/feature',
+      provider: 'v8' as const,
     },
   },
-  resolve: {
-    alias: {
-      '@libs-example-util': resolve(__dirname, '../util/src/index.ts'),
-      '@libs-example-ui': resolve(__dirname, '../ui/src/index.ts'),
-      '@libs-example-data-access': resolve(
-        __dirname,
-        '../data-access/src/index.ts',
-      ),
-    },
-  },
-});
+}));
