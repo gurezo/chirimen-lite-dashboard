@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { EMPTY } from 'rxjs';
+import { initialWebSerialState } from '@libs-web-serial-state';
 import { LeftSidebarComponent } from './left-sidebar.component';
 
 describe('LeftSidebarComponent', () => {
@@ -18,7 +19,11 @@ describe('LeftSidebarComponent', () => {
     await TestBed.configureTestingModule({
       imports: [LeftSidebarComponent],
       providers: [
-        provideMockStore(),
+        provideMockStore({
+          initialState: {
+            webSerial: { ...initialWebSerialState },
+          },
+        }),
         {
           provide: Router,
           useValue: { navigate: vi.fn().mockResolvedValue(true), events: EMPTY },
