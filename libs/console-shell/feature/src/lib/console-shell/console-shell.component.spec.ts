@@ -2,10 +2,15 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { DialogService } from '@libs-dialogs-util';
 import { ConsoleShellStore } from '@libs-console-shell-util';
+import {
+  isConnected,
+  selectConnectionMessage,
+  selectErrorMessage,
+} from '@libs-web-serial-state';
 import { Store } from '@ngrx/store';
 import { SerialNotificationService } from '@libs-web-serial-data-access';
 import { TerminalCommandRequestService } from '@libs-terminal-util';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ConsoleShellComponent } from './console-shell.component';
 
@@ -22,14 +27,20 @@ describe('ConsoleShellComponent', () => {
   let closeDialog: ReturnType<typeof vi.fn>;
   let openShellDialog: ReturnType<typeof vi.fn>;
   let requestTerminalCommand: ReturnType<typeof vi.fn>;
+  let isConnected$: BehaviorSubject<boolean>;
+  let applyConnectedLayout: ReturnType<typeof vi.fn>;
+  let resetLayoutAfterDisconnect: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
-    storeSelect = vi
-      .fn()
-      .mockReturnValueOnce(of(false))
-      .mockReturnValueOnce(of(''))
-      .mockReturnValueOnce(of(''))
-      .mockReturnValueOnce(of(false));
+    isConnected$ = new BehaviorSubject(false);
+    applyConnectedLayout = vi.fn();
+    resetLayoutAfterDisconnect = vi.fn();
+    storeSelect = vi.fn((selector: unknown) => {
+      if (selector === selectConnectionMessage) return of('');
+      if (selector === selectErrorMessage) return of('');
+      if (selector === isConnected) return isConnected$.asObservable();
+      return isConnected$.asObservable();
+    });
     storeDispatch = vi.fn();
 
     notifyConnectionSuccess = vi.fn();
@@ -71,6 +82,8 @@ describe('ConsoleShellComponent', () => {
             toggleRightNav: vi.fn(),
             openDialog: openShellDialog,
             closeDialog,
+            applyConnectedLayout,
+            resetLayoutAfterDisconnect,
           },
         },
         {
@@ -134,6 +147,19 @@ describe('ConsoleShellComponent', () => {
   it('should set grid template columns with fixed right pane when right nav is open', () => {
     expect(component.gridTemplateColumns()).toBe('280px minmax(0, 1fr) 96px');
   });
+
+  it('should apply connected layout when isConnected becomes true', () => {
+    applyConnectedLayout.mockClear();
+    isConnected$.next(true);
+    expect(applyConnectedLayout).toHaveBeenCalledTimes(1);
+  });
+
+  it('should reset layout when isConnected becomes false after connected', () => {
+    isConnected$.next(true);
+    resetLayoutAfterDisconnect.mockClear();
+    isConnected$.next(false);
+    expect(resetLayoutAfterDisconnect).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe('ConsoleShellComponent gridTemplateColumns when right nav closed', () => {
@@ -142,12 +168,13 @@ describe('ConsoleShellComponent gridTemplateColumns when right nav closed', () =
   let storeSelect: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
-    storeSelect = vi
-      .fn()
-      .mockReturnValueOnce(of(false))
-      .mockReturnValueOnce(of(''))
-      .mockReturnValueOnce(of(''))
-      .mockReturnValueOnce(of(false));
+    const isConnected$ = new BehaviorSubject(false);
+    storeSelect = vi.fn((selector: unknown) => {
+      if (selector === selectConnectionMessage) return of('');
+      if (selector === selectErrorMessage) return of('');
+      if (selector === isConnected) return isConnected$.asObservable();
+      return isConnected$.asObservable();
+    });
 
     await TestBed.configureTestingModule({
       imports: [ConsoleShellComponent],
@@ -179,6 +206,8 @@ describe('ConsoleShellComponent gridTemplateColumns when right nav closed', () =
             toggleRightNav: vi.fn(),
             openDialog: vi.fn(),
             closeDialog: vi.fn(),
+            applyConnectedLayout: vi.fn(),
+            resetLayoutAfterDisconnect: vi.fn(),
           },
         },
         {
