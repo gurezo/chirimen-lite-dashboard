@@ -1,16 +1,24 @@
 <div
-  class="bg-white flex flex-col items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-5 shadow-lg h-[600px] overflow-auto"
+  class="flex min-h-0 h-full justify-center items-center overflow-hidden"
 >
-  <!-- <iframe src="https://tutorial.chirimen.org/pizero/esm-examples/"></iframe> -->
-  @if (example$ | async; as example) {
-  <choh-example-list
-    [gpioExample]="example[0]"
-    [i2cExample]="example[1]"
-    [remoteExample]="example[2]"
-    (saveExample)="onSaveExample($event)"
-  />
-  }
-  <div class="flex justify-end w-full">
-    <choh-button [label]="'閉じる'" type="button" (clickEvent)="closeModal()" />
+  <div
+    class="bg-white flex flex-col gap-4 items-center p-5 shadow-lg w-[95%] min-h-0 max-h-[min(600px,100%)] overflow-auto"
+  >
+    <!-- <iframe src="https://tutorial.chirimen.org/pizero/esm-examples/"></iframe> -->
+    @if (example$ | async; as example) {
+      <choh-example-list
+        [gpioExample]="example[0]"
+        [i2cExample]="example[1]"
+        [remoteExample]="example[2]"
+        (saveExample)="onSaveExample($event)"
+      />
+    }
+    <div class="flex justify-end w-full">
+      <choh-button
+        [label]="'閉じる'"
+        type="button"
+        (clickEvent)="closeModal()"
+      />
+    </div>
   </div>
 </div>
