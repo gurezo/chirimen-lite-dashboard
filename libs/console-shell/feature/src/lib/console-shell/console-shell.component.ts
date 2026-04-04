@@ -60,6 +60,9 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
   /** Right PIN panel width when open (px); shell-owned fixed track. */
   private static readonly RIGHT_PANE_WIDTH_PX = 96;
 
+  /** Narrow rail when the PIN panel is collapsed (px); keeps toggle + pin chrome visible. */
+  private static readonly RIGHT_RAIL_COLLAPSED_WIDTH_PX = 48;
+
   private store = inject(Store);
   private serialNotification = inject(SerialNotificationService);
   private shellStore = inject(ConsoleShellStore);
@@ -80,14 +83,14 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
   );
 
   /**
-   * Stable 3-column template: fixed left, flexible center, fixed right PIN strip.
-   * Collapsed right uses 0px so the center column keeps full remaining width.
+   * Stable 3-column template: fixed left, flexible center, fixed right track.
+   * Open: full PIN strip; collapsed: narrow rail for pin chrome + toggle only.
    */
   readonly gridTemplateColumns = computed(() => {
     const left = `${ConsoleShellComponent.LEFT_PANE_WIDTH_PX}px`;
     const right = this.rightNavOpen()
       ? `${ConsoleShellComponent.RIGHT_PANE_WIDTH_PX}px`
-      : '0px';
+      : `${ConsoleShellComponent.RIGHT_RAIL_COLLAPSED_WIDTH_PX}px`;
     return `${left} minmax(0, 1fr) ${right}`;
   });
 

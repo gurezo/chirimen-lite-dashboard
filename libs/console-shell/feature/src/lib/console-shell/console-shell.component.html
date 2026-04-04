@@ -8,11 +8,9 @@
   >
     <lib-header-toolbar
       [connected$]="connected$"
-      [rightNavOpen]="rightNavOpen()"
       (eventConnect)="onConnect()"
       (eventDisConnect)="onDisConnect()"
       (toolbarAction)="onToolbarAction($event)"
-      (toggleRightSidebar)="onToggleRightSidebar()"
     />
     @if (connected) {
       <lib-breadcrumb [segments]="breadcrumbSegments()" />
@@ -43,13 +41,13 @@
         </div>
 
         <div
-          class="flex min-h-0 min-w-0 flex-col overflow-hidden"
-          [class.border-l]="rightNavOpen()"
-          [class.border-gray-200]="rightNavOpen()"
+          class="flex min-h-0 min-w-0 flex-col overflow-hidden border-l border-gray-200"
         >
-          @if (rightNavOpen()) {
-            <lib-right-sidebar class="min-h-0 min-w-0 flex-1" />
-          }
+          <lib-right-sidebar
+            class="min-h-0 min-w-0 flex-1"
+            [rightNavOpen]="rightNavOpen()"
+            (toggleRightSidebar)="onToggleRightSidebar()"
+          />
         </div>
       </div>
     } @else {
