@@ -297,7 +297,7 @@ describe('ConsoleShellComponent layout DOM (connected vs disconnected)', () => {
     const root = fixture.nativeElement as HTMLElement;
 
     expect(root.querySelector('lib-connect-page')).toBeTruthy();
-    expect(fixture.debugElement.query(By.css('lib-header-toolbar'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('lib-header-toolbar'))).toBeTruthy();
     expect(root.querySelector('lib-breadcrumb')).toBeNull();
     expect(root.querySelector('lib-left-sidebar')).toBeNull();
     expect(root.querySelector('choh-terminal')).toBeNull();
