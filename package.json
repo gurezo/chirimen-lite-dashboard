@@ -30,6 +30,7 @@
     "@ngrx/store": "21.0.1",
     "@ngrx/store-devtools": "21.0.1",
     "@types/w3c-web-serial": "1.0.6",
+    "@xterm/addon-fit": "^0.10.0",
     "@xterm/xterm": "^5.5.0",
     "monaco-editor": "^0.50.0",
     "ngx-monaco-editor-v2": "^18.1.0",
