@@ -1,15 +1,13 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   ConnectButtonComponent,
   ConnectionStatusComponent,
   type ConnectStatus,
 } from '@libs-connect-ui';
-import { ConsoleShellStore } from '@libs-console-shell-util';
 import { WebSerialActions } from '@libs-web-serial-state';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'lib-connect-page',
@@ -36,9 +34,8 @@ import { filter, map } from 'rxjs';
     </section>
   `,
 })
-export class ConnectPageComponent implements OnInit, OnDestroy {
+export class ConnectPageComponent {
   private store = inject(Store);
-  private shellStore = inject(ConsoleShellStore);
 
   disconnectedMessage =
     'Raspberry Pi Zero と PC を USB で繋いだ後、Connect ボタンをクリックして、Web Serail を接続して下さい';
@@ -57,22 +54,6 @@ export class ConnectPageComponent implements OnInit, OnDestroy {
         connected ? 'connected' : 'disconnected',
     ),
   );
-
-  private subscriptions = new Subscription();
-
-  ngOnInit(): void {
-    this.subscriptions.add(
-      this.connected$
-        .pipe(filter((isConnected) => isConnected))
-        .subscribe(() => {
-          this.shellStore.setConnected(true);
-        }),
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
 
   onConnect(): void {
     this.store.dispatch(WebSerialActions.onConnect());
