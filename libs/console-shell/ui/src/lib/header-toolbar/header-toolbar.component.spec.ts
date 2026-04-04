@@ -24,7 +24,16 @@ describe('HeaderToolbarComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should not render toolbar row when disconnected', () => {
+    expect(
+      fixture.nativeElement.querySelector('button[aria-label="editor"]'),
+    ).toBeNull();
+  });
+
   it('should emit toolbarAction when action icon is clicked', () => {
+    fixture.componentRef.setInput('connected$', of(true));
+    fixture.detectChanges();
+
     const emitSpy = vi.spyOn(component.toolbarAction, 'emit');
     const editorButton: HTMLButtonElement | null =
       fixture.nativeElement.querySelector('button[aria-label="editor"]');
