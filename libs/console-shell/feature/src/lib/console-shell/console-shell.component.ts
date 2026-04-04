@@ -57,8 +57,11 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
   /** Left file tree column width (px). */
   private static readonly LEFT_PANE_WIDTH_PX = 280;
 
-  /** Right PIN panel width when open (px); shell-owned fixed track. */
-  private static readonly RIGHT_PANE_WIDTH_PX = 96;
+  /**
+   * Pin diagram image width (px); grid track adds the left chrome rail width on top.
+   * Keep in sync with pin-assign `wallpaperS` display width.
+   */
+  private static readonly RIGHT_PIN_DIAGRAM_WIDTH_PX = 300;
 
   /** Narrow rail when the PIN panel is collapsed (px); keeps toggle + pin chrome visible. */
   private static readonly RIGHT_RAIL_COLLAPSED_WIDTH_PX = 48;
@@ -84,13 +87,15 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
 
   /**
    * Stable 3-column template: fixed left, flexible center, fixed right track.
-   * Open: full PIN strip; collapsed: narrow rail for pin chrome + toggle only.
+   * Open: rail + pin diagram width; collapsed: narrow rail only.
    */
   readonly gridTemplateColumns = computed(() => {
     const left = `${ConsoleShellComponent.LEFT_PANE_WIDTH_PX}px`;
+    const rail = ConsoleShellComponent.RIGHT_RAIL_COLLAPSED_WIDTH_PX;
+    const diagram = ConsoleShellComponent.RIGHT_PIN_DIAGRAM_WIDTH_PX;
     const right = this.rightNavOpen()
-      ? `${ConsoleShellComponent.RIGHT_PANE_WIDTH_PX}px`
-      : `${ConsoleShellComponent.RIGHT_RAIL_COLLAPSED_WIDTH_PX}px`;
+      ? `calc(${rail}px + ${diagram}px)`
+      : `${rail}px`;
     return `${left} minmax(0, 1fr) ${right}`;
   });
 

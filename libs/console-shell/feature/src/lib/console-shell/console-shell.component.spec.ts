@@ -156,8 +156,10 @@ describe('ConsoleShellComponent', () => {
     expect(openDialog).not.toHaveBeenCalled();
   });
 
-  it('should set grid template columns with fixed right pane when right nav is open', () => {
-    expect(component.gridTemplateColumns()).toBe('280px minmax(0, 1fr) 96px');
+  it('should set grid template columns with fixed diagram width when right nav is open', () => {
+    expect(component.gridTemplateColumns()).toBe(
+      '280px minmax(0, 1fr) calc(48px + 300px)',
+    );
   });
 
   it('should apply connected layout when isConnected becomes true', () => {
