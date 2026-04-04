@@ -24,6 +24,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('@libs-example-feature').then((m) => m.ExampleComponent),
       },
+      {
+        path: 'wifi',
+        loadComponent: () =>
+          import('@libs-wifi-feature').then((m) => m.WifiPageComponent),
+      },
     ],
   },
   {
