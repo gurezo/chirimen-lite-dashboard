@@ -1,10 +1,8 @@
-import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from '@libs-dialogs-util';
 import { ConsoleShellStore } from '@libs-console-shell-util';
-import { TerminalPageComponent } from '@libs-terminal-feature';
 import {
   isConnected,
   selectConnectionMessage,
@@ -13,18 +11,9 @@ import {
 import { Store } from '@ngrx/store';
 import { SerialNotificationService } from '@libs-web-serial-data-access';
 import { TerminalCommandRequestService } from '@libs-terminal-util';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, EMPTY, of } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ConsoleShellComponent } from './console-shell.component';
-
-/** Lightweight stand-in so jsdom does not boot @xterm/xterm in layout DOM tests. */
-@Component({
-  // eslint-disable-next-line @angular-eslint/component-selector -- must match choh-terminal in shell template
-  selector: 'choh-terminal',
-  standalone: true,
-  template: '',
-})
-class StubTerminalPageComponent {}
 
 describe('ConsoleShellComponent', () => {
   let component: ConsoleShellComponent;
@@ -42,8 +31,14 @@ describe('ConsoleShellComponent', () => {
   let isConnected$: BehaviorSubject<boolean>;
   let applyConnectedLayout: ReturnType<typeof vi.fn>;
   let resetLayoutAfterDisconnect: ReturnType<typeof vi.fn>;
+  let navigateSpy: ReturnType<typeof vi.fn>;
+  let activatedRouteMock: ActivatedRoute;
 
   beforeEach(async () => {
+    navigateSpy = vi.fn().mockResolvedValue(true);
+    activatedRouteMock = {
+      firstChild: { snapshot: { url: [{ path: 'terminal' }] } },
+    } as unknown as ActivatedRoute;
     isConnected$ = new BehaviorSubject(false);
     applyConnectedLayout = vi.fn();
     resetLayoutAfterDisconnect = vi.fn();
@@ -67,7 +62,11 @@ describe('ConsoleShellComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ConsoleShellComponent],
       providers: [
-        provideRouter([]),
+        {
+          provide: Router,
+          useValue: { navigate: navigateSpy, events: EMPTY },
+        },
+        { provide: ActivatedRoute, useValue: activatedRouteMock },
         {
           provide: Store,
           useValue: { select: storeSelect, dispatch: storeDispatch },
@@ -137,7 +136,9 @@ describe('ConsoleShellComponent', () => {
 
     expect(closeDialog).toHaveBeenCalledTimes(1);
     expect(closeAllDialog).toHaveBeenCalledTimes(1);
-    expect(setActivePanel).toHaveBeenCalledWith('editor');
+    expect(navigateSpy).toHaveBeenCalledWith(['editor'], {
+      relativeTo: activatedRouteMock,
+    });
   });
 
   it('should open dialog when wifi action is clicked', () => {
@@ -152,7 +153,9 @@ describe('ConsoleShellComponent', () => {
 
     expect(closeDialog).toHaveBeenCalledTimes(1);
     expect(closeAllDialog).toHaveBeenCalledTimes(1);
-    expect(setActivePanel).toHaveBeenCalledWith('terminal');
+    expect(navigateSpy).toHaveBeenCalledWith(['terminal'], {
+      relativeTo: activatedRouteMock,
+    });
     expect(requestTerminalCommand).toHaveBeenCalledWith('i2cdetect -y 1');
     expect(openShellDialog).not.toHaveBeenCalled();
     expect(openDialog).not.toHaveBeenCalled();
@@ -165,16 +168,24 @@ describe('ConsoleShellComponent', () => {
   });
 
   it('should apply connected layout when isConnected becomes true', () => {
+    navigateSpy.mockClear();
     applyConnectedLayout.mockClear();
     isConnected$.next(true);
     expect(applyConnectedLayout).toHaveBeenCalledTimes(1);
+    expect(navigateSpy).toHaveBeenCalledWith(['terminal'], {
+      relativeTo: activatedRouteMock,
+    });
   });
 
   it('should reset layout when isConnected becomes false after connected', () => {
     isConnected$.next(true);
+    navigateSpy.mockClear();
     resetLayoutAfterDisconnect.mockClear();
     isConnected$.next(false);
     expect(resetLayoutAfterDisconnect).toHaveBeenCalledTimes(1);
+    expect(navigateSpy).toHaveBeenCalledWith(['terminal'], {
+      relativeTo: activatedRouteMock,
+    });
   });
 });
 
@@ -185,6 +196,9 @@ describe('ConsoleShellComponent gridTemplateColumns when right nav closed', () =
 
   beforeEach(async () => {
     const isConnected$ = new BehaviorSubject(false);
+    const activatedRoute = {
+      firstChild: { snapshot: { url: [{ path: 'terminal' }] } },
+    } as unknown as ActivatedRoute;
     storeSelect = vi.fn((selector: unknown) => {
       if (selector === selectConnectionMessage) return of('');
       if (selector === selectErrorMessage) return of('');
@@ -195,7 +209,11 @@ describe('ConsoleShellComponent gridTemplateColumns when right nav closed', () =
     await TestBed.configureTestingModule({
       imports: [ConsoleShellComponent],
       providers: [
-        provideRouter([]),
+        {
+          provide: Router,
+          useValue: { navigate: vi.fn().mockResolvedValue(true), events: EMPTY },
+        },
+        { provide: ActivatedRoute, useValue: activatedRoute },
         {
           provide: Store,
           useValue: { select: storeSelect, dispatch: vi.fn() },
@@ -250,8 +268,12 @@ describe('ConsoleShellComponent layout DOM (connected vs disconnected)', () => {
   let isConnected$: BehaviorSubject<boolean>;
   let storeSelect: ReturnType<typeof vi.fn>;
   let storeDispatch: ReturnType<typeof vi.fn>;
+  let activatedRouteMock: ActivatedRoute;
 
   beforeEach(async () => {
+    activatedRouteMock = {
+      firstChild: { snapshot: { url: [{ path: 'terminal' }] } },
+    } as unknown as ActivatedRoute;
     isConnected$ = new BehaviorSubject(false);
     storeSelect = vi.fn((selector: unknown) => {
       if (selector === selectConnectionMessage) return of('');
@@ -264,7 +286,14 @@ describe('ConsoleShellComponent layout DOM (connected vs disconnected)', () => {
     await TestBed.configureTestingModule({
       imports: [ConsoleShellComponent],
       providers: [
-        provideRouter([]),
+        {
+          provide: Router,
+          useValue: {
+            navigate: vi.fn().mockResolvedValue(true),
+            events: EMPTY,
+          },
+        },
+        { provide: ActivatedRoute, useValue: activatedRouteMock },
         ConsoleShellStore,
         {
           provide: Store,
@@ -286,12 +315,7 @@ describe('ConsoleShellComponent layout DOM (connected vs disconnected)', () => {
           useValue: { requestCommand: vi.fn() },
         },
       ],
-    })
-      .overrideComponent(ConsoleShellComponent, {
-        remove: { imports: [TerminalPageComponent] },
-        add: { imports: [StubTerminalPageComponent] },
-      })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ConsoleShellComponent);
     fixture.detectChanges();
@@ -304,10 +328,10 @@ describe('ConsoleShellComponent layout DOM (connected vs disconnected)', () => {
     expect(fixture.debugElement.query(By.css('lib-header-toolbar'))).toBeTruthy();
     expect(root.querySelector('lib-breadcrumb')).toBeNull();
     expect(root.querySelector('lib-left-sidebar')).toBeNull();
-    expect(root.querySelector('choh-terminal')).toBeNull();
+    expect(root.querySelector('router-outlet')).toBeNull();
   });
 
-  it('shows toolbar, breadcrumb, three panes, and terminal after connect', () => {
+  it('shows toolbar, breadcrumb, three panes, and router outlet after connect', () => {
     isConnected$.next(true);
     fixture.detectChanges();
 
@@ -317,7 +341,7 @@ describe('ConsoleShellComponent layout DOM (connected vs disconnected)', () => {
     expect(fixture.debugElement.query(By.css('lib-header-toolbar'))).toBeTruthy();
     expect(root.querySelector('lib-breadcrumb')).toBeTruthy();
     expect(root.querySelector('lib-left-sidebar')).toBeTruthy();
-    expect(root.querySelector('choh-terminal')).toBeTruthy();
+    expect(root.querySelector('router-outlet')).toBeTruthy();
     expect(root.querySelector('lib-right-sidebar')).toBeTruthy();
   });
 
