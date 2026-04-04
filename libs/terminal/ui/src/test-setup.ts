@@ -8,9 +8,15 @@ import {
 
 if (typeof globalThis.ResizeObserver === 'undefined') {
   globalThis.ResizeObserver = class {
-    observe(): void {}
-    unobserve(): void {}
-    disconnect(): void {}
+    observe(): void {
+      void 0;
+    }
+    unobserve(): void {
+      void 0;
+    }
+    disconnect(): void {
+      void 0;
+    }
   };
 }
 
