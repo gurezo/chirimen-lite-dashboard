@@ -62,7 +62,6 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
   connected$ = this.store.select((state) => state.webSerial.isConnected);
 
   readonly activePanel = this.shellStore.activePanel;
-  readonly leftNavOpen = this.shellStore.leftNavOpen;
   readonly rightNavOpen = this.shellStore.rightNavOpen;
 
   readonly breadcrumbSegments = computed(() =>
@@ -73,11 +72,10 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
     }),
   );
 
-  /** Stable 3-column template: left ~280px, center flexible, right PIN strip (collapsed columns use 0px). */
+  /** Stable 3-column template: left file tree ~280px, center flexible, right PIN strip (collapsed uses 0px). */
   readonly gridTemplateColumns = computed(() => {
-    const left = this.leftNavOpen() ? '280px' : '0px';
     const right = this.rightNavOpen() ? 'minmax(64px, 96px)' : '0px';
-    return `${left} minmax(0, 1fr) ${right}`;
+    return `280px minmax(0, 1fr) ${right}`;
   });
 
   private subscriptions = new Subscription();
