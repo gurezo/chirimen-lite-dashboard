@@ -33,17 +33,7 @@
             (toolbarAction)="onToolbarAction($event)"
           />
           <div class="min-h-0 flex-1 overflow-hidden">
-            @switch (activePanel()) {
-              @case ('terminal') {
-                <choh-terminal />
-              }
-              @case ('editor') {
-                <choh-editor-page />
-              }
-              @case ('example') {
-                <choh-example />
-              }
-            }
+            <router-outlet />
           </div>
         </div>
 

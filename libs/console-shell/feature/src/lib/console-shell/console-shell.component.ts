@@ -7,6 +7,12 @@ import {
   OnInit,
   Type,
 } from '@angular/core';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterOutlet,
+} from '@angular/router';
 import { ConnectPageComponent } from '@libs-connect-feature';
 import {
   ActionToolBarComponent,
@@ -16,9 +22,6 @@ import {
   RightSidebarComponent,
   ToolbarAction,
 } from '@libs-console-shell-ui';
-import { TerminalPageComponent } from '@libs-terminal-feature';
-import { EditorPageComponent } from '@libs-editor-feature';
-import { ExampleComponent } from '@libs-example-feature';
 import { WifiPageComponent } from '@libs-wifi-feature';
 import { SetupPageComponent } from '@libs-chirimen-setup-feature';
 import { RemotePageComponent } from '@libs-remote-feature';
@@ -49,9 +52,7 @@ import { TerminalCommandRequestService } from '@libs-terminal-util';
     HeaderToolbarComponent,
     LeftSidebarComponent,
     RightSidebarComponent,
-    TerminalPageComponent,
-    EditorPageComponent,
-    ExampleComponent,
+    RouterOutlet,
   ],
   templateUrl: './console-shell.component.html',
 })
@@ -76,6 +77,8 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
   private shellStore = inject(ConsoleShellStore);
   private dialogService = inject(DialogService);
   private terminalCommands = inject(TerminalCommandRequestService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   connected$ = this.store.select((state) => state.webSerial.isConnected);
 
@@ -113,6 +116,14 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
     this.store.dispatch(WebSerialActions.init());
 
     this.subscriptions.add(
+      this.router.events
+        .pipe(
+          filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        )
+        .subscribe(() => this.syncActivePanelFromRouter()),
+    );
+
+    this.subscriptions.add(
       this.store
         .select(selectConnectionMessage)
         .pipe(filter((message) => message !== ''))
@@ -141,11 +152,24 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
         .subscribe(([prev, next]) => {
           if (!prev && next) {
             this.shellStore.applyConnectedLayout();
+            void this.router.navigate(['terminal'], { relativeTo: this.route });
           } else if (prev && !next) {
             this.shellStore.resetLayoutAfterDisconnect();
+            void this.router.navigate(['terminal'], { relativeTo: this.route });
           }
         }),
     );
+  }
+
+  private syncActivePanelFromRouter(): void {
+    const path = this.route.firstChild?.snapshot.url[0]?.path;
+    if (
+      path === 'terminal' ||
+      path === 'editor' ||
+      path === 'example'
+    ) {
+      this.shellStore.setActivePanel(path);
+    }
   }
 
   ngOnDestroy() {
@@ -172,14 +196,14 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
     if (action === 'terminal' || action === 'editor' || action === 'example') {
       this.shellStore.closeDialog();
       this.dialogService.closeAll();
-      this.shellStore.setActivePanel(action);
+      void this.router.navigate([action], { relativeTo: this.route });
       return;
     }
 
     if (action === 'i2c') {
       this.shellStore.closeDialog();
       this.dialogService.closeAll();
-      this.shellStore.setActivePanel('terminal');
+      void this.router.navigate(['terminal'], { relativeTo: this.route });
       this.terminalCommands.requestCommand('i2cdetect -y 1');
       return;
     }
