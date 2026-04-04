@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { ConnectPageComponent } from '@libs-connect-feature';
 import {
+  ActionToolBarComponent,
   BreadcrumbComponent,
   HeaderToolbarComponent,
   LeftSidebarComponent,
@@ -41,6 +42,7 @@ import { TerminalCommandRequestService } from '@libs-terminal-util';
 @Component({
   selector: 'lib-console-shell',
   imports: [
+    ActionToolBarComponent,
     AsyncPipe,
     BreadcrumbComponent,
     ConnectPageComponent,
