@@ -159,7 +159,7 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
   }
 
   onToolbarAction(action: ToolbarAction): void {
-    if (action === 'editor' || action === 'example') {
+    if (action === 'terminal' || action === 'editor' || action === 'example') {
       this.shellStore.closeDialog();
       this.dialogService.closeAll();
       this.shellStore.setActivePanel(action);
