@@ -5,7 +5,7 @@ import { PinAssignComponent } from '@libs-pin-assign-panel-ui';
   selector: 'lib-right-sidebar',
   imports: [PinAssignComponent],
   template: `
-    <div class="right-sidebar min-h-0 overflow-auto">
+    <div class="right-sidebar h-full min-h-0 overflow-auto">
       <choh-pin-assign />
     </div>
   `,
