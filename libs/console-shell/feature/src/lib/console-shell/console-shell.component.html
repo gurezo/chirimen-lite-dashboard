@@ -7,10 +7,8 @@
     [class.border-gray-200]="connected"
   >
     <lib-header-toolbar
-      [connected$]="connected$"
       (eventConnect)="onConnect()"
       (eventDisConnect)="onDisConnect()"
-      (toolbarAction)="onToolbarAction($event)"
     />
     @if (connected) {
       <lib-breadcrumb [segments]="breadcrumbSegments()" />
@@ -26,18 +24,24 @@
           <lib-left-sidebar />
         </div>
 
-        <div class="min-h-0 min-w-0 overflow-hidden">
-          @switch (activePanel()) {
-            @case ('terminal') {
-              <choh-terminal />
+        <div class="flex min-h-0 min-w-0 flex-col overflow-hidden">
+          <lib-action-tool-bar
+            [connected$]="connected$"
+            (toolbarAction)="onToolbarAction($event)"
+          />
+          <div class="min-h-0 flex-1 overflow-hidden">
+            @switch (activePanel()) {
+              @case ('terminal') {
+                <choh-terminal />
+              }
+              @case ('editor') {
+                <choh-editor-page />
+              }
+              @case ('example') {
+                <choh-example />
+              }
             }
-            @case ('editor') {
-              <choh-editor-page />
-            }
-            @case ('example') {
-              <choh-example />
-            }
-          }
+          </div>
         </div>
 
         <div
