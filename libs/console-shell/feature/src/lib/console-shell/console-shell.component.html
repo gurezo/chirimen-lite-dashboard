@@ -35,9 +35,13 @@
           }
         </div>
 
-        <div class="min-h-0 min-w-0 overflow-auto">
+        <div
+          class="flex min-h-0 min-w-0 flex-col overflow-hidden"
+          [class.border-l]="rightNavOpen()"
+          [class.border-gray-200]="rightNavOpen()"
+        >
           @if (rightNavOpen()) {
-            <lib-right-sidebar />
+            <lib-right-sidebar class="min-h-0 min-w-0 flex-1" />
           }
         </div>
       </div>
