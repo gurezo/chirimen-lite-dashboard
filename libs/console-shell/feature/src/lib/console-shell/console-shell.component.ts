@@ -24,13 +24,14 @@ import { RemotePageComponent } from '@libs-remote-feature';
 import { SerialNotificationService } from '@libs-web-serial-data-access';
 import { DialogService } from '@libs-dialogs-util';
 import {
+  isConnected,
   selectConnectionMessage,
   selectErrorMessage,
   WebSerialActions,
 } from '@libs-web-serial-state';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, pairwise, startWith } from 'rxjs/operators';
 import {
   buildConsoleShellBreadcrumbSegments,
   ConsoleShellStore,
@@ -110,6 +111,23 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
         .pipe(filter((message) => message !== ''))
         .subscribe((errorMessage) => {
           this.serialNotification.notifyConnectionError(errorMessage);
+        }),
+    );
+
+    this.subscriptions.add(
+      this.store
+        .select(isConnected)
+        .pipe(
+          startWith(false),
+          pairwise(),
+          filter(([prev, next]) => prev !== next),
+        )
+        .subscribe(([prev, next]) => {
+          if (!prev && next) {
+            this.shellStore.applyConnectedLayout();
+          } else if (prev && !next) {
+            this.shellStore.resetLayoutAfterDisconnect();
+          }
         }),
     );
   }
