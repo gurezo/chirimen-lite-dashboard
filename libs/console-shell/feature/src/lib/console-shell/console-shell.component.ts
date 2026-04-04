@@ -22,7 +22,6 @@ import {
   RightSidebarComponent,
   ToolbarAction,
 } from '@libs-console-shell-ui';
-import { WifiPageComponent } from '@libs-wifi-feature';
 import { SetupPageComponent } from '@libs-chirimen-setup-feature';
 import { RemotePageComponent } from '@libs-remote-feature';
 import { SerialNotificationService } from '@libs-web-serial-data-access';
@@ -166,7 +165,8 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
     if (
       path === 'terminal' ||
       path === 'editor' ||
-      path === 'example'
+      path === 'example' ||
+      path === 'wifi'
     ) {
       this.shellStore.setActivePanel(path);
     }
@@ -193,7 +193,12 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
   }
 
   onToolbarAction(action: ToolbarAction): void {
-    if (action === 'terminal' || action === 'editor' || action === 'example') {
+    if (
+      action === 'terminal' ||
+      action === 'editor' ||
+      action === 'example' ||
+      action === 'wifi'
+    ) {
       this.shellStore.closeDialog();
       this.dialogService.closeAll();
       void this.router.navigate([action], { relativeTo: this.route });
@@ -210,7 +215,6 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
 
     this.shellStore.openDialog(action);
     const componentMap = {
-      wifi: WifiPageComponent,
       setup: SetupPageComponent,
       remote: RemotePageComponent,
     } as const;
