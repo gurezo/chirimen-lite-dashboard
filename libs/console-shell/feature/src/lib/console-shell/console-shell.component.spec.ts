@@ -64,7 +64,6 @@ describe('ConsoleShellComponent', () => {
           provide: ConsoleShellStore,
           useValue: {
             activePanel: () => 'terminal',
-            leftNavOpen: () => true,
             rightNavOpen: () => true,
             setActivePanel,
             toggleRightNav: vi.fn(),

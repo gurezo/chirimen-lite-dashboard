@@ -17,10 +17,8 @@
         <div class="col-span-3 min-h-0 shrink-0">
           <lib-breadcrumb [segments]="breadcrumbSegments()" />
         </div>
-        <div class="min-h-0 min-w-0 overflow-auto">
-          @if (leftNavOpen()) {
-            <lib-left-sidebar />
-          }
+        <div class="flex min-h-0 min-w-0 flex-col overflow-hidden">
+          <lib-left-sidebar />
         </div>
 
         <div class="min-h-0 min-w-0 overflow-hidden">
