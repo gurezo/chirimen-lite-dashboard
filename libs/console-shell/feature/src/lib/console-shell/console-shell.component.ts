@@ -56,8 +56,11 @@ import { TerminalCommandRequestService } from '@libs-terminal-util';
   templateUrl: './console-shell.component.html',
 })
 export class ConsoleShellComponent implements OnInit, OnDestroy {
-  /** Left file tree column width (px). */
+  /** Left column width when the file tree is open: tree + chrome rail (px). */
   private static readonly LEFT_PANE_WIDTH_PX = 280;
+
+  /** Narrow rail when the left file tree is collapsed (px); folder + toggle stay visible. */
+  private static readonly LEFT_RAIL_COLLAPSED_WIDTH_PX = 48;
 
   /**
    * Pin diagram image width (px); grid track adds the left chrome rail width on top.
@@ -77,6 +80,7 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
   connected$ = this.store.select((state) => state.webSerial.isConnected);
 
   readonly activePanel = this.shellStore.activePanel;
+  readonly leftNavOpen = this.shellStore.leftNavOpen;
   readonly rightNavOpen = this.shellStore.rightNavOpen;
 
   readonly breadcrumbSegments = computed(() =>
@@ -89,10 +93,12 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
 
   /**
    * Stable 3-column template: fixed left, flexible center, fixed right track.
-   * Open: rail + pin diagram width; collapsed: narrow rail only.
+   * Left: full pane or narrow rail; right: rail + pin diagram or narrow rail.
    */
   readonly gridTemplateColumns = computed(() => {
-    const left = `${ConsoleShellComponent.LEFT_PANE_WIDTH_PX}px`;
+    const left = this.leftNavOpen()
+      ? `${ConsoleShellComponent.LEFT_PANE_WIDTH_PX}px`
+      : `${ConsoleShellComponent.LEFT_RAIL_COLLAPSED_WIDTH_PX}px`;
     const rail = ConsoleShellComponent.RIGHT_RAIL_COLLAPSED_WIDTH_PX;
     const diagram = ConsoleShellComponent.RIGHT_PIN_DIAGRAM_WIDTH_PX;
     const right = this.rightNavOpen()
@@ -152,6 +158,10 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
 
   onDisConnect() {
     this.store.dispatch(WebSerialActions.onDisConnect());
+  }
+
+  onToggleLeftSidebar() {
+    this.shellStore.toggleLeftNav();
   }
 
   onToggleRightSidebar() {
