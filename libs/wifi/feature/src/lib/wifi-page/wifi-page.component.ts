@@ -1,20 +1,17 @@
+import { Dialog } from '@angular/cdk/dialog';
 import { Component, inject, signal } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
-import { firstValueFrom } from 'rxjs';
 import { ConfirmDialogComponent } from '@libs-dialogs-ui';
-import { DialogService } from '@libs-dialogs-util';
-import { ButtonComponent, NotificationService } from '@libs-shared-ui';
 import type { WiFiInfo } from '@libs-shared-types';
-import {
-  WifiRebootFlowService,
-  WifiScanService,
-} from '@libs-wifi-data-access';
+import { ButtonComponent, NotificationService } from '@libs-shared-ui';
+import { SerialFacadeService } from '@libs-web-serial-data-access';
+import { WifiRebootFlowService, WifiScanService } from '@libs-wifi-data-access';
 import {
   WifiConnectDialogComponent,
   type WifiConnectDialogData,
   WifiListComponent,
 } from '@libs-wifi-ui';
-import { SerialFacadeService } from '@libs-web-serial-data-access';
+import { firstValueFrom } from 'rxjs';
 
 /**
  * WiFi 設定画面（スマートコンポーネント）
@@ -31,7 +28,7 @@ export class WifiPageComponent {
   readonly scanInProgress = signal(false);
   readonly actionInProgress = signal(false);
 
-  private readonly dialogService = inject(DialogService);
+  private readonly dialog = inject(Dialog);
   private readonly notify = inject(NotificationService);
   private readonly serial = inject(SerialFacadeService);
   private readonly wifiScan = inject(WifiScanService);
@@ -69,7 +66,7 @@ export class WifiPageComponent {
     if (!this.ensureSerial()) {
       return;
     }
-    this.dialogService.open(WifiConnectDialogComponent, {
+    this.dialog.open(WifiConnectDialogComponent, {
       width: '400px',
       data: { initialSsid } satisfies WifiConnectDialogData,
     });
@@ -90,7 +87,7 @@ export class WifiPageComponent {
       const body = [ipInfo, wlInfo, ipaddr ? `IP: ${ipaddr}` : '']
         .filter(Boolean)
         .join('\n\n');
-      this.dialogService.open(ConfirmDialogComponent, {
+      this.dialog.open(ConfirmDialogComponent, {
         width: '520px',
         data: {
           title: 'WiFi / ネットワーク情報',
@@ -127,7 +124,7 @@ export class WifiPageComponent {
     if (!this.ensureSerial()) {
       return;
     }
-    const ref = this.dialogService.open(ConfirmDialogComponent, {
+    const ref = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: 'デバイスを再起動',
         message: 'シリアル接続が切れる場合があります。続行しますか？',
@@ -158,7 +155,7 @@ export class WifiPageComponent {
     this.actionInProgress.set(true);
     try {
       const out = await this.wifiScan.checkChirimenTutorialReachability();
-      this.dialogService.open(ConfirmDialogComponent, {
+      this.dialog.open(ConfirmDialogComponent, {
         width: '480px',
         data: {
           title: '疎通確認（tutorial.chirimen.org）',
