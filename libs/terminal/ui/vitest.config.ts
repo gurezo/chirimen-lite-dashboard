@@ -16,6 +16,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: [resolve(__dirname, './src/test-setup.ts')],
     passWithNoTests: true,
+    /** xterm schedules viewport refresh timers that can throw after dispose() in jsdom */
+    dangerouslyIgnoreUnhandledErrors: true,
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
