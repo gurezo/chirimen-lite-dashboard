@@ -5,12 +5,13 @@ import { MatIcon } from '@angular/material/icon';
 import { Observable, of } from 'rxjs';
 
 export type ToolbarAction =
-  | 'wifi'
   | 'editor'
   | 'example'
   | 'i2c'
+  | 'remote'
   | 'setup'
-  | 'remote';
+  | 'terminal'
+  | 'wifi';
 
 @Component({
   selector: 'lib-action-tool-bar',
@@ -22,8 +23,9 @@ export class ActionToolBarComponent {
   toolbarAction = output<ToolbarAction>();
 
   readonly toolbarActions = [
+    { name: 'terminal', icon: 'terminal' },
     { name: 'wifi', icon: 'signal_wifi_4_bar' },
-    { name: 'editor', icon: 'terminal' },
+    { name: 'editor', icon: 'text_ad' },
     { name: 'example', icon: 'javascript' },
     { name: 'i2c', icon: 'lan' },
     { name: 'setup', icon: 'settings' },
