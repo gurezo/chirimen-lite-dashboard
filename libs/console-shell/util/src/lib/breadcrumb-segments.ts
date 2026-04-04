@@ -8,13 +8,13 @@ const PANEL_LABELS: Record<ConsoleShellState['activePanel'], string> = {
   terminal: 'Terminal',
   editor: 'Editor',
   example: 'Example',
+  wifi: 'WiFi',
 };
 
 const DIALOG_LABELS: Record<
   Exclude<ConsoleShellState['activeDialog'], 'none'>,
   string
 > = {
-  wifi: 'WiFi',
   setup: 'Setup',
   remote: 'Remote',
 };
