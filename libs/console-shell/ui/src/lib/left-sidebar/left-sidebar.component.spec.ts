@@ -1,6 +1,8 @@
 /// <reference types="vitest/globals" />
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
+import { EMPTY } from 'rxjs';
 import { LeftSidebarComponent } from './left-sidebar.component';
 
 describe('LeftSidebarComponent', () => {
@@ -8,9 +10,21 @@ describe('LeftSidebarComponent', () => {
   let fixture: ComponentFixture<LeftSidebarComponent>;
 
   beforeEach(async () => {
+    const activatedRoute = {
+      firstChild: null,
+      snapshot: { url: [] },
+    } as unknown as ActivatedRoute;
+
     await TestBed.configureTestingModule({
       imports: [LeftSidebarComponent],
-      providers: [provideMockStore()],
+      providers: [
+        provideMockStore(),
+        {
+          provide: Router,
+          useValue: { navigate: vi.fn().mockResolvedValue(true), events: EMPTY },
+        },
+        { provide: ActivatedRoute, useValue: activatedRoute },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LeftSidebarComponent);
