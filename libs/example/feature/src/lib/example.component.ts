@@ -15,6 +15,9 @@ import {
   selector: 'choh-example',
   imports: [ButtonComponent, ExampleListComponent, AsyncPipe],
   templateUrl: './example.component.html',
+  host: {
+    class: 'block h-full min-h-0 min-w-0',
+  },
 })
 export class ExampleComponent implements OnInit {
   private dialogService = inject(DialogService);
