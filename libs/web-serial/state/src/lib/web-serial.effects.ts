@@ -62,13 +62,15 @@ export class WebSerialEffects {
                 })
               );
             }
-            return from(this.initializeAfterConnect()).pipe(
-              map(() =>
-                WebSerialActions.onConnectSuccess({
-                  isConnected: true,
-                  message: ERROR_MESSAGES.CONNECTION_SUCCESS,
-                })
-              )
+            // ポート確立直後に UI を接続済みへ（initializeAfterConnect はターミナル表示後に続行）
+            void this.initializeAfterConnect().catch((err) =>
+              console.warn('Post-connect initialization failed', err)
+            );
+            return of(
+              WebSerialActions.onConnectSuccess({
+                isConnected: true,
+                message: ERROR_MESSAGES.CONNECTION_SUCCESS,
+              })
             );
           }),
           catchError((error) => {
