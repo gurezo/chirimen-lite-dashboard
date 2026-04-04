@@ -24,10 +24,16 @@ describe('HeaderToolbarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should not render toolbar row when disconnected', () => {
+  it('should not render toolbar action buttons when disconnected', () => {
     expect(
       fixture.nativeElement.querySelector('button[aria-label="editor"]'),
     ).toBeNull();
+  });
+
+  it('should render burger menu trigger when disconnected', () => {
+    expect(
+      fixture.nativeElement.querySelector('.mat-mdc-menu-trigger'),
+    ).not.toBeNull();
   });
 
   it('should emit toolbarAction when action icon is clicked', () => {
