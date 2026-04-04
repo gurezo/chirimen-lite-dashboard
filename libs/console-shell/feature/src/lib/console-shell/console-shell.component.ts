@@ -73,6 +73,13 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
     }),
   );
 
+  /** Stable 3-column template: left ~280px, center flexible, right PIN strip (collapsed columns use 0px). */
+  readonly gridTemplateColumns = computed(() => {
+    const left = this.leftNavOpen() ? '280px' : '0px';
+    const right = this.rightNavOpen() ? 'minmax(64px, 96px)' : '0px';
+    return `${left} minmax(0, 1fr) ${right}`;
+  });
+
   private subscriptions = new Subscription();
 
   ngOnInit() {
