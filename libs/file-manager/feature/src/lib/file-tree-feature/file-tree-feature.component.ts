@@ -6,7 +6,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, PRIMARY_OUTLET, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
   isConnected,
@@ -72,7 +72,6 @@ export class FileTreeFeatureComponent implements OnInit, OnDestroy {
   private fileList = inject(FileListService);
   private store = inject(Store);
   private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
   private loadSubscription?: Subscription;
 
   @Output() readonly fileSelected = new EventEmitter<string>();
@@ -110,16 +109,17 @@ export class FileTreeFeatureComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * サイドバー内コンポーネントの `ActivatedRoute` は、環境によっては
-   * `firstChild` を持たないことがある。ルータの root から葉まで辿り、
-   * アクティブな子ルートが `terminal` かどうかを判定する。
+   * lazy `loadComponent` だけの子ルートでは `ActivatedRoute.snapshot.routeConfig.path`
+   * が期待どおり取れないことがあるため、実際の URL（primary outlet の末尾セグメント）で判定する。
    */
   private isTerminalRoute(): boolean {
-    let route: ActivatedRoute | null = this.activatedRoute.root;
-    while (route?.firstChild) {
-      route = route.firstChild;
-    }
-    return route?.snapshot.routeConfig?.path === 'terminal';
+    const tree = this.router.parseUrl(this.router.url);
+    const primary = tree.root.children[PRIMARY_OUTLET];
+    const segments = primary?.segments ?? [];
+    return (
+      segments.length > 0 &&
+      segments[segments.length - 1].path === 'terminal'
+    );
   }
 
   async reload(): Promise<void> {

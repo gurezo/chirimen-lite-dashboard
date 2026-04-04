@@ -1,6 +1,6 @@
 /// <reference types="vitest/globals" />
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { DefaultUrlSerializer, NavigationEnd, Router } from '@angular/router';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { Subject } from 'rxjs';
 import { initialWebSerialState } from '@libs-web-serial-state';
@@ -14,36 +14,15 @@ describe('FileTreeFeatureComponent', () => {
   let mockStore: MockStore;
   const listMock = vi.fn<() => Promise<FileTreeNode[]>>();
   const routerEvents = new Subject<NavigationEnd>();
-  let leafRoutePath = 'editor';
+  const urlSerializer = new DefaultUrlSerializer();
+  let routerUrl = '/editor';
 
   beforeEach(async () => {
     listMock.mockResolvedValue([
       { name: 'docs', path: './docs', isDirectory: true },
       { name: 'main.ts', path: './main.ts', isDirectory: false },
     ]);
-    leafRoutePath = 'editor';
-
-    const leaf = {
-      get snapshot() {
-        return { routeConfig: { path: leafRoutePath } };
-      },
-      firstChild: null,
-      root: null as unknown,
-    };
-    const mid = {
-      snapshot: { routeConfig: { path: '' } },
-      firstChild: leaf,
-      root: null as unknown,
-    };
-    const rootRoute = {
-      snapshot: { routeConfig: { path: '' } },
-      firstChild: mid,
-      get root() {
-        return rootRoute;
-      },
-    };
-    mid.root = rootRoute;
-    leaf.root = rootRoute;
+    routerUrl = '/editor';
 
     await TestBed.configureTestingModule({
       imports: [FileTreeFeatureComponent],
@@ -55,9 +34,14 @@ describe('FileTreeFeatureComponent', () => {
         }),
         {
           provide: Router,
-          useValue: { events: routerEvents.asObservable() },
+          useValue: {
+            events: routerEvents.asObservable(),
+            get url() {
+              return routerUrl;
+            },
+            parseUrl: (rawUrl: string) => urlSerializer.parse(rawUrl),
+          },
         },
-        { provide: ActivatedRoute, useValue: rootRoute },
         {
           provide: FileListService,
           useValue: { list: listMock },
@@ -99,7 +83,7 @@ describe('FileTreeFeatureComponent', () => {
         isPostConnectInitDone: true,
       },
     });
-    leafRoutePath = 'terminal';
+    routerUrl = '/terminal';
     routerEvents.next(new NavigationEnd(1, '/', '/terminal'));
     await fixture.whenStable();
     await Promise.resolve();
