@@ -11,16 +11,21 @@ export interface ConsoleShellState {
   activeDialog: ConsoleShellDialog;
 }
 
+/** Default shell layout after connect and after disconnect (issue #462). */
+export const DEFAULT_CONSOLE_SHELL_STATE: ConsoleShellState = {
+  activePanel: 'terminal',
+  leftNavOpen: true,
+  rightNavOpen: true,
+  selectedFilePath: null,
+  activeDialog: 'none',
+};
+
 @Injectable({
   providedIn: 'root',
 })
 export class ConsoleShellStore {
   private readonly stateSignal = signal<ConsoleShellState>({
-    activePanel: 'terminal',
-    leftNavOpen: true,
-    rightNavOpen: true,
-    selectedFilePath: null,
-    activeDialog: 'none',
+    ...DEFAULT_CONSOLE_SHELL_STATE,
   });
 
   readonly state = this.stateSignal.asReadonly();
@@ -113,6 +118,16 @@ export class ConsoleShellStore {
       ...state,
       activeDialog: 'none',
     }));
+  }
+
+  /** Apply expected layout when Web Serial connection succeeds. */
+  applyConnectedLayout(): void {
+    this.stateSignal.set({ ...DEFAULT_CONSOLE_SHELL_STATE });
+  }
+
+  /** Reset shell UI state when disconnected so reconnect gets a stable layout. */
+  resetLayoutAfterDisconnect(): void {
+    this.stateSignal.set({ ...DEFAULT_CONSOLE_SHELL_STATE });
   }
 }
 
