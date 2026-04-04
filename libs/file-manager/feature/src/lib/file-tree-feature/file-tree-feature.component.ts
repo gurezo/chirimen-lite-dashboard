@@ -109,10 +109,17 @@ export class FileTreeFeatureComponent implements OnInit, OnDestroy {
     this.loadSubscription?.unsubscribe();
   }
 
+  /**
+   * サイドバー内コンポーネントの `ActivatedRoute` は、環境によっては
+   * `firstChild` を持たないことがある。ルータの root から葉まで辿り、
+   * アクティブな子ルートが `terminal` かどうかを判定する。
+   */
   private isTerminalRoute(): boolean {
-    return (
-      this.activatedRoute.firstChild?.snapshot.routeConfig?.path === 'terminal'
-    );
+    let route: ActivatedRoute | null = this.activatedRoute.root;
+    while (route?.firstChild) {
+      route = route.firstChild;
+    }
+    return route?.snapshot.routeConfig?.path === 'terminal';
   }
 
   async reload(): Promise<void> {

@@ -14,24 +14,36 @@ describe('FileTreeFeatureComponent', () => {
   let mockStore: MockStore;
   const listMock = vi.fn<() => Promise<FileTreeNode[]>>();
   const routerEvents = new Subject<NavigationEnd>();
-  let childRoutePath = 'editor';
+  let leafRoutePath = 'editor';
 
   beforeEach(async () => {
     listMock.mockResolvedValue([
       { name: 'docs', path: './docs', isDirectory: true },
       { name: 'main.ts', path: './main.ts', isDirectory: false },
     ]);
-    childRoutePath = 'editor';
+    leafRoutePath = 'editor';
 
-    const activatedRouteStub = {
-      get firstChild() {
-        return {
-          snapshot: {
-            routeConfig: { path: childRoutePath },
-          },
-        };
+    const leaf = {
+      get snapshot() {
+        return { routeConfig: { path: leafRoutePath } };
+      },
+      firstChild: null,
+      root: null as unknown,
+    };
+    const mid = {
+      snapshot: { routeConfig: { path: '' } },
+      firstChild: leaf,
+      root: null as unknown,
+    };
+    const rootRoute = {
+      snapshot: { routeConfig: { path: '' } },
+      firstChild: mid,
+      get root() {
+        return rootRoute;
       },
     };
+    mid.root = rootRoute;
+    leaf.root = rootRoute;
 
     await TestBed.configureTestingModule({
       imports: [FileTreeFeatureComponent],
@@ -45,7 +57,7 @@ describe('FileTreeFeatureComponent', () => {
           provide: Router,
           useValue: { events: routerEvents.asObservable() },
         },
-        { provide: ActivatedRoute, useValue: activatedRouteStub },
+        { provide: ActivatedRoute, useValue: rootRoute },
         {
           provide: FileListService,
           useValue: { list: listMock },
@@ -87,7 +99,7 @@ describe('FileTreeFeatureComponent', () => {
         isPostConnectInitDone: true,
       },
     });
-    childRoutePath = 'terminal';
+    leafRoutePath = 'terminal';
     routerEvents.next(new NavigationEnd(1, '/', '/terminal'));
     await fixture.whenStable();
     await Promise.resolve();
