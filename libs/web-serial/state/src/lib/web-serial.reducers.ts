@@ -4,6 +4,7 @@ import { WebSerialState } from './web-serial.model';
 
 export const initialWebSerialState: WebSerialState = {
   isConnected: false,
+  isPostConnectInitDone: false,
   sendData: '',
   receiveData: '',
   error: null,
@@ -20,10 +21,12 @@ export const webSerialReducer = createReducer(
   })),
   on(WebSerialActions.onConnect, (state) => ({
     ...state,
+    isPostConnectInitDone: false,
   })),
   on(WebSerialActions.onConnectSuccess, (state, { isConnected, message }) => ({
     ...state,
     isConnected,
+    isPostConnectInitDone: false,
     connectionMessage: message,
     errorMessage: '',
   })),
@@ -32,9 +35,15 @@ export const webSerialReducer = createReducer(
     (state, { isConnected, errorMessage }) => ({
       ...state,
       isConnected,
+      isPostConnectInitDone: false,
       connectionMessage: '',
       errorMessage,
     })
+  ),
+  on(WebSerialActions.postConnectInitComplete, (state) =>
+    state.isConnected
+      ? { ...state, isPostConnectInitDone: true }
+      : state
   ),
   on(WebSerialActions.onDisConnect, () => ({
     ...initialWebSerialState,

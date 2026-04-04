@@ -9,6 +9,11 @@ export const isConnected = createSelector(
   (state: WebSerialState) => state.isConnected
 );
 
+export const selectIsPostConnectInitDone = createSelector(
+  selectWebSerialFeature,
+  (state: WebSerialState) => state.isPostConnectInitDone
+);
+
 export const selectSendData = createSelector(
   selectWebSerialFeature,
   (state: WebSerialState) => state.sendData

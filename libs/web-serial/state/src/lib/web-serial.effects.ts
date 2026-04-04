@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import { catchError, from, map, of, switchMap } from 'rxjs';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { createConnectClient } from '@libs-connect-util';
@@ -23,6 +24,7 @@ const ERROR_MESSAGES = {
 export class WebSerialEffects {
   actions$ = inject(Actions);
   service = inject(SerialFacadeService);
+  private store = inject(Store);
 
   private async initializeAfterConnect(): Promise<void> {
     const client = createConnectClient();
@@ -40,6 +42,16 @@ export class WebSerialEffects {
       }
     } catch {
       // readUntilPrompt が失敗しても接続成功扱い
+    }
+  }
+
+  private async runPostConnectInit(): Promise<void> {
+    try {
+      await this.initializeAfterConnect();
+    } finally {
+      if (this.service.isConnected()) {
+        this.store.dispatch(WebSerialActions.postConnectInitComplete());
+      }
     }
   }
 
@@ -62,8 +74,8 @@ export class WebSerialEffects {
                 })
               );
             }
-            // ポート確立直後に UI を接続済みへ（initializeAfterConnect はターミナル表示後に続行）
-            void this.initializeAfterConnect().catch((err) =>
+            // ポート確立直後に UI を接続済みへ（initializeAfterConnect はバックグラウンドで続行）
+            void this.runPostConnectInit().catch((err) =>
               console.warn('Post-connect initialization failed', err)
             );
             return of(
