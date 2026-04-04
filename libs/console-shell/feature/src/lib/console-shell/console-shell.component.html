@@ -1,42 +1,49 @@
-<lib-header-toolbar
-  [connected$]="connected$"
-  [rightNavOpen]="rightNavOpen()"
-  (eventConnect)="onConnect()"
-  (eventDisConnect)="onDisConnect()"
-  (toolbarAction)="onToolbarAction($event)"
-  (toggleRightSidebar)="onToggleRightSidebar()"
-/>
-@if (connected$ | async; as connected) {
-  <div class="grid grid-cols-[auto_1fr_auto] grid-rows-[auto_1fr] gap-2 h-screen">
-    <div class="col-span-3 min-h-0 shrink-0">
-      <lib-breadcrumb [segments]="breadcrumbSegments()" />
-    </div>
-    @if (leftNavOpen()) {
-      <div class="min-h-0 overflow-auto">
-        <lib-left-sidebar />
-      </div>
-    }
+<div class="flex h-screen min-h-0 flex-col">
+  <lib-header-toolbar
+    class="shrink-0"
+    [connected$]="connected$"
+    [rightNavOpen]="rightNavOpen()"
+    (eventConnect)="onConnect()"
+    (eventDisConnect)="onDisConnect()"
+    (toolbarAction)="onToolbarAction($event)"
+    (toggleRightSidebar)="onToggleRightSidebar()"
+  />
+  <div class="flex min-h-0 flex-1 flex-col overflow-hidden">
+    @if (connected$ | async; as connected) {
+      <div
+        class="grid h-full min-h-0 grid-cols-[auto_1fr_auto] grid-rows-[auto_1fr] gap-2"
+      >
+        <div class="col-span-3 min-h-0 shrink-0">
+          <lib-breadcrumb [segments]="breadcrumbSegments()" />
+        </div>
+        @if (leftNavOpen()) {
+          <div class="min-h-0 overflow-auto">
+            <lib-left-sidebar />
+          </div>
+        }
 
-    <div class="min-h-0 overflow-auto">
-      @switch (activePanel()) {
-        @case ('terminal') {
-          <choh-terminal />
-        }
-        @case ('editor') {
-          <choh-editor-page />
-        }
-        @case ('example') {
-          <choh-example />
-        }
-      }
-    </div>
+        <div class="min-h-0 overflow-auto">
+          @switch (activePanel()) {
+            @case ('terminal') {
+              <choh-terminal />
+            }
+            @case ('editor') {
+              <choh-editor-page />
+            }
+            @case ('example') {
+              <choh-example />
+            }
+          }
+        </div>
 
-    @if (rightNavOpen()) {
-      <div class="min-h-0 overflow-auto">
-        <lib-right-sidebar />
+        @if (rightNavOpen()) {
+          <div class="min-h-0 overflow-auto">
+            <lib-right-sidebar />
+          </div>
+        }
       </div>
+    } @else {
+      <lib-connect-page />
     }
   </div>
-} @else {
-  <lib-connect-page />
-}
+</div>

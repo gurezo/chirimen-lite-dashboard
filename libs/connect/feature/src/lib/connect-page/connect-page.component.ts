@@ -13,10 +13,11 @@ import { filter, map } from 'rxjs';
 
 @Component({
   selector: 'lib-connect-page',
+  host: { class: 'flex min-h-0 flex-1 flex-col' },
   imports: [AsyncPipe, ConnectButtonComponent, ConnectionStatusComponent],
   template: `
     <section
-      class="text-center h-[80vh] flex flex-col justify-center items-center gap-4"
+      class="flex h-full min-h-0 flex-col items-center justify-center gap-4 text-center"
     >
       @if (connectionStatus$ | async; as status) {
         <lib-connection-status
