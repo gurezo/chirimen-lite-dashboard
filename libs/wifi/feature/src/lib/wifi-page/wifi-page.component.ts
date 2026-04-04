@@ -37,10 +37,6 @@ export class WifiPageComponent {
   private readonly wifiScan = inject(WifiScanService);
   private readonly wifiReboot = inject(WifiRebootFlowService);
 
-  closeModal(): void {
-    this.dialogService.close();
-  }
-
   private ensureSerial(): boolean {
     if (!this.serial.isConnected()) {
       this.notify.warning('WiFi', 'シリアル接続してください');
