@@ -32,8 +32,6 @@ export class HeaderToolbarComponent {
   eventConnect = output<void>();
   eventDisConnect = output<void>();
   toolbarAction = output<ToolbarAction>();
-  rightNavOpen = input<boolean>(true);
-  toggleRightSidebar = output<void>();
 
   readonly toolbarActions = [
     { name: 'wifi', icon: 'signal_wifi_4_bar' },
