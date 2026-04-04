@@ -1,7 +1,22 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import {
+  isConnected,
+  selectIsPostConnectInitDone,
+} from '@libs-web-serial-state';
 import { FileListService } from '@libs-file-manager-data-access';
 import { FileTreeComponent } from '@libs-file-manager-ui';
 import { FileTreeNode, joinPath } from '@libs-file-manager-util';
+import { combineLatest, Subscription } from 'rxjs';
+import { filter, map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'lib-file-tree-feature',
@@ -53,8 +68,13 @@ import { FileTreeNode, joinPath } from '@libs-file-manager-util';
     </section>
   `,
 })
-export class FileTreeFeatureComponent implements OnInit {
+export class FileTreeFeatureComponent implements OnInit, OnDestroy {
   private fileList = inject(FileListService);
+  private store = inject(Store);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private loadSubscription?: Subscription;
+
   @Output() readonly fileSelected = new EventEmitter<string>();
 
   nodes: FileTreeNode[] = [];
@@ -62,8 +82,37 @@ export class FileTreeFeatureComponent implements OnInit {
   loading = false;
   errorMessage: string | null = null;
 
-  async ngOnInit(): Promise<void> {
-    await this.loadCurrentPath();
+  ngOnInit(): void {
+    const terminal$ = this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+      map(() => this.isTerminalRoute()),
+      startWith(this.isTerminalRoute()),
+    );
+
+    this.loadSubscription = combineLatest([
+      this.store.select(isConnected),
+      this.store.select(selectIsPostConnectInitDone),
+      terminal$,
+    ])
+      .pipe(
+        filter(
+          ([connected, postConnectDone, terminal]) =>
+            connected && postConnectDone && terminal,
+        ),
+      )
+      .subscribe(() => {
+        void this.loadCurrentPath();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.loadSubscription?.unsubscribe();
+  }
+
+  private isTerminalRoute(): boolean {
+    return (
+      this.activatedRoute.firstChild?.snapshot.routeConfig?.path === 'terminal'
+    );
   }
 
   async reload(): Promise<void> {
