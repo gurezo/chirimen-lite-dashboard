@@ -141,11 +141,16 @@ describe('ConsoleShellComponent', () => {
     });
   });
 
-  it('should open dialog when wifi action is clicked', () => {
+  it('should navigate to wifi when wifi action is clicked', () => {
     component.onToolbarAction('wifi');
 
-    expect(openShellDialog).toHaveBeenCalledWith('wifi');
-    expect(openDialog).toHaveBeenCalledTimes(1);
+    expect(closeDialog).toHaveBeenCalledTimes(1);
+    expect(closeAllDialog).toHaveBeenCalledTimes(1);
+    expect(navigateSpy).toHaveBeenCalledWith(['wifi'], {
+      relativeTo: activatedRouteMock,
+    });
+    expect(openShellDialog).not.toHaveBeenCalled();
+    expect(openDialog).not.toHaveBeenCalled();
   });
 
   it('should request i2cdetect in terminal when i2c action is clicked', () => {

@@ -14,14 +14,23 @@ describe('buildConsoleShellBreadcrumbSegments', () => {
   it('appends dialog label when a dialog is open', () => {
     const segments = buildConsoleShellBreadcrumbSegments({
       activePanel: 'terminal',
-      activeDialog: 'wifi',
+      activeDialog: 'setup',
       selectedFilePath: null,
     });
     expect(segments.map((s) => s.label)).toEqual([
       'Console',
       'Terminal',
-      'WiFi',
+      'Setup',
     ]);
+  });
+
+  it('uses wifi as panel segment when wifi route is active', () => {
+    const segments = buildConsoleShellBreadcrumbSegments({
+      activePanel: 'wifi',
+      activeDialog: 'none',
+      selectedFilePath: null,
+    });
+    expect(segments.map((s) => s.label)).toEqual(['Console', 'WiFi']);
   });
 
   it('appends file basename in editor when a file is selected', () => {

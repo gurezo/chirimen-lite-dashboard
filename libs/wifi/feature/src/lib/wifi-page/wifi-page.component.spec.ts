@@ -22,7 +22,6 @@ describe('WifiPageComponent', () => {
         {
           provide: DialogService,
           useValue: {
-            close: vi.fn(),
             open: vi.fn().mockReturnValue(dialogRef),
           },
         },

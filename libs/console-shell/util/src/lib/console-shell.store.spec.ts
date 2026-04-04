@@ -19,7 +19,7 @@ describe('ConsoleShellStore', () => {
     store.setActivePanel('editor');
     store.closeRightNav();
     store.setSelectedFilePath('/foo');
-    store.openDialog('wifi');
+    store.openDialog('setup');
 
     store.applyConnectedLayout();
 
