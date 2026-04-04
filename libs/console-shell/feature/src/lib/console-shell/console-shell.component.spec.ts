@@ -64,6 +64,8 @@ describe('ConsoleShellComponent', () => {
           provide: ConsoleShellStore,
           useValue: {
             activePanel: () => 'terminal',
+            activeDialog: () => 'none',
+            selectedFilePath: () => null,
             rightNavOpen: () => true,
             setActivePanel,
             toggleRightNav: vi.fn(),
@@ -127,5 +129,71 @@ describe('ConsoleShellComponent', () => {
     expect(requestTerminalCommand).toHaveBeenCalledWith('i2cdetect -y 1');
     expect(openShellDialog).not.toHaveBeenCalled();
     expect(openDialog).not.toHaveBeenCalled();
+  });
+
+  it('should set grid template columns with fixed right pane when right nav is open', () => {
+    expect(component.gridTemplateColumns()).toBe('280px minmax(0, 1fr) 96px');
+  });
+});
+
+describe('ConsoleShellComponent gridTemplateColumns when right nav closed', () => {
+  let component: ConsoleShellComponent;
+  let fixture: ComponentFixture<ConsoleShellComponent>;
+  let storeSelect: ReturnType<typeof vi.fn>;
+
+  beforeEach(async () => {
+    storeSelect = vi
+      .fn()
+      .mockReturnValueOnce(of(false))
+      .mockReturnValueOnce(of(''))
+      .mockReturnValueOnce(of(''))
+      .mockReturnValueOnce(of(false));
+
+    await TestBed.configureTestingModule({
+      imports: [ConsoleShellComponent],
+      providers: [
+        provideRouter([]),
+        {
+          provide: Store,
+          useValue: { select: storeSelect, dispatch: vi.fn() },
+        },
+        {
+          provide: SerialNotificationService,
+          useValue: {
+            notifyConnectionSuccess: vi.fn(),
+            notifyConnectionError: vi.fn(),
+          },
+        },
+        {
+          provide: DialogService,
+          useValue: { open: vi.fn(), closeAll: vi.fn() },
+        },
+        {
+          provide: ConsoleShellStore,
+          useValue: {
+            activePanel: () => 'terminal',
+            activeDialog: () => 'none',
+            selectedFilePath: () => null,
+            rightNavOpen: () => false,
+            setActivePanel: vi.fn(),
+            toggleRightNav: vi.fn(),
+            openDialog: vi.fn(),
+            closeDialog: vi.fn(),
+          },
+        },
+        {
+          provide: TerminalCommandRequestService,
+          useValue: { requestCommand: vi.fn() },
+        },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ConsoleShellComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should set grid template columns with 0px right track when right nav is closed', () => {
+    expect(component.gridTemplateColumns()).toBe('280px minmax(0, 1fr) 0px');
   });
 });
