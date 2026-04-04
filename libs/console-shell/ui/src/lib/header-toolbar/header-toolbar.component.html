@@ -1,25 +1,31 @@
 <header>
-  <div class="border-b border-gray-200 px-4">
-    <div class="flex items-center py-4" routerLink="/">
+  <div
+    class="flex items-center gap-4 border-b border-gray-200 px-4 py-4"
+  >
+    <div class="shrink-0 cursor-pointer" routerLink="/">
       <img
         src="CHIRIMEN-banner.png"
         alt="Web Serial Console"
-        class="mr-4 block h-[67px] w-64"
+        class="block h-[67px] w-64"
       />
     </div>
-  </div>
-  @if (connected$() | async) {
-    <div class="flex flex-wrap items-center justify-end gap-2 px-4 py-2">
-      @for (action of toolbarActions; track action.name) {
-        <button
-          mat-icon-button
-          [attr.aria-label]="action.name"
-          type="button"
-          (click)="toolbarAction.emit(action.name)"
-        >
-          <mat-icon>{{ action.icon }}</mat-icon>
-        </button>
+    <div
+      class="flex min-w-0 flex-1 flex-wrap items-center justify-end gap-2"
+    >
+      @if (connected$() | async) {
+        @for (action of toolbarActions; track action.name) {
+          <button
+            mat-icon-button
+            [attr.aria-label]="action.name"
+            type="button"
+            (click)="toolbarAction.emit(action.name)"
+          >
+            <mat-icon>{{ action.icon }}</mat-icon>
+          </button>
+        }
       }
+    </div>
+    <div class="flex shrink-0 items-center">
       <mat-icon [matMenuTriggerFor]="menu">menu</mat-icon>
       <mat-menu #menu="matMenu">
         <button mat-menu-item (click)="eventDisConnect.emit()">
@@ -28,5 +34,5 @@
         </button>
       </mat-menu>
     </div>
-  }
+  </div>
 </header>
