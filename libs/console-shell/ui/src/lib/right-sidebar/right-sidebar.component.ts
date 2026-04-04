@@ -9,38 +9,7 @@ import { PinAssignComponent } from '@libs-pin-assign-panel-ui';
   host: {
     class: 'flex min-h-0 min-w-0 flex-1 flex-col',
   },
-  template: `
-    <div
-      class="right-sidebar flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden"
-    >
-      <div
-        class="flex shrink-0 flex-col items-center gap-1 border-b border-gray-200 py-2"
-      >
-        <mat-icon aria-hidden="true">fiber_pin</mat-icon>
-        <button
-          mat-icon-button
-          type="button"
-          [attr.aria-label]="
-            rightNavOpen() ? 'Close right panel' : 'Open right panel'
-          "
-          (click)="toggleRightSidebar.emit()"
-        >
-          <mat-icon>
-            @if (rightNavOpen()) {
-              right_panel_close
-            } @else {
-              right_panel_open
-            }
-          </mat-icon>
-        </button>
-      </div>
-      @if (rightNavOpen()) {
-        <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-          <choh-pin-assign />
-        </div>
-      }
-    </div>
-  `,
+  templateUrl: './right-sidebar.component.html',
 })
 export class RightSidebarComponent {
   rightNavOpen = input<boolean>(true);
