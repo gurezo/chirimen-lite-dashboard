@@ -1,19 +1,21 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 import { ConsoleShellStore } from '@libs-console-shell-util';
 import { FileTreeFeatureComponent } from '@libs-file-manager-feature';
 
 @Component({
   selector: 'lib-left-sidebar',
-  imports: [FileTreeFeatureComponent],
+  imports: [FileTreeFeatureComponent, MatIconButton, MatIcon],
   host: {
-    class:
-      'flex min-h-0 flex-1 flex-col overflow-hidden border-r border-gray-200',
+    class: 'flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden',
   },
-  template: `
-    <lib-file-tree-feature (fileSelected)="onFileSelected($event)" />
-  `,
+  templateUrl: './left-sidebar.component.html',
 })
 export class LeftSidebarComponent {
+  leftNavOpen = input<boolean>(true);
+  toggleLeftSidebar = output<void>();
+
   private shellStore = inject(ConsoleShellStore);
 
   onFileSelected(path: string): void {
