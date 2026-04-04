@@ -1,8 +1,6 @@
 /// <reference types="vitest/globals" />
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DefaultUrlSerializer, NavigationEnd, Router } from '@angular/router';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { Subject } from 'rxjs';
 import { initialWebSerialState } from '@libs-web-serial-state';
 import { FileListService } from '@libs-file-manager-data-access';
 import { FileTreeNode } from '@libs-file-manager-util';
@@ -13,16 +11,12 @@ describe('FileTreeFeatureComponent', () => {
   let fixture: ComponentFixture<FileTreeFeatureComponent>;
   let mockStore: MockStore;
   const listMock = vi.fn<() => Promise<FileTreeNode[]>>();
-  const routerEvents = new Subject<NavigationEnd>();
-  const urlSerializer = new DefaultUrlSerializer();
-  let routerUrl = '/editor';
 
   beforeEach(async () => {
     listMock.mockResolvedValue([
       { name: 'docs', path: './docs', isDirectory: true },
       { name: 'main.ts', path: './main.ts', isDirectory: false },
     ]);
-    routerUrl = '/editor';
 
     await TestBed.configureTestingModule({
       imports: [FileTreeFeatureComponent],
@@ -32,16 +26,6 @@ describe('FileTreeFeatureComponent', () => {
             webSerial: { ...initialWebSerialState },
           },
         }),
-        {
-          provide: Router,
-          useValue: {
-            events: routerEvents.asObservable(),
-            get url() {
-              return routerUrl;
-            },
-            parseUrl: (rawUrl: string) => urlSerializer.parse(rawUrl),
-          },
-        },
         {
           provide: FileListService,
           useValue: { list: listMock },
@@ -59,7 +43,7 @@ describe('FileTreeFeatureComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('does not list until connected, post-connect init done, and terminal route', async () => {
+  it('does not list until connected and post-connect init done', async () => {
     await fixture.whenStable();
     expect(listMock).not.toHaveBeenCalled();
 
@@ -67,7 +51,7 @@ describe('FileTreeFeatureComponent', () => {
       webSerial: {
         ...initialWebSerialState,
         isConnected: true,
-        isPostConnectInitDone: true,
+        isPostConnectInitDone: false,
       },
     });
     fixture.detectChanges();
@@ -75,7 +59,7 @@ describe('FileTreeFeatureComponent', () => {
     expect(listMock).not.toHaveBeenCalled();
   });
 
-  it('loads current path when connected, post-connect done, and on terminal route', async () => {
+  it('loads current path when connected and post-connect init done', async () => {
     mockStore.setState({
       webSerial: {
         ...initialWebSerialState,
@@ -83,8 +67,6 @@ describe('FileTreeFeatureComponent', () => {
         isPostConnectInitDone: true,
       },
     });
-    routerUrl = '/terminal';
-    routerEvents.next(new NavigationEnd(1, '/', '/terminal'));
     await fixture.whenStable();
     await Promise.resolve();
     await Promise.resolve();

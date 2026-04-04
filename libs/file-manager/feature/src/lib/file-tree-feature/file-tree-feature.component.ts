@@ -6,7 +6,6 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { NavigationEnd, PRIMARY_OUTLET, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
   isConnected,
@@ -16,7 +15,7 @@ import { FileListService } from '@libs-file-manager-data-access';
 import { FileTreeComponent } from '@libs-file-manager-ui';
 import { FileTreeNode, joinPath } from '@libs-file-manager-util';
 import { combineLatest, Subscription } from 'rxjs';
-import { filter, map, startWith } from 'rxjs/operators';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'lib-file-tree-feature',
@@ -71,7 +70,6 @@ import { filter, map, startWith } from 'rxjs/operators';
 export class FileTreeFeatureComponent implements OnInit, OnDestroy {
   private fileList = inject(FileListService);
   private store = inject(Store);
-  private router = inject(Router);
   private loadSubscription?: Subscription;
 
   @Output() readonly fileSelected = new EventEmitter<string>();
@@ -82,22 +80,15 @@ export class FileTreeFeatureComponent implements OnInit, OnDestroy {
   errorMessage: string | null = null;
 
   ngOnInit(): void {
-    const terminal$ = this.router.events.pipe(
-      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
-      map(() => this.isTerminalRoute()),
-      startWith(this.isTerminalRoute()),
-    );
-
     this.loadSubscription = combineLatest([
       this.store.select(isConnected),
       this.store.select(selectIsPostConnectInitDone),
-      terminal$,
     ])
       .pipe(
-        filter(
-          ([connected, postConnectDone, terminal]) =>
-            connected && postConnectDone && terminal,
+        distinctUntilChanged(
+          (a, b) => a[0] === b[0] && a[1] === b[1],
         ),
+        filter(([connected, postConnectDone]) => connected && postConnectDone),
       )
       .subscribe(() => {
         void this.loadCurrentPath();
@@ -106,20 +97,6 @@ export class FileTreeFeatureComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.loadSubscription?.unsubscribe();
-  }
-
-  /**
-   * lazy `loadComponent` だけの子ルートでは `ActivatedRoute.snapshot.routeConfig.path`
-   * が期待どおり取れないことがあるため、実際の URL（primary outlet の末尾セグメント）で判定する。
-   */
-  private isTerminalRoute(): boolean {
-    const tree = this.router.parseUrl(this.router.url);
-    const primary = tree.root.children[PRIMARY_OUTLET];
-    const segments = primary?.segments ?? [];
-    return (
-      segments.length > 0 &&
-      segments[segments.length - 1].path === 'terminal'
-    );
   }
 
   async reload(): Promise<void> {
