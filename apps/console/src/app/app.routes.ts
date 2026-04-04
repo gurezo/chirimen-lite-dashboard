@@ -7,6 +7,24 @@ export const routes: Routes = [
     loadComponent: () =>
       import('@libs-console-shell-feature').then((m) => m.ConsoleShellComponent),
     canActivate: [browserCheckGuard],
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'terminal' },
+      {
+        path: 'terminal',
+        loadComponent: () =>
+          import('@libs-terminal-feature').then((m) => m.TerminalPageComponent),
+      },
+      {
+        path: 'editor',
+        loadComponent: () =>
+          import('@libs-editor-feature').then((m) => m.EditorPageComponent),
+      },
+      {
+        path: 'example',
+        loadComponent: () =>
+          import('@libs-example-feature').then((m) => m.ExampleComponent),
+      },
+    ],
   },
   {
     path: 'unsupported-browser',
