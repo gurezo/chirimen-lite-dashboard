@@ -1,5 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { computed, Injectable, signal } from '@angular/core';
 
 type ConsoleShellPanel = 'terminal' | 'editor' | 'example';
 type ConsoleShellDialog = 'none' | 'wifi' | 'setup' | 'remote';
@@ -8,7 +7,6 @@ export interface ConsoleShellState {
   activePanel: ConsoleShellPanel;
   leftNavOpen: boolean;
   rightNavOpen: boolean;
-  isConnected: boolean;
   selectedFilePath: string | null;
   activeDialog: ConsoleShellDialog;
 }
@@ -17,13 +15,10 @@ export interface ConsoleShellState {
   providedIn: 'root',
 })
 export class ConsoleShellStore {
-  private readonly ngRxStore = inject(Store);
-
   private readonly stateSignal = signal<ConsoleShellState>({
     activePanel: 'terminal',
     leftNavOpen: true,
     rightNavOpen: true,
-    isConnected: false,
     selectedFilePath: null,
     activeDialog: 'none',
   });
@@ -40,10 +35,6 @@ export class ConsoleShellStore {
 
   readonly rightNavOpen = computed(
     () => this.stateSignal().rightNavOpen,
-  );
-
-  readonly isConnected = computed(
-    () => this.stateSignal().isConnected,
   );
 
   readonly selectedFilePath = computed(
@@ -100,17 +91,6 @@ export class ConsoleShellStore {
     this.stateSignal.update((state) => ({
       ...state,
       rightNavOpen: false,
-    }));
-  }
-
-  setConnected(connected: boolean): void {
-    this.setConnectionStatus(connected);
-  }
-
-  setConnectionStatus(isConnected: boolean): void {
-    this.stateSignal.update((state) => ({
-      ...state,
-      isConnected,
     }));
   }
 
