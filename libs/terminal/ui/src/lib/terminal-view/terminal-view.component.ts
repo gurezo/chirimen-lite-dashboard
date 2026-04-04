@@ -8,6 +8,7 @@ import {
   input,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { FitAddon } from '@xterm/addon-fit';
 import { Terminal } from '@xterm/xterm';
 import {
   TerminalCommandRequestService,
@@ -20,7 +21,17 @@ import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 
 @Component({
   selector: 'choh-terminal-view',
-  template: ` <div #consoleDom class="mt-2"></div> `,
+  host: {
+    class: 'block h-full min-h-0 min-w-0',
+  },
+  template: `
+    <div class="flex h-full min-h-0 min-w-0 flex-col">
+      <div
+        #consoleDom
+        class="min-h-0 min-w-0 flex-1 overflow-hidden"
+      ></div>
+    </div>
+  `,
 })
 export class TerminalViewComponent implements AfterViewInit, OnDestroy {
   /**
@@ -36,17 +47,22 @@ export class TerminalViewComponent implements AfterViewInit, OnDestroy {
 
   readonly xterminal = new Terminal(xtermConsoleConfigOptions);
 
+  private readonly fitAddon = new FitAddon();
+
   /** Serializes interactive and toolbar-initiated exec so only one runs at a time. */
   private execTail: Promise<void> = Promise.resolve();
 
   private commandRequestSub?: Subscription;
+  private resizeObserver?: ResizeObserver;
 
   ngAfterViewInit(): void {
     this.configTerminal();
   }
 
   ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
     this.commandRequestSub?.unsubscribe();
+    this.xterminal.dispose();
   }
 
   private enqueueExec<T>(job: () => Promise<T>): Promise<T> {
@@ -62,7 +78,12 @@ export class TerminalViewComponent implements AfterViewInit, OnDestroy {
     const el = this.consoleDomRef?.nativeElement;
     if (!el) return;
 
+    this.xterminal.loadAddon(this.fitAddon);
     this.xterminal.open(el);
+    this.fitTerminal();
+    this.resizeObserver = new ResizeObserver(() => this.fitTerminal());
+    this.resizeObserver.observe(el);
+
     this.xterminal.reset();
     this.xterminal.writeln('$ ');
 
@@ -117,5 +138,13 @@ export class TerminalViewComponent implements AfterViewInit, OnDestroy {
         });
       },
     );
+  }
+
+  private fitTerminal(): void {
+    try {
+      this.fitAddon.fit();
+    } catch {
+      // Dimensions may be zero before layout stabilizes
+    }
   }
 }

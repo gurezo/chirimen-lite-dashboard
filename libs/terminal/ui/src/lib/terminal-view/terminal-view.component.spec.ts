@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 import { TerminalCommandRequestService } from '@libs-terminal-util';
@@ -26,6 +26,11 @@ describe('TerminalViewComponent', () => {
 
     fixture = TestBed.createComponent(TerminalViewComponent);
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture.destroy();
+    TestBed.resetTestingModule();
   });
 
   it('should create', () => {
