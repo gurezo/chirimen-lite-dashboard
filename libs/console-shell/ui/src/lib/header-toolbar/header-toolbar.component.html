@@ -1,6 +1,6 @@
 <header>
   <div
-    class="flex items-center gap-4 border-b border-gray-200 px-4 py-4"
+    class="flex items-center justify-between gap-4 border-b border-gray-200 px-4 py-4"
   >
     <div class="shrink-0 cursor-pointer" routerLink="/">
       <img
@@ -8,22 +8,6 @@
         alt="Web Serial Console"
         class="block h-[67px] w-64"
       />
-    </div>
-    <div
-      class="flex min-w-0 flex-1 flex-wrap items-center justify-end gap-2"
-    >
-      @if (connected$() | async) {
-        @for (action of toolbarActions; track action.name) {
-          <button
-            mat-icon-button
-            [attr.aria-label]="action.name"
-            type="button"
-            (click)="toolbarAction.emit(action.name)"
-          >
-            <mat-icon>{{ action.icon }}</mat-icon>
-          </button>
-        }
-      }
     </div>
     <div class="flex shrink-0 items-center">
       <mat-icon [matMenuTriggerFor]="menu">menu</mat-icon>

@@ -1,7 +1,6 @@
 /// <reference types="vitest/globals" />
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { of } from 'rxjs';
 import { HeaderToolbarComponent } from './header-toolbar.component';
 
 describe('HeaderToolbarComponent', () => {
@@ -16,7 +15,6 @@ describe('HeaderToolbarComponent', () => {
 
     fixture = TestBed.createComponent(HeaderToolbarComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('connected$', of(false));
     fixture.detectChanges();
   });
 
@@ -24,28 +22,9 @@ describe('HeaderToolbarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should not render toolbar action buttons when disconnected', () => {
-    expect(
-      fixture.nativeElement.querySelector('button[aria-label="editor"]'),
-    ).toBeNull();
-  });
-
-  it('should render burger menu trigger when disconnected', () => {
+  it('should render burger menu trigger', () => {
     expect(
       fixture.nativeElement.querySelector('.mat-mdc-menu-trigger'),
     ).not.toBeNull();
-  });
-
-  it('should emit toolbarAction when action icon is clicked', () => {
-    fixture.componentRef.setInput('connected$', of(true));
-    fixture.detectChanges();
-
-    const emitSpy = vi.spyOn(component.toolbarAction, 'emit');
-    const editorButton: HTMLButtonElement | null =
-      fixture.nativeElement.querySelector('button[aria-label="editor"]');
-
-    editorButton?.click();
-
-    expect(emitSpy).toHaveBeenCalledWith('editor');
   });
 });
