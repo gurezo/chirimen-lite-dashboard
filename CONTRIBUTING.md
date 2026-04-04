@@ -54,7 +54,7 @@ Angular のコミットガイドラインに合わせ、コミットメッセー
 | `terminal`            | ターミナル lib（feature / ui / util）                          |
 | `file-manager`        | ファイルマネージャ lib（data-access / feature / ui / util）    |
 | `i2cdetect`           | I2C 検出 lib（ui / data-access / util に分割）                 |
-| `pin-assign-panel`    | ピン割り当てパネル lib（feature / ui / util）                  |
+| `pin-assign-panel`    | ピン割り当てパネル lib（ui）                                   |
 | `remote`              | リモート lib（data-access / feature / ui / util）              |
 | `shared-ui`           | 共有 UI lib                                                    |
 | `shared-guards`       | 共有ガード lib                                                 |
