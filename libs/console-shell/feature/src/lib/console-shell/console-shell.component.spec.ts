@@ -234,8 +234,8 @@ describe('ConsoleShellComponent gridTemplateColumns when right nav closed', () =
     fixture.detectChanges();
   });
 
-  it('should set grid template columns with 0px right track when right nav is closed', () => {
-    expect(component.gridTemplateColumns()).toBe('280px minmax(0, 1fr) 0px');
+  it('should set grid template columns with collapsed rail width when right nav is closed', () => {
+    expect(component.gridTemplateColumns()).toBe('280px minmax(0, 1fr) 48px');
   });
 });
 
@@ -313,6 +313,19 @@ describe('ConsoleShellComponent layout DOM (connected vs disconnected)', () => {
     expect(root.querySelector('lib-left-sidebar')).toBeTruthy();
     expect(root.querySelector('choh-terminal')).toBeTruthy();
     expect(root.querySelector('lib-right-sidebar')).toBeTruthy();
+  });
+
+  it('keeps right sidebar mounted when right nav is collapsed after connect', () => {
+    isConnected$.next(true);
+    fixture.detectChanges();
+
+    const shellStore = TestBed.inject(ConsoleShellStore);
+    shellStore.closeRightNav();
+    fixture.detectChanges();
+
+    const root = fixture.nativeElement as HTMLElement;
+    expect(root.querySelector('lib-right-sidebar')).toBeTruthy();
+    expect(root.querySelector('choh-pin-assign')).toBeNull();
   });
 
   it('resets active panel to terminal when connection becomes true', () => {
