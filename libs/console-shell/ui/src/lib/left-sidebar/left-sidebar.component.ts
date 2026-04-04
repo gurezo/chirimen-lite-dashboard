@@ -1,4 +1,5 @@
 import { Component, inject, input, output } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { ConsoleShellStore } from '@libs-console-shell-util';
@@ -17,9 +18,11 @@ export class LeftSidebarComponent {
   toggleLeftSidebar = output<void>();
 
   private shellStore = inject(ConsoleShellStore);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   onFileSelected(path: string): void {
     this.shellStore.setSelectedFilePath(path);
-    this.shellStore.setActivePanel('editor');
+    void this.router.navigate(['editor'], { relativeTo: this.route });
   }
 }
