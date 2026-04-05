@@ -1,43 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { SerialError, SerialErrorCode } from '@gurezo/web-serial-rxjs';
 import { catchError, of, switchMap } from 'rxjs';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
+import { getWebSerialConnectFailureMessage } from '@libs-web-serial-util';
 import { WebSerialActions } from './web-serial.actions';
 
-// エラーメッセージ定数
-const ERROR_MESSAGES = {
-  CONNECTION_SUCCESS: 'Web Serial Open Success',
-  CONNECTION_FAILED: '接続に失敗しました',
-  NO_PORT_SELECTED: 'ポートが選択されませんでした',
-  UNSUPPORTED_DEVICE:
-    'サポートされていないデバイスです。Raspberry Pi Zero以外のデバイスは接続できません。',
-} as const;
-
-function connectFailureMessage(error: unknown): string {
-  if (error instanceof SerialError) {
-    if (error.is(SerialErrorCode.OPERATION_CANCELLED)) {
-      return ERROR_MESSAGES.NO_PORT_SELECTED;
-    }
-    if (
-      error.is(SerialErrorCode.PORT_NOT_AVAILABLE) ||
-      error.is(SerialErrorCode.PORT_OPEN_FAILED)
-    ) {
-      return ERROR_MESSAGES.UNSUPPORTED_DEVICE;
-    }
-  }
-  if (error instanceof Error && error.message?.includes('No port selected')) {
-    return ERROR_MESSAGES.NO_PORT_SELECTED;
-  }
-  if (
-    error instanceof Error &&
-    (error.message?.includes('not a Raspberry Pi Zero') ||
-      error.message?.includes('not supported'))
-  ) {
-    return ERROR_MESSAGES.UNSUPPORTED_DEVICE;
-  }
-  return ERROR_MESSAGES.CONNECTION_FAILED;
-}
+const CONNECTION_SUCCESS_MESSAGE = 'Web Serial Open Success';
 
 /**
  * WebSerialEffects
@@ -49,43 +17,38 @@ export class WebSerialEffects {
   actions$ = inject(Actions);
   service = inject(SerialFacadeService);
 
-  init$ = createEffect(
-    () => this.actions$.pipe(ofType(WebSerialActions.init)),
-    { dispatch: false }
-  );
-
   connect$ = createEffect(() =>
     this.actions$.pipe(
       ofType(WebSerialActions.onConnect),
       switchMap(() =>
         this.service.connect$().pipe(
-          switchMap((success) => {
-            if (!success) {
+          switchMap((result) => {
+            if (!result.ok) {
               return of(
                 WebSerialActions.onConnectFail({
                   isConnected: false,
-                  errorMessage: ERROR_MESSAGES.CONNECTION_FAILED,
-                })
+                  errorMessage: result.errorMessage,
+                }),
               );
             }
             return of(
               WebSerialActions.onConnectSuccess({
                 isConnected: true,
-                message: ERROR_MESSAGES.CONNECTION_SUCCESS,
-              })
+                message: CONNECTION_SUCCESS_MESSAGE,
+              }),
             );
           }),
           catchError((error: unknown) => {
             return [
               WebSerialActions.onConnectFail({
                 isConnected: false,
-                errorMessage: connectFailureMessage(error),
+                errorMessage: getWebSerialConnectFailureMessage(error),
               }),
             ];
-          })
-        )
-      )
-    )
+          }),
+        ),
+      ),
+    ),
   );
 
   disConnect$ = createEffect(
