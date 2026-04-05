@@ -17,12 +17,18 @@ import {
   SerialCommandService,
 } from './serial-command.service';
 import {
+  getWebSerialConnectFailureMessage,
   SERIAL_TIMEOUT,
   type SerialExecOptions,
 } from '@libs-web-serial-util';
 import { PiZeroShellReadinessService } from './pi-zero-shell-readiness.service';
 import { SerialTransportService } from './serial-transport.service';
 import { SerialValidatorService } from './serial-validator.service';
+
+/** {@link SerialFacadeService#connect$} の結果 */
+export type SerialFacadeConnectResult =
+  | { ok: true }
+  | { ok: false; errorMessage: string };
 
 /**
  * Serial Facade サービス
@@ -62,7 +68,7 @@ export class SerialFacadeService {
    *
    * @param baudRate ボーレート (デフォルト: 115200)
    */
-  connect$(baudRate = 115200): Observable<boolean> {
+  connect$(baudRate = 115200): Observable<SerialFacadeConnectResult> {
     return defer(() => {
       const preConnect$ = this.isConnected()
         ? this.disconnect$()
@@ -72,17 +78,23 @@ export class SerialFacadeService {
         switchMap((result) => {
           if ('error' in result) {
             console.error('Connection failed:', result.error);
-            return of(false);
+            return of<SerialFacadeConnectResult>({
+              ok: false,
+              errorMessage: result.error,
+            });
           }
           this.startReadStreamSubscription();
           this.connectionEpoch += 1;
           this.shellReadiness.reset();
           this.connectionEstablished.next();
-          return of(true);
+          return of<SerialFacadeConnectResult>({ ok: true });
         }),
-        catchError((error) => {
+        catchError((error: unknown) => {
           console.error('Connection error:', error);
-          return of(false);
+          return of<SerialFacadeConnectResult>({
+            ok: false,
+            errorMessage: getWebSerialConnectFailureMessage(error),
+          });
         })
       );
     });
@@ -95,7 +107,8 @@ export class SerialFacadeService {
    * @returns 接続成功の場合 true、失敗の場合 false
    */
   async connect(baudRate = 115200): Promise<boolean> {
-    return firstValueFrom(this.connect$(baudRate));
+    const result = await firstValueFrom(this.connect$(baudRate));
+    return result.ok;
   }
 
   private startReadStreamSubscription(): void {
