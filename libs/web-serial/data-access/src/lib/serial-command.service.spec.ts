@@ -79,7 +79,18 @@ describe('SerialCommandService', () => {
       timeout: 1000,
       retry: 0,
     });
-    expect(result.stdout).toMatch(/login:\s*$/m);
+    expect(result.stdout).toMatch(/login:\s*/i);
+  });
+
+  it('readUntilPrompt matches Japanese login prompt in buffer', async () => {
+    const { service, chunks } = createService();
+    chunks.next('ホスト名 ログイン: ');
+    const result = await service.readUntilPrompt({
+      prompt: PI_ZERO_SERIAL_LOGIN_LINE_PATTERN,
+      timeout: 1000,
+      retry: 0,
+    });
+    expect(result.stdout).toMatch(/ログイン/);
   });
 
   it('supports RegExp prompt', async () => {

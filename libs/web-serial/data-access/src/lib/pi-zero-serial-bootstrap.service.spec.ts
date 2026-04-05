@@ -4,6 +4,7 @@ import {
   PI_ZERO_LOGIN_PASSWORD,
   PI_ZERO_LOGIN_USER,
   PI_ZERO_PROMPT,
+  PI_ZERO_SERIAL_LOGIN_LINE_PATTERN,
   PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
   SERIAL_TIMEOUT,
 } from '@libs-web-serial-util';
@@ -47,14 +48,14 @@ describe('PiZeroSerialBootstrapService', () => {
     expect(readUntilPrompt).toHaveBeenCalledTimes(1);
     expect(readUntilPrompt).toHaveBeenCalledWith({
       prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-      timeout: SERIAL_TIMEOUT.SHORT,
+      timeout: SERIAL_TIMEOUT.SHELL_PROMPT_PROBE,
     });
     expect(exec).toHaveBeenNthCalledWith(
       1,
       TZ_SET_CMD,
       expect.objectContaining({
         prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-        timeout: SERIAL_TIMEOUT.DEFAULT,
+        timeout: SERIAL_TIMEOUT.SHORT,
       }),
     );
     expect(exec).toHaveBeenNthCalledWith(
@@ -62,7 +63,7 @@ describe('PiZeroSerialBootstrapService', () => {
       TZ_STATUS_CMD,
       expect.objectContaining({
         prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-        timeout: SERIAL_TIMEOUT.DEFAULT,
+        timeout: SERIAL_TIMEOUT.SHORT,
       }),
     );
   });
@@ -89,12 +90,20 @@ describe('PiZeroSerialBootstrapService', () => {
 
     expect(vi.mocked(shellReadiness.setReady)).toHaveBeenCalledWith(true);
     expect(readUntilPrompt).toHaveBeenCalledTimes(2);
+    expect(readUntilPrompt).toHaveBeenNthCalledWith(1, {
+      prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+      timeout: SERIAL_TIMEOUT.SHELL_PROMPT_PROBE,
+    });
+    expect(readUntilPrompt).toHaveBeenNthCalledWith(2, {
+      prompt: PI_ZERO_SERIAL_LOGIN_LINE_PATTERN,
+      timeout: SERIAL_TIMEOUT.DEFAULT,
+    });
     expect(exec).toHaveBeenNthCalledWith(
       1,
       PI_ZERO_LOGIN_USER,
       expect.objectContaining({
         prompt: expect.any(RegExp),
-        timeout: SERIAL_TIMEOUT.LONG,
+        timeout: SERIAL_TIMEOUT.DEFAULT,
       }),
     );
     expect(exec).toHaveBeenNthCalledWith(
@@ -102,7 +111,7 @@ describe('PiZeroSerialBootstrapService', () => {
       PI_ZERO_LOGIN_PASSWORD,
       expect.objectContaining({
         prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-        timeout: SERIAL_TIMEOUT.LONG,
+        timeout: SERIAL_TIMEOUT.DEFAULT,
       }),
     );
     expect(lines.some((l) => l.includes('ログインユーザー'))).toBe(true);
@@ -111,7 +120,7 @@ describe('PiZeroSerialBootstrapService', () => {
       TZ_SET_CMD,
       expect.objectContaining({
         prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-        timeout: SERIAL_TIMEOUT.DEFAULT,
+        timeout: SERIAL_TIMEOUT.SHORT,
       }),
     );
     expect(exec).toHaveBeenNthCalledWith(
@@ -119,7 +128,7 @@ describe('PiZeroSerialBootstrapService', () => {
       TZ_STATUS_CMD,
       expect.objectContaining({
         prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-        timeout: SERIAL_TIMEOUT.DEFAULT,
+        timeout: SERIAL_TIMEOUT.SHORT,
       }),
     );
   });
