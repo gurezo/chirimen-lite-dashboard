@@ -13,10 +13,13 @@ import {
   throwError,
 } from 'rxjs';
 import {
-  CommandExecutionConfig,
   type CommandResult,
   SerialCommandService,
 } from './serial-command.service';
+import {
+  SERIAL_TIMEOUT,
+  type SerialExecOptions,
+} from '@libs-web-serial-util';
 import { PiZeroShellReadinessService } from './pi-zero-shell-readiness.service';
 import { SerialTransportService } from './serial-transport.service';
 import { SerialValidatorService } from './serial-validator.service';
@@ -24,7 +27,7 @@ import { SerialValidatorService } from './serial-validator.service';
 /**
  * Serial Facade サービス
  *
- * Transport / Validator / Command を統合し、シンプルなインターフェースを提供
+ * Transport / Validator（ポート情報） / Command を統合し、シンプルな API を提供
  */
 @Injectable({
   providedIn: 'root',
@@ -163,29 +166,15 @@ export class SerialFacadeService {
   }
 
   /**
-   * @deprecated Use `exec()` / `execRaw()` / `readUntilPrompt()` instead.
-   * コマンドを実行し、指定されたプロンプトまで待機（後方互換）
-   */
-  async executeCommand(
-    cmd: string,
-    prompt: string | RegExp,
-    timeout = 10000,
-  ): Promise<string> {
-    const result = await this.exec(cmd, prompt, timeout);
-    return result.stdout;
-  }
-
-  /**
    * コマンド実行（stdout 相当を返す）
    */
-  async exec(
-    cmd: string,
-    prompt: string | RegExp,
-    timeout = 10000,
-    retry = 0
-  ): Promise<CommandResult> {
-    const config: CommandExecutionConfig = { prompt, timeout, retry };
-    return this.command.exec(cmd, config);
+  async exec(cmd: string, options: SerialExecOptions): Promise<CommandResult> {
+    const {
+      prompt,
+      timeout = SERIAL_TIMEOUT.DEFAULT,
+      retry = 0,
+    } = options;
+    return this.command.exec(cmd, { prompt, timeout, retry });
   }
 
   /**
@@ -193,24 +182,26 @@ export class SerialFacadeService {
    */
   async execRaw(
     cmdRaw: string,
-    prompt: string | RegExp,
-    timeout = 10000,
-    retry = 0
+    options: SerialExecOptions,
   ): Promise<CommandResult> {
-    const config: CommandExecutionConfig = { prompt, timeout, retry };
-    return this.command.execRaw(cmdRaw, config);
+    const {
+      prompt,
+      timeout = SERIAL_TIMEOUT.DEFAULT,
+      retry = 0,
+    } = options;
+    return this.command.execRaw(cmdRaw, { prompt, timeout, retry });
   }
 
   /**
    * 送信せずに prompt まで待機
    */
-  async readUntilPrompt(
-    prompt: string | RegExp,
-    timeout = 10000,
-    retry = 0
-  ): Promise<CommandResult> {
-    const config: CommandExecutionConfig = { prompt, timeout, retry };
-    return this.command.readUntilPrompt(config);
+  async readUntilPrompt(options: SerialExecOptions): Promise<CommandResult> {
+    const {
+      prompt,
+      timeout = SERIAL_TIMEOUT.DEFAULT,
+      retry = 0,
+    } = options;
+    return this.command.readUntilPrompt({ prompt, timeout, retry });
   }
 
   /** 現在のシリアル接続セッション番号（切断後も値は保持され、次回接続で増える） */
@@ -247,51 +238,5 @@ export class SerialFacadeService {
 
   getPort(): SerialPort | null {
     return this.transport.getPort() ?? null;
-  }
-
-  // ============================================
-  // Legacy methods (後方互換性のため)
-  // ============================================
-
-  /**
-   * @deprecated Use connect() instead
-   */
-  async startConnection(baudRate?: number): Promise<void> {
-    const success = await this.connect(baudRate);
-    if (!success) {
-      throw new Error('Failed to start connection');
-    }
-  }
-
-  /**
-   * @deprecated Use disconnect() instead
-   */
-  async terminateConnection(): Promise<void> {
-    return this.disconnect();
-  }
-
-  /**
-   * @deprecated Use write() instead
-   */
-  async portWrite(data: string): Promise<void> {
-    return this.write(data);
-  }
-
-  /**
-   * @deprecated Use executeCommand() instead
-   */
-  async portWritelnWaitfor(
-    cmd: string,
-    prompt: string | RegExp,
-    timeout = 10000,
-  ): Promise<string> {
-    return this.executeCommand(cmd, prompt, timeout);
-  }
-
-  /**
-   * @deprecated Use isConnected() instead
-   */
-  getConnectionStatus(): boolean {
-    return this.isConnected();
   }
 }

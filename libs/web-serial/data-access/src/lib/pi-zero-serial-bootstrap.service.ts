@@ -7,6 +7,7 @@ import {
   PI_ZERO_SERIAL_LOGIN_LINE_PATTERN,
   PI_ZERO_SERIAL_PASSWORD_LINE_PATTERN,
   PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+  SERIAL_TIMEOUT,
 } from '@libs-web-serial-util';
 import { PiZeroShellReadinessService } from './pi-zero-shell-readiness.service';
 import { SerialFacadeService } from './serial-facade.service';
@@ -58,11 +59,10 @@ export class PiZeroSerialBootstrapService {
 
     let atShell = false;
     try {
-      await this.serial.readUntilPrompt(
-        PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-        5000,
-        0,
-      );
+      await this.serial.readUntilPrompt({
+        prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+        timeout: SERIAL_TIMEOUT.SHORT,
+      });
       atShell = true;
     } catch {
       atShell = false;
@@ -70,27 +70,22 @@ export class PiZeroSerialBootstrapService {
 
     if (!atShell) {
       log('[コンソール] ログイン画面を検出しました。');
-      await this.serial.readUntilPrompt(
-        PI_ZERO_SERIAL_LOGIN_LINE_PATTERN,
-        60000,
-        0,
-      );
+      await this.serial.readUntilPrompt({
+        prompt: PI_ZERO_SERIAL_LOGIN_LINE_PATTERN,
+        timeout: SERIAL_TIMEOUT.FILE_TRANSFER,
+      });
       log(
         `[コンソール] ログインユーザー「${PI_ZERO_LOGIN_USER}」を送信中...`,
       );
-      await this.serial.exec(
-        PI_ZERO_LOGIN_USER,
-        PI_ZERO_SERIAL_PASSWORD_LINE_PATTERN,
-        30000,
-        0,
-      );
+      await this.serial.exec(PI_ZERO_LOGIN_USER, {
+        prompt: PI_ZERO_SERIAL_PASSWORD_LINE_PATTERN,
+        timeout: SERIAL_TIMEOUT.LONG,
+      });
       log('[コンソール] パスワードを送信中（画面には表示しません）...');
-      await this.serial.exec(
-        PI_ZERO_LOGIN_PASSWORD,
-        PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-        30000,
-        0,
-      );
+      await this.serial.exec(PI_ZERO_LOGIN_PASSWORD, {
+        prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+        timeout: SERIAL_TIMEOUT.LONG,
+      });
       log('[コンソール] ログインが完了しました。');
     }
 
@@ -98,12 +93,10 @@ export class PiZeroSerialBootstrapService {
     for (const step of client.timezoneSteps) {
       log(step.statusMessage);
       try {
-        const { stdout } = await this.serial.exec(
-          step.command,
-          PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-          10000,
-          0,
-        );
+        const { stdout } = await this.serial.exec(step.command, {
+          prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+          timeout: SERIAL_TIMEOUT.DEFAULT,
+        });
         const cleaned = sanitizeSerialStdout(
           typeof stdout === 'string' ? stdout : '',
           step.command,

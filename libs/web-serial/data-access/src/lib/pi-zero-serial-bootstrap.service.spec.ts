@@ -4,6 +4,7 @@ import {
   PI_ZERO_LOGIN_USER,
   PI_ZERO_PROMPT,
   PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+  SERIAL_TIMEOUT,
 } from '@libs-web-serial-util';
 import { PiZeroSerialBootstrapService } from './pi-zero-serial-bootstrap.service';
 import type { PiZeroShellReadinessService } from './pi-zero-shell-readiness.service';
@@ -41,24 +42,25 @@ describe('PiZeroSerialBootstrapService', () => {
 
     expect(vi.mocked(shellReadiness.setReady)).toHaveBeenCalledWith(true);
     expect(readUntilPrompt).toHaveBeenCalledTimes(1);
-    expect(readUntilPrompt).toHaveBeenCalledWith(
-      PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-      5000,
-      0,
-    );
+    expect(readUntilPrompt).toHaveBeenCalledWith({
+      prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+      timeout: SERIAL_TIMEOUT.SHORT,
+    });
     expect(exec).toHaveBeenNthCalledWith(
       1,
       TZ_SET_CMD,
-      PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-      10000,
-      0,
+      expect.objectContaining({
+        prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+        timeout: SERIAL_TIMEOUT.DEFAULT,
+      }),
     );
     expect(exec).toHaveBeenNthCalledWith(
       2,
       TZ_STATUS_CMD,
-      PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-      10000,
-      0,
+      expect.objectContaining({
+        prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+        timeout: SERIAL_TIMEOUT.DEFAULT,
+      }),
     );
   });
 
@@ -85,31 +87,35 @@ describe('PiZeroSerialBootstrapService', () => {
     expect(exec).toHaveBeenNthCalledWith(
       1,
       PI_ZERO_LOGIN_USER,
-      expect.any(RegExp),
-      30000,
-      0,
+      expect.objectContaining({
+        prompt: expect.any(RegExp),
+        timeout: SERIAL_TIMEOUT.LONG,
+      }),
     );
     expect(exec).toHaveBeenNthCalledWith(
       2,
       PI_ZERO_LOGIN_PASSWORD,
-      PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-      30000,
-      0,
+      expect.objectContaining({
+        prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+        timeout: SERIAL_TIMEOUT.LONG,
+      }),
     );
     expect(lines.some((l) => l.includes('ログインユーザー'))).toBe(true);
     expect(exec).toHaveBeenNthCalledWith(
       3,
       TZ_SET_CMD,
-      PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-      10000,
-      0,
+      expect.objectContaining({
+        prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+        timeout: SERIAL_TIMEOUT.DEFAULT,
+      }),
     );
     expect(exec).toHaveBeenNthCalledWith(
       4,
       TZ_STATUS_CMD,
-      PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-      10000,
-      0,
+      expect.objectContaining({
+        prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+        timeout: SERIAL_TIMEOUT.DEFAULT,
+      }),
     );
   });
 

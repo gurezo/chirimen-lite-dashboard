@@ -2,7 +2,7 @@ import '@angular/compiler';
 import { Injector } from '@angular/core';
 import { FileContentService } from '@libs-wifi-data-access';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
-import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
+import { PI_ZERO_PROMPT, SERIAL_TIMEOUT } from '@libs-web-serial-util';
 import { FileUtils } from '@libs-wifi-util';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { FileService } from './file.service';
@@ -45,8 +45,10 @@ describe('FileService', () => {
       await svc.listLines('');
       expect(exec).toHaveBeenCalledWith(
         `ls -al --quoting-style=c -- ${FileUtils.escapePath('.')}`,
-        PI_ZERO_PROMPT,
-        30000,
+        {
+          prompt: PI_ZERO_PROMPT,
+          timeout: SERIAL_TIMEOUT.LONG,
+        },
       );
     });
 
@@ -55,8 +57,10 @@ describe('FileService', () => {
       await svc.listLines('./my dir');
       expect(exec).toHaveBeenCalledWith(
         `ls -al --quoting-style=c -- ${FileUtils.escapePath('./my dir')}`,
-        PI_ZERO_PROMPT,
-        30000,
+        {
+          prompt: PI_ZERO_PROMPT,
+          timeout: SERIAL_TIMEOUT.LONG,
+        },
       );
     });
   });
@@ -82,8 +86,10 @@ describe('FileService', () => {
       await svc.mkdir('/tmp/a');
       expect(exec).toHaveBeenCalledWith(
         `mkdir -p -- ${FileUtils.escapePath('/tmp/a')}`,
-        PI_ZERO_PROMPT,
-        10000,
+        {
+          prompt: PI_ZERO_PROMPT,
+          timeout: SERIAL_TIMEOUT.DEFAULT,
+        },
       );
     });
   });
@@ -93,8 +99,10 @@ describe('FileService', () => {
       await svc.touch('./file.txt');
       expect(exec).toHaveBeenCalledWith(
         `touch -- ${FileUtils.escapePath('./file.txt')}`,
-        PI_ZERO_PROMPT,
-        10000,
+        {
+          prompt: PI_ZERO_PROMPT,
+          timeout: SERIAL_TIMEOUT.DEFAULT,
+        },
       );
     });
   });
@@ -104,8 +112,10 @@ describe('FileService', () => {
       await svc.remove('./old.txt');
       expect(exec).toHaveBeenCalledWith(
         `rm -- ${FileUtils.escapePath('./old.txt')}`,
-        PI_ZERO_PROMPT,
-        10000,
+        {
+          prompt: PI_ZERO_PROMPT,
+          timeout: SERIAL_TIMEOUT.DEFAULT,
+        },
       );
     });
   });
@@ -152,8 +162,10 @@ describe('FileService', () => {
       await svc.move('./a', './b');
       expect(exec).toHaveBeenCalledWith(
         `mv -- ${FileUtils.escapePath('./a')} ${FileUtils.escapePath('./b')}`,
-        PI_ZERO_PROMPT,
-        10000,
+        {
+          prompt: PI_ZERO_PROMPT,
+          timeout: SERIAL_TIMEOUT.DEFAULT,
+        },
       );
     });
   });

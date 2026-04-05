@@ -20,7 +20,7 @@ import {
   PiZeroSerialBootstrapService,
   SerialFacadeService,
 } from '@libs-web-serial-data-access';
-import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
+import { PI_ZERO_PROMPT, SERIAL_TIMEOUT } from '@libs-web-serial-util';
 
 @Component({
   selector: 'choh-terminal-view',
@@ -131,12 +131,10 @@ export class TerminalViewComponent implements AfterViewInit, OnDestroy {
       this.xterminal,
       async (command) => {
         return this.enqueueExec(async () => {
-          const { stdout } = await this.serial.exec(
-            command,
-            this.remotePrompt(),
-            10000,
-            0,
-          );
+          const { stdout } = await this.serial.exec(command, {
+            prompt: this.remotePrompt(),
+            timeout: SERIAL_TIMEOUT.DEFAULT,
+          });
           return sanitizeSerialStdout(stdout, command, this.remotePrompt());
         });
       },
@@ -154,12 +152,10 @@ export class TerminalViewComponent implements AfterViewInit, OnDestroy {
           }
           this.xterminal.writeln(`$ ${cmd}`);
           try {
-            const { stdout } = await this.serial.exec(
-              cmd,
-              this.remotePrompt(),
-              10000,
-              0,
-            );
+            const { stdout } = await this.serial.exec(cmd, {
+              prompt: this.remotePrompt(),
+              timeout: SERIAL_TIMEOUT.DEFAULT,
+            });
             const out = sanitizeSerialStdout(
               stdout,
               cmd,
