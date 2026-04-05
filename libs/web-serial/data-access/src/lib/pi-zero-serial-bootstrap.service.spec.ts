@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import { from } from 'rxjs';
 import {
   PI_ZERO_LOGIN_PASSWORD,
   PI_ZERO_LOGIN_USER,
@@ -33,7 +34,9 @@ describe('PiZeroSerialBootstrapService', () => {
       isConnected: () => true,
       getConnectionEpoch: () => 1,
       readUntilPrompt,
+      readUntilPrompt$: (o: unknown) => from(readUntilPrompt(o)),
       exec,
+      exec$: (c: string, o: unknown) => from(exec(c, o)),
     } as unknown as SerialFacadeService;
 
     const shellReadiness = createShellReadinessMock();
@@ -74,7 +77,9 @@ describe('PiZeroSerialBootstrapService', () => {
       isConnected: () => true,
       getConnectionEpoch: () => 1,
       readUntilPrompt,
+      readUntilPrompt$: (o: unknown) => from(readUntilPrompt(o)),
       exec,
+      exec$: (c: string, o: unknown) => from(exec(c, o)),
     } as unknown as SerialFacadeService;
 
     const shellReadiness = createShellReadinessMock();
@@ -123,11 +128,14 @@ describe('PiZeroSerialBootstrapService', () => {
     const readUntilPrompt = vi.fn().mockResolvedValue({
       stdout: `${PI_ZERO_PROMPT} `,
     });
+    const exec = vi.fn().mockResolvedValue({ stdout: '' });
     const serial = {
       isConnected: () => true,
       getConnectionEpoch: () => 1,
       readUntilPrompt,
-      exec: vi.fn().mockResolvedValue({ stdout: '' }),
+      readUntilPrompt$: (o: unknown) => from(readUntilPrompt(o)),
+      exec,
+      exec$: (c: string, o: unknown) => from(exec(c, o)),
     } as unknown as SerialFacadeService;
 
     const shellReadiness = createShellReadinessMock();
@@ -154,7 +162,9 @@ describe('PiZeroSerialBootstrapService', () => {
       isConnected: () => true,
       getConnectionEpoch: () => 1,
       readUntilPrompt,
+      readUntilPrompt$: (o: unknown) => from(readUntilPrompt(o)),
       exec,
+      exec$: (c: string, o: unknown) => from(exec(c, o)),
     } as unknown as SerialFacadeService;
 
     const lines: string[] = [];
