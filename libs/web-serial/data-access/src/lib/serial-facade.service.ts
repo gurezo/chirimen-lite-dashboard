@@ -168,40 +168,70 @@ export class SerialFacadeService {
   /**
    * コマンド実行（stdout 相当を返す）
    */
-  async exec(cmd: string, options: SerialExecOptions): Promise<CommandResult> {
+  exec$(
+    cmd: string,
+    options: SerialExecOptions,
+  ): Observable<CommandResult> {
     const {
       prompt,
       timeout = SERIAL_TIMEOUT.DEFAULT,
       retry = 0,
     } = options;
-    return this.command.exec(cmd, { prompt, timeout, retry });
+    return this.command.exec$(cmd, { prompt, timeout, retry });
   }
 
   /**
    * raw コマンド実行（改行制御が必要なケース向け）
    */
-  async execRaw(
+  execRaw$(
     cmdRaw: string,
     options: SerialExecOptions,
-  ): Promise<CommandResult> {
+  ): Observable<CommandResult> {
     const {
       prompt,
       timeout = SERIAL_TIMEOUT.DEFAULT,
       retry = 0,
     } = options;
-    return this.command.execRaw(cmdRaw, { prompt, timeout, retry });
+    return this.command.execRaw$(cmdRaw, { prompt, timeout, retry });
   }
 
   /**
    * 送信せずに prompt まで待機
    */
-  async readUntilPrompt(options: SerialExecOptions): Promise<CommandResult> {
+  readUntilPrompt$(options: SerialExecOptions): Observable<CommandResult> {
     const {
       prompt,
       timeout = SERIAL_TIMEOUT.DEFAULT,
       retry = 0,
     } = options;
-    return this.command.readUntilPrompt({ prompt, timeout, retry });
+    return this.command.readUntilPrompt$({ prompt, timeout, retry });
+  }
+
+  /**
+   * コマンド実行（stdout 相当を返す）
+   * @deprecated Prefer {@link SerialFacadeService.exec$}.
+   */
+  async exec(cmd: string, options: SerialExecOptions): Promise<CommandResult> {
+    return firstValueFrom(this.exec$(cmd, options));
+  }
+
+  /**
+   * raw コマンド実行（改行制御が必要なケース向け）
+   * @deprecated Prefer {@link SerialFacadeService.execRaw$}.
+   */
+  async execRaw(
+    cmdRaw: string,
+    options: SerialExecOptions,
+  ): Promise<CommandResult> {
+    return firstValueFrom(this.execRaw$(cmdRaw, options));
+  }
+
+  /**
+   * 送信せずに prompt まで待機
+   * @deprecated Prefer {@link SerialFacadeService.readUntilPrompt$}.
+   */
+  async readUntilPrompt(options: SerialExecOptions): Promise<CommandResult> {
+    return firstValueFrom(this.readUntilPrompt$(options));
   }
 
   /** 現在のシリアル接続セッション番号（切断後も値は保持され、次回接続で増える） */
