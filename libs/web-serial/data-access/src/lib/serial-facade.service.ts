@@ -21,6 +21,7 @@ import {
   type CommandResult,
   SerialCommandService,
 } from './serial-command.service';
+import { PiZeroShellReadinessService } from './pi-zero-shell-readiness.service';
 import { SerialTransportService } from './serial-transport.service';
 import { SerialValidatorService } from './serial-validator.service';
 
@@ -36,6 +37,7 @@ export class SerialFacadeService {
   private transport = inject(SerialTransportService);
   private command = inject(SerialCommandService);
   private validator = inject(SerialValidatorService);
+  private shellReadiness = inject(PiZeroShellReadinessService);
 
   private readBuffer = '';
   private readSubscription: Subscription | null = null;
@@ -91,6 +93,7 @@ export class SerialFacadeService {
               }
               this.startReadStreamSubscription();
               this.connectionEpoch += 1;
+              this.shellReadiness.reset();
               this.connectionEstablished.next();
               return of(true);
             })
@@ -133,6 +136,7 @@ export class SerialFacadeService {
    * Serial ポートから切断（Observable）
    */
   disconnect$(): Observable<void> {
+    this.shellReadiness.reset();
     this.command.cancelAllCommands();
     this.readSubscription?.unsubscribe();
     this.readSubscription = null;
