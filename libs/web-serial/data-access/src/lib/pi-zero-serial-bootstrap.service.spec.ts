@@ -3,11 +3,13 @@ import {
   PI_ZERO_LOGIN_PASSWORD,
   PI_ZERO_LOGIN_USER,
   PI_ZERO_PROMPT,
+  PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
 } from '@libs-web-serial-util';
 import { PiZeroSerialBootstrapService } from './pi-zero-serial-bootstrap.service';
 import type { SerialFacadeService } from './serial-facade.service';
 
-const TZ_SET_CMD = 'sudo timedatectl set-timezone Asia/Tokyo || true';
+const TZ_SET_CMD =
+  'sudo -n timedatectl set-timezone Asia/Tokyo 2>/dev/null || true';
 const TZ_STATUS_CMD = 'timedatectl status';
 
 describe('PiZeroSerialBootstrapService', () => {
@@ -27,18 +29,22 @@ describe('PiZeroSerialBootstrapService', () => {
     await service.runAfterConnect();
 
     expect(readUntilPrompt).toHaveBeenCalledTimes(1);
-    expect(readUntilPrompt).toHaveBeenCalledWith(PI_ZERO_PROMPT, 5000, 0);
+    expect(readUntilPrompt).toHaveBeenCalledWith(
+      PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+      5000,
+      0,
+    );
     expect(exec).toHaveBeenNthCalledWith(
       1,
       TZ_SET_CMD,
-      PI_ZERO_PROMPT,
+      PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
       10000,
       0,
     );
     expect(exec).toHaveBeenNthCalledWith(
       2,
       TZ_STATUS_CMD,
-      PI_ZERO_PROMPT,
+      PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
       10000,
       0,
     );
@@ -72,7 +78,7 @@ describe('PiZeroSerialBootstrapService', () => {
     expect(exec).toHaveBeenNthCalledWith(
       2,
       PI_ZERO_LOGIN_PASSWORD,
-      PI_ZERO_PROMPT,
+      PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
       30000,
       0,
     );
@@ -80,14 +86,14 @@ describe('PiZeroSerialBootstrapService', () => {
     expect(exec).toHaveBeenNthCalledWith(
       3,
       TZ_SET_CMD,
-      PI_ZERO_PROMPT,
+      PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
       10000,
       0,
     );
     expect(exec).toHaveBeenNthCalledWith(
       4,
       TZ_STATUS_CMD,
-      PI_ZERO_PROMPT,
+      PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
       10000,
       0,
     );
