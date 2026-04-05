@@ -39,10 +39,11 @@ export class SerialTransportService {
     baudRate = 115200
   ): Observable<{ port: SerialPort } | { error: string }> {
     return defer(() => {
-      this.client = createSerialClient({ baudRate });
-      return this.client!.connect().pipe(
+      const client = createSerialClient({ baudRate });
+      this.client = client;
+      return client.connect().pipe(
         map((): { port: SerialPort } | { error: string } => {
-          const port = this.client!.currentPort;
+          const port = client.currentPort;
           if (!port) {
             return {
               error: getConnectionErrorMessage(
