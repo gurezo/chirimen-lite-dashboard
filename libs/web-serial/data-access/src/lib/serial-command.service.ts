@@ -148,7 +148,8 @@ export class SerialCommandService {
 
     for (let attempt = 0; attempt <= retry; attempt++) {
       onAttemptStart?.();
-      this.clearReadBuffer();
+      // Keep readBuffer: login/boot lines may already be present after a prior
+      // readUntilPrompt timeout (shell probe → login: wait).
 
       const { id, promise } = this.registerWait(config);
       this.tryResolvePendingFromBuffer();
