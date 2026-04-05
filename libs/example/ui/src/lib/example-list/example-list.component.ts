@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { ExampleItem } from '@libs-example-util';
 import { ExampleItemComponent } from '../example-item/example-item.component';
 
@@ -8,8 +8,8 @@ import { ExampleItemComponent } from '../example-item/example-item.component';
   templateUrl: './example-list.component.html',
 })
 export class ExampleListComponent {
-  @Input() gpioExample!: ExampleItem[];
-  @Input() i2cExample!: ExampleItem[];
-  @Input() remoteExample!: ExampleItem[];
-  @Output() readonly saveExample = new EventEmitter<ExampleItem>();
+  readonly gpioExample = input.required<ExampleItem[]>();
+  readonly i2cExample = input.required<ExampleItem[]>();
+  readonly remoteExample = input.required<ExampleItem[]>();
+  readonly saveExample = output<ExampleItem>();
 }

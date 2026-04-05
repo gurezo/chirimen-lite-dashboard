@@ -1,17 +1,17 @@
 <div>
   <choh-example-item
     [label]="'GPIO'"
-    [exampleItem]="gpioExample"
+    [exampleItem]="gpioExample()"
     (saveExample)="saveExample.emit($event)"
   />
   <choh-example-item
     [label]="'I2C'"
-    [exampleItem]="i2cExample"
+    [exampleItem]="i2cExample()"
     (saveExample)="saveExample.emit($event)"
   />
   <choh-example-item
     [label]="'Remote'"
-    [exampleItem]="remoteExample"
+    [exampleItem]="remoteExample()"
     (saveExample)="saveExample.emit($event)"
   />
 </div>

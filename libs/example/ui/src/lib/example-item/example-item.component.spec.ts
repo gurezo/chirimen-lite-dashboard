@@ -12,6 +12,8 @@ describe('ExampleItemComponent', () => {
 
     fixture = TestBed.createComponent(ExampleItemComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('label', 'Test');
+    fixture.componentRef.setInput('exampleItem', []);
     fixture.detectChanges();
   });
 

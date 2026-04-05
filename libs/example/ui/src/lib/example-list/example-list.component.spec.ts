@@ -12,6 +12,9 @@ describe('ExampleListComponent', () => {
 
     fixture = TestBed.createComponent(ExampleListComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('gpioExample', []);
+    fixture.componentRef.setInput('i2cExample', []);
+    fixture.componentRef.setInput('remoteExample', []);
     fixture.detectChanges();
   });
 
