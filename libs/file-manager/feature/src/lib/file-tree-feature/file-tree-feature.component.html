@@ -3,10 +3,14 @@
   aria-label="File browser"
 >
   @if (loading) {
-    <div class="min-h-0 flex-1">
+    <div
+      class="flex min-h-0 flex-1 flex-col items-center justify-center"
+      role="status"
+      aria-live="polite"
+    >
       <mat-progress-spinner
         mode="indeterminate"
-        diameter="28"
+        diameter="84"
         aria-label="Loading files"
       />
     </div>
