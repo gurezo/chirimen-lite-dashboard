@@ -16,7 +16,10 @@ import {
   xtermConsoleConfigOptions,
 } from '@libs-terminal-util';
 import { attachTerminalInput } from '../terminal-input';
-import { SerialFacadeService } from '@libs-web-serial-data-access';
+import {
+  PiZeroSerialBootstrapService,
+  SerialFacadeService,
+} from '@libs-web-serial-data-access';
 import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 
 @Component({
@@ -43,6 +46,7 @@ export class TerminalViewComponent implements AfterViewInit, OnDestroy {
   private consoleDomRef?: ElementRef<HTMLElement>;
 
   private serial = inject(SerialFacadeService);
+  private piZeroBootstrap = inject(PiZeroSerialBootstrapService);
   private commandRequests = inject(TerminalCommandRequestService);
 
   readonly xterminal = new Terminal(xtermConsoleConfigOptions);
@@ -53,15 +57,37 @@ export class TerminalViewComponent implements AfterViewInit, OnDestroy {
   private execTail: Promise<void> = Promise.resolve();
 
   private commandRequestSub?: Subscription;
+  private connectionEstablishedSub?: Subscription;
   private resizeObserver?: ResizeObserver;
 
   ngAfterViewInit(): void {
     this.configTerminal();
+    this.connectionEstablishedSub = this.serial.connectionEstablished$.subscribe(
+      () => {
+        if (!this.serial.isConnected()) {
+          return;
+        }
+        this.xterminal.writeln(
+          '[コンソール] シリアルに接続しました。初期化しています...',
+        );
+        void this.enqueueExec(async () => {
+          try {
+            await this.piZeroBootstrap.runAfterConnect((line) =>
+              this.xterminal.writeln(line),
+            );
+          } catch {
+            // 失敗メッセージは runAfterConnect 内で表示済み
+          }
+          this.xterminal.write('$ ');
+        });
+      },
+    );
   }
 
   ngOnDestroy(): void {
     this.resizeObserver?.disconnect();
     this.commandRequestSub?.unsubscribe();
+    this.connectionEstablishedSub?.unsubscribe();
     this.xterminal.dispose();
   }
 
@@ -85,7 +111,21 @@ export class TerminalViewComponent implements AfterViewInit, OnDestroy {
     this.resizeObserver.observe(el);
 
     this.xterminal.reset();
-    this.xterminal.writeln('$ ');
+    if (this.serial.isConnected()) {
+      this.xterminal.writeln('[コンソール] シリアル接続済み。初期化しています...');
+      void this.enqueueExec(async () => {
+        try {
+          await this.piZeroBootstrap.runAfterConnect((line) =>
+            this.xterminal.writeln(line),
+          );
+        } catch {
+          // 失敗メッセージは runAfterConnect 内で表示済み
+        }
+        this.xterminal.write('$ ');
+      });
+    } else {
+      this.xterminal.writeln('$ ');
+    }
 
     attachTerminalInput(
       this.xterminal,

@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NEVER } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { SerialFacadeService } from '@libs-web-serial-data-access';
+import {
+  PiZeroSerialBootstrapService,
+  SerialFacadeService,
+} from '@libs-web-serial-data-access';
 import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 import { TerminalCommandRequestService } from '@libs-terminal-util';
 import { TerminalViewComponent } from './terminal-view.component';
@@ -20,6 +24,13 @@ describe('TerminalViewComponent', () => {
         useValue: {
           isConnected: () => true,
           exec: execMock,
+          connectionEstablished$: NEVER,
+          getConnectionEpoch: () => 1,
+        },
+      })
+      .overrideProvider(PiZeroSerialBootstrapService, {
+        useValue: {
+          runAfterConnect: vi.fn().mockResolvedValue(undefined),
         },
       })
       .compileComponents();
