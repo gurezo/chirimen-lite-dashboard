@@ -1,11 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NEVER } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('@xterm/xterm', () => {
+  class MockTerminal {
+    loadAddon = vi.fn();
+    open = vi.fn();
+    dispose = vi.fn();
+    writeln = vi.fn();
+    write = vi.fn();
+    reset = vi.fn();
+    onKey = vi.fn();
+  }
+  return { Terminal: MockTerminal };
+});
+
+vi.mock('@xterm/addon-fit', () => ({
+  FitAddon: class {
+    fit = vi.fn();
+  },
+}));
 import {
   PiZeroSerialBootstrapService,
   SerialFacadeService,
 } from '@libs-web-serial-data-access';
-import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
+import { PI_ZERO_PROMPT, SERIAL_TIMEOUT } from '@libs-web-serial-util';
 import { TerminalCommandRequestService } from '@libs-terminal-util';
 import { TerminalViewComponent } from './terminal-view.component';
 
@@ -53,12 +72,10 @@ describe('TerminalViewComponent', () => {
     requests.requestCommand('i2cdetect -y 1');
 
     await vi.waitFor(() => {
-      expect(execMock).toHaveBeenCalledWith(
-        'i2cdetect -y 1',
-        PI_ZERO_PROMPT,
-        10000,
-        0,
-      );
+      expect(execMock).toHaveBeenCalledWith('i2cdetect -y 1', {
+        prompt: PI_ZERO_PROMPT,
+        timeout: SERIAL_TIMEOUT.DEFAULT,
+      });
     });
   });
 });

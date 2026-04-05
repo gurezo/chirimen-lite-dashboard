@@ -9,16 +9,6 @@ export const isConnected = createSelector(
   (state: WebSerialState) => state.isConnected
 );
 
-export const selectSendData = createSelector(
-  selectWebSerialFeature,
-  (state: WebSerialState) => state.sendData
-);
-
-export const selectReciveData = createSelector(
-  selectWebSerialFeature,
-  (state: WebSerialState) => state.receiveData
-);
-
 export const selectConnectionMessage = createSelector(
   selectWebSerialFeature,
   (state: WebSerialState) => state.connectionMessage

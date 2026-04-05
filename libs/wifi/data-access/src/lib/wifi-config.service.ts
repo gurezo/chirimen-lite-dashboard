@@ -3,7 +3,11 @@ import { FileContentService } from './file-content.service';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { FileUtils, shellSingleQuote } from '@libs-wifi-util';
 import { WifiRebootFlowService } from './wifi-reboot-flow.service';
-import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
+import {
+  PI_ZERO_PROMPT,
+  SERIAL_TIMEOUT,
+  wrapSerialError,
+} from '@libs-web-serial-util';
 
 /**
  * WiFi 設定（setWiFi / configureWifi）を担当
@@ -21,12 +25,14 @@ export class WifiConfigService {
    */
   async setWiFi(ssid: string, password: string): Promise<void> {
     try {
-      await this.serial.exec('cd', PI_ZERO_PROMPT, 10000);
-      await this.serial.exec(
-        'sudo touch /boot/ssh',
-        PI_ZERO_PROMPT,
-        10000
-      );
+      await this.serial.exec('cd', {
+        prompt: PI_ZERO_PROMPT,
+        timeout: SERIAL_TIMEOUT.DEFAULT,
+      });
+      await this.serial.exec('sudo touch /boot/ssh', {
+        prompt: PI_ZERO_PROMPT,
+        timeout: SERIAL_TIMEOUT.DEFAULT,
+      });
 
       const wifiSetupScript = this.generateWifiSetupScript();
 
@@ -36,13 +42,13 @@ export class WifiConfigService {
       const qPass = shellSingleQuote(password);
       await this.serial.exec(
         `chmod +x wifi_setup.sh && ./wifi_setup.sh ${qSsid} ${qPass}`,
-        PI_ZERO_PROMPT,
-        30000
+        {
+          prompt: PI_ZERO_PROMPT,
+          timeout: SERIAL_TIMEOUT.LONG,
+        }
       );
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
-      throw new Error(`Failed to set WiFi: ${errorMessage}`);
+      throw wrapSerialError('Failed to set WiFi', error);
     }
   }
 
@@ -57,9 +63,7 @@ export class WifiConfigService {
 
       await this.rebootFlow.restartWifiService();
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
-      throw new Error(`WiFi configuration failed: ${errorMessage}`);
+      throw wrapSerialError('WiFi configuration failed', error);
     }
   }
 
@@ -105,8 +109,10 @@ network={
     try {
       await this.serial.exec(
         'sudo cp /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf.backup',
-        PI_ZERO_PROMPT,
-        10000
+        {
+          prompt: PI_ZERO_PROMPT,
+          timeout: SERIAL_TIMEOUT.DEFAULT,
+        }
       );
 
       const encoder = new TextEncoder();
@@ -118,17 +124,20 @@ network={
 
       await this.serial.exec(
         'sudo tee /etc/wpa_supplicant/wpa_supplicant.conf > /dev/null',
-        '\n',
-        10000
+        {
+          prompt: '\n',
+          timeout: SERIAL_TIMEOUT.DEFAULT,
+        }
       );
-      await this.serial.exec(base64, '\n', 1000);
+      await this.serial.exec(base64, {
+        prompt: '\n',
+        timeout: SERIAL_TIMEOUT.LINE,
+      });
 
       await this.serial.write('\x04');
       await this.sleep(10);
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
-      throw new Error(`Failed to save WiFi config: ${errorMessage}`);
+      throw wrapSerialError('Failed to save WiFi config', error);
     }
   }
 

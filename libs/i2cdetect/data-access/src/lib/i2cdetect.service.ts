@@ -1,7 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { formatI2cdetectResult } from '@libs-i2cdetect-util';
-import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
+import {
+  PI_ZERO_PROMPT,
+  SERIAL_TIMEOUT,
+  wrapSerialError,
+} from '@libs-web-serial-util';
 
 /**
  * I2C デバイス検出サービス
@@ -23,14 +27,15 @@ export class I2cdetectService {
   async detectI2cDevices(): Promise<string> {
     try {
       const output = (
-        await this.serial.exec('i2cdetect -y 1', PI_ZERO_PROMPT, 10000)
+        await this.serial.exec('i2cdetect -y 1', {
+          prompt: PI_ZERO_PROMPT,
+          timeout: SERIAL_TIMEOUT.DEFAULT,
+        })
       ).stdout;
 
       return formatI2cdetectResult(output);
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
-      throw new Error(`Failed to detect I2C devices: ${errorMessage}`);
+      throw wrapSerialError('Failed to detect I2C devices', error);
     }
   }
 

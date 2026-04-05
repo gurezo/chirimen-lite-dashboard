@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
-import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
+import { PI_ZERO_PROMPT, SERIAL_TIMEOUT } from '@libs-web-serial-util';
 
 @Injectable({ providedIn: 'root' })
 export class RemoteStopService {
@@ -8,7 +8,10 @@ export class RemoteStopService {
   private readonly prompt = PI_ZERO_PROMPT;
 
   async stopAll(): Promise<void> {
-    await this.serial.exec('forever stopall', this.prompt, 120000, 0);
+    await this.serial.exec('forever stopall', {
+      prompt: this.prompt,
+      timeout: SERIAL_TIMEOUT.PROCESS_CONTROL,
+    });
   }
 
   /**
@@ -17,7 +20,9 @@ export class RemoteStopService {
    */
   async stopTarget(target: string): Promise<void> {
     const arg = JSON.stringify(target);
-    await this.serial.exec(`forever stop ${arg}`, this.prompt, 120000, 0);
+    await this.serial.exec(`forever stop ${arg}`, {
+      prompt: this.prompt,
+      timeout: SERIAL_TIMEOUT.PROCESS_CONTROL,
+    });
   }
 }
-
