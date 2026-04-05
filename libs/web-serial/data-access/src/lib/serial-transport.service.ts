@@ -10,6 +10,7 @@ import {
   map,
   Observable,
   of,
+  share,
   tap,
   throwError,
 } from 'rxjs';
@@ -28,6 +29,13 @@ import {
 })
 export class SerialTransportService {
   private client: SerialClient | undefined;
+  /**
+   * port.readable は同時にロックできる Reader が 1 つだけのため、
+   * getReadStream() を呼ぶたびに新しい Reader を取ると Facade の常時購読と
+   * read$() などがデータを奪い合い、プロンプト待ちがタイムアウトする。
+   * 1 本の Observable を share して多重購読する。
+   */
+  private readShared$: Observable<string> | null = null;
   private readonly decoder = new TextDecoder();
   private readonly encoder = new TextEncoder();
 
@@ -41,6 +49,7 @@ export class SerialTransportService {
     return defer(() => {
       const client = createSerialClient({ baudRate });
       this.client = client;
+      this.readShared$ = null;
       return client.connect().pipe(
         map((): { port: SerialPort } | { error: string } => {
           const port = client.currentPort;
@@ -74,6 +83,7 @@ export class SerialTransportService {
         tap(() => {
           if (this.client === client) {
             this.client = undefined;
+            this.readShared$ = null;
           }
         }),
         catchError((error) => {
@@ -124,14 +134,18 @@ export class SerialTransportService {
     if (!this.client?.connected) {
       return throwError(() => new Error('Serial port not connected'));
     }
-    return this.client.getReadStream().pipe(
-      map((uint8Array: Uint8Array) =>
-        this.decoder.decode(uint8Array, { stream: true })
-      ),
-      catchError((error) =>
-        throwError(() => new Error(getReadErrorMessage(error)))
-      )
-    );
+    if (!this.readShared$) {
+      this.readShared$ = this.client.getReadStream().pipe(
+        map((uint8Array: Uint8Array) =>
+          this.decoder.decode(uint8Array, { stream: true })
+        ),
+        catchError((error) =>
+          throwError(() => new Error(getReadErrorMessage(error)))
+        ),
+        share()
+      );
+    }
+    return this.readShared$;
   }
 
   /**
