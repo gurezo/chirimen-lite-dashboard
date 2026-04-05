@@ -1,6 +1,8 @@
 /// <reference types="@types/w3c-web-serial" />
 
 import { Injectable } from '@angular/core';
+import { firstValueFrom, type Subscription } from 'rxjs';
+import { SerialTransportService } from './serial-transport.service';
 
 /**
  * コマンド実行設定
@@ -29,16 +31,15 @@ export interface CommandResult {
 /**
  * Serial コマンド実行サービス
  *
- * コマンドの実行、プロンプト待機、タイムアウト管理を担当
- *
- * porting/services/command-executor.service.ts から移行
- * + serial.service.ts の execute() メソッドを統合
+ * 読み取りバッファ・ストリーム購読・プロンプト待ち・書き込みを担当
  */
 @Injectable({
   providedIn: 'root',
 })
 export class SerialCommandService {
   private commandSeq = 0;
+  private readBuffer = '';
+  private readSubscription: Subscription | null = null;
   private pendingCommands = new Map<
     string,
     {
@@ -49,6 +50,8 @@ export class SerialCommandService {
     }
   >();
 
+  constructor(private readonly transport: SerialTransportService) {}
+
   private nextCommandId(): string {
     return `cmd-${++this.commandSeq}-${Date.now()}`;
   }
@@ -57,26 +60,58 @@ export class SerialCommandService {
     if (typeof prompt === 'string') {
       return input.includes(prompt);
     }
-    // RegExp#test は lastIndex があると壊れるため都度 lastIndex をリセット
     prompt.lastIndex = 0;
     return prompt.test(input);
   }
 
   /**
-   * コマンド実行を開始し、指定されたプロンプトが返されるまで待機
-   *
-   * @param commandId コマンドID（通常はコマンド文字列自体）
-   * @param config 実行設定
-   * @param writeFunction データ書き込み関数
-   * @returns コマンド実行結果
+   * 接続後に呼び出し、シリアル読み取りを購読してバッファに蓄積する
    */
-  async executeCommand(
-    commandId: string,
-    config: CommandExecutionConfig,
-    writeFunction: (data: string) => Promise<void>
-  ): Promise<string> {
-    const result = await this.exec(commandId, config, writeFunction);
-    return result.stdout;
+  startReadLoop(): void {
+    this.readBuffer = '';
+    this.readSubscription?.unsubscribe();
+    this.readSubscription = this.transport.getReadStream().subscribe({
+      next: (chunk) => {
+        this.readBuffer += chunk;
+        this.tryResolvePendingFromBuffer();
+      },
+      error: (err) => console.error('Serial read stream error:', err),
+    });
+  }
+
+  /**
+   * 読み取り購読を停止しバッファを空にする
+   */
+  stopReadLoop(): void {
+    this.readSubscription?.unsubscribe();
+    this.readSubscription = null;
+    this.readBuffer = '';
+  }
+
+  /**
+   * 読み取りストリームを購読中か
+   */
+  isReading(): boolean {
+    return this.readSubscription != null && !this.readSubscription.closed;
+  }
+
+  private clearReadBuffer(): void {
+    this.readBuffer = '';
+  }
+
+  /** 現在バッファが待機中コマンドのプロンプトに一致すれば解決する */
+  private tryResolvePendingFromBuffer(): string | null {
+    for (const [commandId, command] of this.pendingCommands) {
+      if (this.matchesPrompt(this.readBuffer, command.config.prompt)) {
+        clearTimeout(command.timeoutId);
+        this.pendingCommands.delete(commandId);
+        const stdout = this.readBuffer;
+        command.resolve(stdout);
+        this.readBuffer = '';
+        return stdout;
+      }
+    }
+    return null;
   }
 
   /**
@@ -85,24 +120,20 @@ export class SerialCommandService {
   async exec(
     cmd: string,
     config: CommandExecutionConfig,
-    writeFunction: (data: string) => Promise<void>,
     onAttemptStart?: () => void
   ): Promise<CommandResult> {
-    return this.execInternal(cmd + '\n', config, writeFunction, onAttemptStart);
+    return this.execInternal(cmd + '\n', config, onAttemptStart);
   }
 
   /**
    * raw コマンド実行（stdin に `cmdRaw` をそのまま送信）
-   *
-   * base64 送信など、改行制御が必要なケースを想定しています。
    */
   async execRaw(
     cmdRaw: string,
     config: CommandExecutionConfig,
-    writeFunction: (data: string) => Promise<void>,
     onAttemptStart?: () => void
   ): Promise<CommandResult> {
-    return this.execInternal(cmdRaw, config, writeFunction, onAttemptStart);
+    return this.execInternal(cmdRaw, config, onAttemptStart);
   }
 
   /**
@@ -110,17 +141,17 @@ export class SerialCommandService {
    */
   async readUntilPrompt(
     config: CommandExecutionConfig,
-    onAttemptStart?: () => void,
-    afterRegisterWait?: () => void
+    onAttemptStart?: () => void
   ): Promise<CommandResult> {
     const retry = config.retry ?? 0;
     let lastError: unknown;
 
     for (let attempt = 0; attempt <= retry; attempt++) {
       onAttemptStart?.();
+      this.clearReadBuffer();
 
       const { id, promise } = this.registerWait(config);
-      afterRegisterWait?.();
+      this.tryResolvePendingFromBuffer();
       try {
         const stdout = await promise;
         return { stdout };
@@ -140,7 +171,6 @@ export class SerialCommandService {
   private async execInternal(
     sendData: string,
     config: CommandExecutionConfig,
-    writeFunction: (data: string) => Promise<void>,
     onAttemptStart?: () => void
   ): Promise<CommandResult> {
     const retry = config.retry ?? 0;
@@ -148,19 +178,16 @@ export class SerialCommandService {
 
     for (let attempt = 0; attempt <= retry; attempt++) {
       onAttemptStart?.();
+      this.clearReadBuffer();
 
       const { id, promise } = this.registerWait(config);
       try {
-        // コマンドを送信
-        await writeFunction(sendData);
+        await firstValueFrom(this.transport.write(sendData));
         const stdout = await promise;
         return { stdout };
       } catch (error: unknown) {
         lastError = error;
-        // pending が残らないようにクリア
         this.cancelCommand(id);
-        // cancelCommand() により promise が reject されるが、ここでは待機しないため
-        // unhandled rejection を防ぐ
         void promise.catch(() => undefined);
         if (attempt === retry) {
           throw error;
@@ -194,30 +221,6 @@ export class SerialCommandService {
     };
   }
 
-  /**
-   * 入力データを処理し、待機中のコマンドのプロンプトとマッチするかチェック
-   *
-   * @param input 受信したデータ
-   * @returns マッチした場合は入力データ、マッチしない場合は null
-   */
-  processInput(input: string): string | null {
-    for (const [commandId, command] of this.pendingCommands) {
-      if (this.matchesPrompt(input, command.config.prompt)) {
-        // コマンド完了
-        clearTimeout(command.timeoutId);
-        this.pendingCommands.delete(commandId);
-        command.resolve(input);
-        return input;
-      }
-    }
-    return null;
-  }
-
-  /**
-   * 特定のコマンドをキャンセル
-   *
-   * @param commandId キャンセルするコマンドID
-   */
   cancelCommand(commandId: string): void {
     const command = this.pendingCommands.get(commandId);
     if (command) {
@@ -227,9 +230,6 @@ export class SerialCommandService {
     }
   }
 
-  /**
-   * すべての待機中のコマンドをキャンセル
-   */
   cancelAllCommands(): void {
     for (const [, command] of this.pendingCommands) {
       clearTimeout(command.timeoutId);
@@ -238,11 +238,6 @@ export class SerialCommandService {
     this.pendingCommands.clear();
   }
 
-  /**
-   * 待機中のコマンド数を取得
-   *
-   * @returns 待機中のコマンド数
-   */
   getPendingCommandCount(): number {
     return this.pendingCommands.size;
   }
