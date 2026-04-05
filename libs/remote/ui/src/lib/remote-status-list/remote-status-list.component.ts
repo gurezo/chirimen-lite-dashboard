@@ -1,4 +1,4 @@
-import { Component, Input, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import type { ForeverProcess } from '@libs-shared-types';
 
 @Component({
@@ -11,7 +11,7 @@ import type { ForeverProcess } from '@libs-shared-types';
       class="max-h-[min(360px,40vh)] overflow-y-auto w-full border border-gray-200 rounded"
       role="list"
     >
-      @for (p of processes; track trackKey(p)) {
+      @for (p of processes(); track trackKey(p)) {
         <button
           type="button"
           role="listitem"
@@ -37,8 +37,8 @@ import type { ForeverProcess } from '@libs-shared-types';
   `,
 })
 export class RemoteStatusListComponent {
-  @Input() processes: ForeverProcess[] = [];
-  @Input() selected: ForeverProcess | null = null;
+  readonly processes = input<ForeverProcess[]>([]);
+  readonly selected = input<ForeverProcess | null>(null);
 
   readonly rowSelected = output<ForeverProcess>();
 
@@ -47,7 +47,7 @@ export class RemoteStatusListComponent {
   }
 
   isSelected(p: ForeverProcess): boolean {
-    const s = this.selected;
+    const s = this.selected();
     return s !== null && s.listIndex === p.listIndex && s.uid === p.uid;
   }
 }

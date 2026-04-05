@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { ButtonComponent } from '@libs-shared-ui';
 
 @Component({
@@ -6,15 +6,15 @@ import { ButtonComponent } from '@libs-shared-ui';
   imports: [ButtonComponent],
   template: `
     <choh-button
-      [label]="label"
+      [label]="label()"
       type="button"
-      [disabled]="disabled"
+      [disabled]="disabled()"
       (clickEvent)="runClick.emit()"
     />
   `,
 })
 export class RemoteRunButtonComponent {
-  @Input() label = '起動';
-  @Input() disabled = false;
-  @Output() runClick = new EventEmitter<void>();
+  readonly label = input('起動');
+  readonly disabled = input(false);
+  readonly runClick = output<void>();
 }
