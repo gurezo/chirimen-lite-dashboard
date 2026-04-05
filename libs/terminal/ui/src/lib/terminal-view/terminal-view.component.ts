@@ -1,13 +1,15 @@
 import {
   AfterViewInit,
   Component,
+  DestroyRef,
   ElementRef,
   OnDestroy,
   ViewChild,
   inject,
   input,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { EMPTY, Subscription, catchError, finalize, switchMap } from 'rxjs';
 import { FitAddon } from '@xterm/addon-fit';
 import { Terminal } from '@xterm/xterm';
 import {
@@ -48,6 +50,7 @@ export class TerminalViewComponent implements AfterViewInit, OnDestroy {
   private serial = inject(SerialFacadeService);
   private piZeroBootstrap = inject(PiZeroSerialBootstrapService);
   private commandRequests = inject(TerminalCommandRequestService);
+  private destroyRef = inject(DestroyRef);
 
   readonly xterminal = new Terminal(xtermConsoleConfigOptions);
 
@@ -57,37 +60,34 @@ export class TerminalViewComponent implements AfterViewInit, OnDestroy {
   private execTail: Promise<void> = Promise.resolve();
 
   private commandRequestSub?: Subscription;
-  private connectionEstablishedSub?: Subscription;
   private resizeObserver?: ResizeObserver;
 
   ngAfterViewInit(): void {
     this.configTerminal();
-    this.connectionEstablishedSub = this.serial.connectionEstablished$.subscribe(
-      () => {
-        if (!this.serial.isConnected()) {
-          return;
-        }
-        this.xterminal.writeln(
-          '[コンソール] シリアルに接続しました。初期化しています...',
-        );
-        void this.enqueueExec(async () => {
-          try {
-            await this.piZeroBootstrap.runAfterConnect((line) =>
-              this.xterminal.writeln(line),
-            );
-          } catch {
-            // 失敗メッセージは runAfterConnect 内で表示済み
+    this.serial.connectionEstablished$
+      .pipe(
+        switchMap(() => {
+          if (!this.serial.isConnected()) {
+            return EMPTY;
           }
-          this.xterminal.write('$ ');
-        });
-      },
-    );
+          this.xterminal.writeln(
+            '[コンソール] シリアルに接続しました。初期化しています...',
+          );
+          return this.piZeroBootstrap
+            .runAfterConnect$((line) => this.xterminal.writeln(line))
+            .pipe(
+              catchError(() => EMPTY),
+              finalize(() => this.xterminal.write('$ ')),
+            );
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
   }
 
   ngOnDestroy(): void {
     this.resizeObserver?.disconnect();
     this.commandRequestSub?.unsubscribe();
-    this.connectionEstablishedSub?.unsubscribe();
     this.xterminal.dispose();
   }
 
@@ -113,16 +113,14 @@ export class TerminalViewComponent implements AfterViewInit, OnDestroy {
     this.xterminal.reset();
     if (this.serial.isConnected()) {
       this.xterminal.writeln('[コンソール] シリアル接続済み。初期化しています...');
-      void this.enqueueExec(async () => {
-        try {
-          await this.piZeroBootstrap.runAfterConnect((line) =>
-            this.xterminal.writeln(line),
-          );
-        } catch {
-          // 失敗メッセージは runAfterConnect 内で表示済み
-        }
-        this.xterminal.write('$ ');
-      });
+      this.piZeroBootstrap
+        .runAfterConnect$((line) => this.xterminal.writeln(line))
+        .pipe(
+          takeUntilDestroyed(this.destroyRef),
+          catchError(() => EMPTY),
+          finalize(() => this.xterminal.write('$ ')),
+        )
+        .subscribe();
     } else {
       this.xterminal.writeln('$ ');
     }
