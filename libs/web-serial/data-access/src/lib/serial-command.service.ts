@@ -110,7 +110,8 @@ export class SerialCommandService {
    */
   async readUntilPrompt(
     config: CommandExecutionConfig,
-    onAttemptStart?: () => void
+    onAttemptStart?: () => void,
+    afterRegisterWait?: () => void
   ): Promise<CommandResult> {
     const retry = config.retry ?? 0;
     let lastError: unknown;
@@ -119,6 +120,7 @@ export class SerialCommandService {
       onAttemptStart?.();
 
       const { id, promise } = this.registerWait(config);
+      afterRegisterWait?.();
       try {
         const stdout = await promise;
         return { stdout };

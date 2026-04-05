@@ -1,7 +1,7 @@
 /// <reference types="@types/w3c-web-serial" />
 
 import { Injectable, inject } from '@angular/core';
-import { firstValueFrom, take, type Subscription } from 'rxjs';
+import { firstValueFrom, Subject, take, type Subscription } from 'rxjs';
 import {
   CommandExecutionConfig,
   type CommandResult,
@@ -25,6 +25,15 @@ export class SerialFacadeService {
 
   private readBuffer = '';
   private readSubscription: Subscription | null = null;
+
+  /** 接続成功のたびに増加（同一接続の post-connect 処理を1回に制限するため） */
+  private connectionEpoch = 0;
+
+  private readonly connectionEstablished = new Subject<void>();
+  /**
+   * シリアル接続が確立されるたびに通知（ターミナルが後からマウントされる場合のブートストラップ用）
+   */
+  readonly connectionEstablished$ = this.connectionEstablished.asObservable();
 
   /**
    * データストリーム (Observable)
@@ -67,6 +76,8 @@ export class SerialFacadeService {
       }
 
       this.startReadStreamSubscription();
+      this.connectionEpoch += 1;
+      this.connectionEstablished.next();
       return true;
     } catch (error) {
       console.error('Connection error:', error);
@@ -193,10 +204,21 @@ export class SerialFacadeService {
     retry = 0
   ): Promise<CommandResult> {
     const config: CommandExecutionConfig = { prompt, timeout, retry };
-    const clearReadBuffer = () => {
-      this.readBuffer = '';
-    };
-    return this.command.readUntilPrompt(config, clearReadBuffer);
+    return this.command.readUntilPrompt(
+      config,
+      undefined,
+      () => {
+        const matched = this.command.processInput(this.readBuffer);
+        if (matched) {
+          this.readBuffer = '';
+        }
+      },
+    );
+  }
+
+  /** 現在のシリアル接続セッション番号（切断後も値は保持され、次回接続で増える） */
+  getConnectionEpoch(): number {
+    return this.connectionEpoch;
   }
 
   isConnected(): boolean {
