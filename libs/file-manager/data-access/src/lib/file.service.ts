@@ -1,0 +1,81 @@
+import { Injectable, inject } from '@angular/core';
+import { FileContentService } from '@libs-wifi-data-access';
+import { SerialFacadeService } from '@libs-web-serial-data-access';
+import { FileUtils } from '@libs-wifi-util';
+import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
+import { FileTreeNode, parseLsOutput } from '@libs-file-manager-util';
+
+@Injectable({ providedIn: 'root' })
+export class FileService {
+  private serial = inject(SerialFacadeService);
+  private fileContent = inject(FileContentService);
+
+  /**
+   * ディレクトリ直下の ls 出力（行単位）を返します。
+   */
+  async listLines(directoryPath: string): Promise<string[]> {
+    const dir = directoryPath || '.';
+    const escaped = FileUtils.escapePath(dir);
+
+    const stdout = (
+      await this.serial.exec(
+        `ls -al --quoting-style=c -- ${escaped}`,
+        PI_ZERO_PROMPT,
+        30000,
+      )
+    ).stdout;
+
+    return stdout
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean);
+  }
+
+  /**
+   * ディレクトリ直下をツリー表示向けに整形して返します。
+   */
+  async listTree(path: string): Promise<FileTreeNode[]> {
+    const lines = await this.listLines(path);
+    return parseLsOutput(lines, path);
+  }
+
+  async mkdir(path: string): Promise<void> {
+    const escaped = FileUtils.escapePath(path);
+    await this.serial.exec(`mkdir -p -- ${escaped}`, PI_ZERO_PROMPT, 10000);
+  }
+
+  async touch(path: string): Promise<void> {
+    const escaped = FileUtils.escapePath(path);
+    await this.serial.exec(`touch -- ${escaped}`, PI_ZERO_PROMPT, 10000);
+  }
+
+  async remove(path: string): Promise<void> {
+    const escaped = FileUtils.escapePath(path);
+    await this.serial.exec(`rm -- ${escaped}`, PI_ZERO_PROMPT, 10000);
+  }
+
+  async read(path: string): Promise<string> {
+    const info = await this.fileContent.readFile(path);
+    if (!info.isText || typeof info.content !== 'string') {
+      throw new Error('Target file is not a text file');
+    }
+    return info.content;
+  }
+
+  async move(fromPath: string, toPath: string): Promise<void> {
+    const fromEscaped = FileUtils.escapePath(fromPath);
+    const toEscaped = FileUtils.escapePath(toPath);
+    await this.serial.exec(
+      `mv -- ${fromEscaped} ${toEscaped}`,
+      PI_ZERO_PROMPT,
+      10000,
+    );
+  }
+
+  /**
+   * バイナリのアップロード（base64 + Ctrl-C/Ctrl-D 方式）
+   */
+  async writeBinary(targetPath: string, buffer: ArrayBuffer): Promise<void> {
+    await this.fileContent.writeBinaryFile(targetPath, buffer);
+  }
+}
