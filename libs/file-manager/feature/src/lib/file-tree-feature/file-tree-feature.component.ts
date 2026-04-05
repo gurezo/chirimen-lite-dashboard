@@ -1,11 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  EventEmitter,
-  inject,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, output } from '@angular/core';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FileService } from '@libs-file-manager-data-access';
@@ -26,7 +19,7 @@ export class FileTreeFeatureComponent implements OnInit {
   private file = inject(FileService);
   private shellReadiness = inject(PiZeroShellReadinessService);
   private destroyRef = inject(DestroyRef);
-  @Output() readonly fileSelected = new EventEmitter<string>();
+  readonly fileSelected = output<string>();
 
   nodes: FileTreeNode[] = [];
   currentPath = '.';
