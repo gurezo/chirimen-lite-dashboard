@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, from, map, of, switchMap } from 'rxjs';
+import { catchError, map, of, switchMap } from 'rxjs';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { WebSerialActions } from './web-serial.actions';
 
@@ -32,7 +32,7 @@ export class WebSerialEffects {
     this.actions$.pipe(
       ofType(WebSerialActions.onConnect),
       switchMap(() =>
-        from(this.service.connect()).pipe(
+        this.service.connect$().pipe(
           switchMap((success) => {
             if (!success) {
               return of(
@@ -75,7 +75,7 @@ export class WebSerialEffects {
     () =>
       this.actions$.pipe(
         ofType(WebSerialActions.onDisConnect),
-        switchMap(() => from(this.service.disconnect()))
+        switchMap(() => this.service.disconnect$())
       ),
     { dispatch: false }
   );
@@ -84,7 +84,7 @@ export class WebSerialEffects {
     this.actions$.pipe(
       ofType(WebSerialActions.sendData),
       switchMap((action) =>
-        from(this.service.write(action.sendData)).pipe(
+        this.service.write$(action.sendData).pipe(
           map(() => WebSerialActions.onSendSuccess()),
           catchError(async (error) => WebSerialActions.error(error))
         )
@@ -96,7 +96,7 @@ export class WebSerialEffects {
     this.actions$.pipe(
       ofType(WebSerialActions.receiveData),
       switchMap(() =>
-        from(this.service.read()).pipe(
+        this.service.read$().pipe(
           map((receiveData) => WebSerialActions.receiveData({ receiveData })),
           catchError(async (error) => WebSerialActions.error(error))
         )
