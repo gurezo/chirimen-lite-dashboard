@@ -8,6 +8,7 @@ import {
   PI_ZERO_SERIAL_PASSWORD_LINE_PATTERN,
   PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
 } from '@libs-web-serial-util';
+import { PiZeroShellReadinessService } from './pi-zero-shell-readiness.service';
 import { SerialFacadeService } from './serial-facade.service';
 
 export type PiZeroBootstrapStatusHandler = (line: string) => void;
@@ -18,7 +19,10 @@ export type PiZeroBootstrapStatusHandler = (line: string) => void;
 export class PiZeroSerialBootstrapService {
   private lastBootstrappedEpoch = -1;
 
-  constructor(private readonly serial: SerialFacadeService) {}
+  constructor(
+    private readonly serial: SerialFacadeService,
+    private readonly shellReadiness: PiZeroShellReadinessService,
+  ) {}
 
   /**
    * 接続セッションごとに1回、シェル到達（必要ならログイン）と接続直後の初期化を行う。
@@ -39,6 +43,7 @@ export class PiZeroSerialBootstrapService {
       await this.runPipeline(log);
       if (this.serial.isConnected()) {
         this.lastBootstrappedEpoch = epoch;
+        this.shellReadiness.setReady(true);
       }
     } catch (error: unknown) {
       const message =
