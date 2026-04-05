@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 
 export interface ConfirmDialogData {
@@ -46,13 +46,24 @@ export class ConfirmDialogComponent implements OnInit {
   private dialogRef = inject(DialogRef<boolean>, { optional: true });
   private data = inject<ConfirmDialogData | null>(DIALOG_DATA, { optional: true });
 
-  @Input() title = 'Confirm';
-  @Input() message = 'Are you sure?';
-  @Input() confirmLabel = 'OK';
-  @Input() cancelLabel = 'Cancel';
-  @Input() hideCancel = false;
+  readonly titleInput = input('Confirm', { alias: 'title' });
+  readonly messageInput = input('Are you sure?', { alias: 'message' });
+  readonly confirmLabelInput = input('OK', { alias: 'confirmLabel' });
+  readonly cancelLabelInput = input('Cancel', { alias: 'cancelLabel' });
+  readonly hideCancelInput = input(false, { alias: 'hideCancel' });
+
+  title = 'Confirm';
+  message = 'Are you sure?';
+  confirmLabel = 'OK';
+  cancelLabel = 'Cancel';
+  hideCancel = false;
 
   ngOnInit(): void {
+    this.title = this.titleInput();
+    this.message = this.messageInput();
+    this.confirmLabel = this.confirmLabelInput();
+    this.cancelLabel = this.cancelLabelInput();
+    this.hideCancel = this.hideCancelInput();
     if (this.data) {
       if (this.data.title != null) this.title = this.data.title;
       if (this.data.message != null) this.message = this.data.message;
