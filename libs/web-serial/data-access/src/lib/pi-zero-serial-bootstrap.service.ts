@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { createConnectClient } from '@libs-connect-util';
+import {
+  type ConnectClient,
+  createConnectClient,
+} from '@libs-connect-util';
 import { sanitizeSerialStdout } from '@libs-terminal-util';
 import {
   PI_ZERO_LOGIN_PASSWORD,
@@ -9,6 +12,21 @@ import {
   PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
   SERIAL_TIMEOUT,
 } from '@libs-web-serial-util';
+import type { Observable } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  defaultIfEmpty,
+  defer,
+  firstValueFrom,
+  from,
+  ignoreElements,
+  map,
+  of,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
 import { PiZeroShellReadinessService } from './pi-zero-shell-readiness.service';
 import { SerialFacadeService } from './serial-facade.service';
 
@@ -28,92 +46,137 @@ export class PiZeroSerialBootstrapService {
   /**
    * 接続セッションごとに1回、シェル到達（必要ならログイン）と接続直後の初期化を行う。
    */
-  async runAfterConnect(onStatus?: PiZeroBootstrapStatusHandler): Promise<void> {
+  runAfterConnect$(
+    onStatus?: PiZeroBootstrapStatusHandler,
+  ): Observable<void> {
+    const log = onStatus ?? (() => undefined);
+
     if (!this.serial.isConnected()) {
-      return;
+      return of(undefined);
     }
 
     const epoch = this.serial.getConnectionEpoch();
     if (epoch === this.lastBootstrappedEpoch) {
-      return;
+      return of(undefined);
     }
 
-    const log = onStatus ?? (() => undefined);
-
-    try {
-      await this.runPipeline(log);
-      if (this.serial.isConnected()) {
-        this.lastBootstrappedEpoch = epoch;
-        this.shellReadiness.setReady(true);
-      }
-    } catch (error: unknown) {
-      const message =
-        error instanceof Error ? error.message : String(error);
-      log(`[コンソール] 接続後の初期化に失敗しました: ${message}`);
-      throw error;
-    }
-  }
-
-  private async runPipeline(log: PiZeroBootstrapStatusHandler): Promise<void> {
-    const client = createConnectClient();
-
-    let atShell = false;
-    try {
-      await this.serial.readUntilPrompt({
-        prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-        timeout: SERIAL_TIMEOUT.SHORT,
-      });
-      atShell = true;
-    } catch {
-      atShell = false;
-    }
-
-    if (!atShell) {
-      log('[コンソール] ログイン画面を検出しました。');
-      await this.serial.readUntilPrompt({
-        prompt: PI_ZERO_SERIAL_LOGIN_LINE_PATTERN,
-        timeout: SERIAL_TIMEOUT.FILE_TRANSFER,
-      });
-      log(
-        `[コンソール] ログインユーザー「${PI_ZERO_LOGIN_USER}」を送信中...`,
-      );
-      await this.serial.exec(PI_ZERO_LOGIN_USER, {
-        prompt: PI_ZERO_SERIAL_PASSWORD_LINE_PATTERN,
-        timeout: SERIAL_TIMEOUT.LONG,
-      });
-      log('[コンソール] パスワードを送信中（画面には表示しません）...');
-      await this.serial.exec(PI_ZERO_LOGIN_PASSWORD, {
-        prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-        timeout: SERIAL_TIMEOUT.LONG,
-      });
-      log('[コンソール] ログインが完了しました。');
-    }
-
-    log('[コンソール] タイムゾーン関連の初期化を開始します。');
-    for (const step of client.timezoneSteps) {
-      log(step.statusMessage);
-      try {
-        const { stdout } = await this.serial.exec(step.command, {
-          prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-          timeout: SERIAL_TIMEOUT.DEFAULT,
-        });
-        const cleaned = sanitizeSerialStdout(
-          typeof stdout === 'string' ? stdout : '',
-          step.command,
-          client.prompt,
-        );
-        for (const line of cleaned.split(/\r?\n/)) {
-          if (line.length > 0) {
-            log(line);
-          }
+    return defer(() => this.runPipeline$(log)).pipe(
+      tap(() => {
+        if (this.serial.isConnected()) {
+          this.lastBootstrappedEpoch = epoch;
+          this.shellReadiness.setReady(true);
         }
-      } catch (error: unknown) {
+      }),
+      map(() => undefined),
+      catchError((error: unknown) => {
         const message =
           error instanceof Error ? error.message : String(error);
-        log(`[コンソール] コマンドが失敗しました: ${message}`);
-        console.warn(`Initial command failed: ${step.command}`, error);
-      }
-    }
-    log('[コンソール] タイムゾーン関連の初期化が完了しました。');
+        log(`[コンソール] 接続後の初期化に失敗しました: ${message}`);
+        return throwError(() => error);
+      }),
+    );
+  }
+
+  /**
+   * 接続セッションごとに1回、シェル到達（必要ならログイン）と接続直後の初期化を行う。
+   * @deprecated Prefer {@link PiZeroSerialBootstrapService.runAfterConnect$}.
+   */
+  async runAfterConnect(onStatus?: PiZeroBootstrapStatusHandler): Promise<void> {
+    await firstValueFrom(
+      this.runAfterConnect$(onStatus).pipe(defaultIfEmpty(undefined)),
+    );
+  }
+
+  private runPipeline$(log: PiZeroBootstrapStatusHandler): Observable<void> {
+    const client = createConnectClient();
+
+    return this.serial.readUntilPrompt$({
+      prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+      timeout: SERIAL_TIMEOUT.SHORT,
+    }).pipe(
+      map(() => true),
+      catchError(() => of(false)),
+      switchMap((atShell) =>
+        atShell ? of(undefined) : this.loginSequence$(log),
+      ),
+      switchMap(() => this.timezoneSequence$(log, client)),
+    );
+  }
+
+  private loginSequence$(log: PiZeroBootstrapStatusHandler): Observable<void> {
+    log('[コンソール] ログイン画面を検出しました。');
+    return this.serial
+      .readUntilPrompt$({
+        prompt: PI_ZERO_SERIAL_LOGIN_LINE_PATTERN,
+        timeout: SERIAL_TIMEOUT.FILE_TRANSFER,
+      })
+      .pipe(
+        tap(() => {
+          log(
+            `[コンソール] ログインユーザー「${PI_ZERO_LOGIN_USER}」を送信中...`,
+          );
+        }),
+        switchMap(() =>
+          this.serial.exec$(PI_ZERO_LOGIN_USER, {
+            prompt: PI_ZERO_SERIAL_PASSWORD_LINE_PATTERN,
+            timeout: SERIAL_TIMEOUT.LONG,
+          }),
+        ),
+        tap(() => {
+          log('[コンソール] パスワードを送信中（画面には表示しません）...');
+        }),
+        switchMap(() =>
+          this.serial.exec$(PI_ZERO_LOGIN_PASSWORD, {
+            prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+            timeout: SERIAL_TIMEOUT.LONG,
+          }),
+        ),
+        tap(() => log('[コンソール] ログインが完了しました。')),
+        map(() => undefined),
+      );
+  }
+
+  private timezoneSequence$(
+    log: PiZeroBootstrapStatusHandler,
+    client: ConnectClient,
+  ): Observable<void> {
+    log('[コンソール] タイムゾーン関連の初期化を開始します。');
+    return from(client.timezoneSteps).pipe(
+      concatMap((step) => {
+        log(step.statusMessage);
+        return this.serial
+          .exec$(step.command, {
+            prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+            timeout: SERIAL_TIMEOUT.DEFAULT,
+          })
+          .pipe(
+            tap(({ stdout }) => {
+              const cleaned = sanitizeSerialStdout(
+                typeof stdout === 'string' ? stdout : '',
+                step.command,
+                client.prompt,
+              );
+              for (const line of cleaned.split(/\r?\n/)) {
+                if (line.length > 0) {
+                  log(line);
+                }
+              }
+            }),
+            catchError((error: unknown) => {
+              const message =
+                error instanceof Error ? error.message : String(error);
+              log(`[コンソール] コマンドが失敗しました: ${message}`);
+              console.warn(`Initial command failed: ${step.command}`, error);
+              return of(undefined);
+            }),
+          );
+      }),
+      ignoreElements(),
+      defaultIfEmpty(undefined),
+      tap(() =>
+        log('[コンソール] タイムゾーン関連の初期化が完了しました。'),
+      ),
+      map(() => undefined),
+    );
   }
 }
