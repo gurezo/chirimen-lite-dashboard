@@ -1,4 +1,11 @@
 import { Injectable, inject } from '@angular/core';
+import {
+  type Observable,
+  catchError,
+  firstValueFrom,
+  map,
+  throwError,
+} from 'rxjs';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { formatI2cdetectResult } from '@libs-i2cdetect-util';
 import {
@@ -20,23 +27,31 @@ export class I2cdetectService {
   private serial = inject(SerialFacadeService);
 
   /**
+   * I2C デバイスを検出（Observable）
+   *
+   * @returns I2C デバイス情報（HTML形式）
+   */
+  detectI2cDevices$(): Observable<string> {
+    return this.serial.exec$('i2cdetect -y 1', {
+      prompt: PI_ZERO_PROMPT,
+      timeout: SERIAL_TIMEOUT.DEFAULT,
+    }).pipe(
+      map((result) => formatI2cdetectResult(result.stdout)),
+      catchError((error: unknown) =>
+        throwError(() =>
+          wrapSerialError('Failed to detect I2C devices', error),
+        ),
+      ),
+    );
+  }
+
+  /**
    * I2C デバイスを検出
    *
    * @returns I2C デバイス情報（HTML形式）
    */
   async detectI2cDevices(): Promise<string> {
-    try {
-      const output = (
-        await this.serial.exec('i2cdetect -y 1', {
-          prompt: PI_ZERO_PROMPT,
-          timeout: SERIAL_TIMEOUT.DEFAULT,
-        })
-      ).stdout;
-
-      return formatI2cdetectResult(output);
-    } catch (error: unknown) {
-      throw wrapSerialError('Failed to detect I2C devices', error);
-    }
+    return firstValueFrom(this.detectI2cDevices$());
   }
 
   /**
