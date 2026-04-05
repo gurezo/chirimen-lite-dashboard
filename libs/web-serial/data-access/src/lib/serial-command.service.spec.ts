@@ -1,7 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 import { Observable, Subject } from 'rxjs';
 import { SerialCommandService } from './serial-command.service';
-import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
+import {
+  PI_ZERO_PROMPT,
+  PI_ZERO_SERIAL_LOGIN_LINE_PATTERN,
+} from '@libs-web-serial-util';
 import type { SerialTransportService } from './serial-transport.service';
 
 function createService() {
@@ -66,6 +69,17 @@ describe('SerialCommandService', () => {
 
     const result = await readPromise;
     expect(result.stdout).toContain(PI_ZERO_PROMPT);
+  });
+
+  it('readUntilPrompt sees data already buffered before the wait starts', async () => {
+    const { service, chunks } = createService();
+    chunks.next('Raspberry Pi OS\r\n\r\nraspberrypi login: ');
+    const result = await service.readUntilPrompt({
+      prompt: PI_ZERO_SERIAL_LOGIN_LINE_PATTERN,
+      timeout: 1000,
+      retry: 0,
+    });
+    expect(result.stdout).toMatch(/login:\s*$/m);
   });
 
   it('supports RegExp prompt', async () => {
