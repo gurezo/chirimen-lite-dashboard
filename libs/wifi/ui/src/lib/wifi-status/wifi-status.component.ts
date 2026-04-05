@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 export interface WifiStatusData {
   ipInfo: string;
@@ -12,18 +12,18 @@ export interface WifiStatusData {
 @Component({
   selector: 'choh-wifi-status',
   template: `
-    @if (status) {
+    @if (status(); as st) {
       <div class="wifi-status">
-        @if (status.ipInfo) {
-          <pre class="text-sm">{{ status.ipInfo }}</pre>
+        @if (st.ipInfo) {
+          <pre class="text-sm">{{ st.ipInfo }}</pre>
         }
-        @if (status.wlInfo) {
-          <pre class="text-sm">{{ status.wlInfo }}</pre>
+        @if (st.wlInfo) {
+          <pre class="text-sm">{{ st.wlInfo }}</pre>
         }
       </div>
     }
   `,
 })
 export class WifiStatusComponent {
-  @Input() status: WifiStatusData | null = null;
+  readonly status = input<WifiStatusData | null>(null);
 }
