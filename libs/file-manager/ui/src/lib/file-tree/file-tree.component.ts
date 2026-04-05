@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
 import { FileTreeNode } from '@libs-file-manager-util';
 
 @Component({
   selector: 'lib-file-tree',
+  imports: [MatIcon],
   template: `
     <div class="file-tree text-sm">
       @if (!nodes.length) {
@@ -13,13 +15,15 @@ import { FileTreeNode } from '@libs-file-manager-util';
             <li>
               <button
                 type="button"
-                class="w-full text-left px-2 py-1 rounded hover:bg-gray-100"
+                class="inline-flex w-full items-center gap-1 text-left px-2 py-1 rounded hover:bg-gray-100"
                 (click)="onSelect(node)"
               >
                 @if (node.isDirectory) {
-                  <span>📁 {{ node.name }}</span>
+                  <mat-icon aria-hidden="true" class="shrink-0">folder</mat-icon>
+                  <span>{{ node.name }}</span>
                 } @else {
-                  <span>📄 {{ node.name }}</span>
+                  <mat-icon aria-hidden="true" class="shrink-0">article</mat-icon>
+                  <span>{{ node.name }}</span>
                 }
               </button>
             </li>
