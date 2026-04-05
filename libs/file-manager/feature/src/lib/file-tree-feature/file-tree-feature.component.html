@@ -2,42 +2,44 @@
   class="flex h-full min-h-0 min-w-0 flex-col gap-2 p-2"
   aria-label="File browser"
 >
-  <div class="shrink-0 space-y-2">
-    <div class="flex items-center justify-between">
-      <h2 class="font-semibold">Files</h2>
-      <button type="button" class="text-xs underline" (click)="reload()">
-        reload
-      </button>
-    </div>
-
-    <p class="text-xs text-gray-500 break-all">current: {{ currentPath }}</p>
-
-    @if (currentPath !== '.') {
-      <button type="button" class="text-xs underline" (click)="goParent()">
-        ← parent
-      </button>
-    }
-
-    @if (loading) {
+  @if (loading) {
+    <div class="min-h-0 flex-1">
       <mat-progress-spinner
         mode="indeterminate"
         diameter="28"
         aria-label="Loading files"
       />
-    }
-  </div>
+    </div>
+  } @else {
+    <div class="shrink-0 space-y-2">
+      <div class="flex items-center justify-between">
+        <h2 class="font-semibold">Files</h2>
+        <button type="button" class="text-xs underline" (click)="reload()">
+          reload
+        </button>
+      </div>
 
-  <div
-    class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden"
-    role="region"
-    aria-label="File list"
-  >
-    <lib-file-tree
-      [nodes]="nodes"
-      (directorySelected)="onDirectorySelected($event)"
-      (fileSelected)="onFileSelected($event)"
-    />
-  </div>
+      <p class="text-xs text-gray-500 break-all">current: {{ currentPath }}</p>
+
+      @if (currentPath !== '.') {
+        <button type="button" class="text-xs underline" (click)="goParent()">
+          ← parent
+        </button>
+      }
+    </div>
+
+    <div
+      class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden"
+      role="region"
+      aria-label="File list"
+    >
+      <lib-file-tree
+        [nodes]="nodes"
+        (directorySelected)="onDirectorySelected($event)"
+        (fileSelected)="onFileSelected($event)"
+      />
+    </div>
+  }
 
   @if (errorMessage) {
     <p class="shrink-0 text-xs text-red-600">{{ errorMessage }}</p>
