@@ -18,11 +18,13 @@ import {
   concatMap,
   defaultIfEmpty,
   defer,
+  finalize,
   firstValueFrom,
   from,
   ignoreElements,
   map,
   of,
+  shareReplay,
   switchMap,
   tap,
   throwError,
@@ -37,6 +39,9 @@ export type PiZeroBootstrapStatusHandler = (line: string) => void;
 })
 export class PiZeroSerialBootstrapService {
   private lastBootstrappedEpoch = -1;
+  /** 同一 connectionEpoch でのブートストラップ多重起動を防ぐ */
+  private activeBootstrap$: Observable<void> | null = null;
+  private activeBootstrapEpoch: number | null = null;
 
   constructor(
     private readonly serial: SerialFacadeService,
@@ -60,7 +65,16 @@ export class PiZeroSerialBootstrapService {
       return of(undefined);
     }
 
-    return defer(() => this.runPipeline$(log)).pipe(
+    if (
+      this.activeBootstrap$ !== null &&
+      this.activeBootstrapEpoch === epoch
+    ) {
+      return this.activeBootstrap$;
+    }
+
+    this.activeBootstrapEpoch = epoch;
+
+    this.activeBootstrap$ = defer(() => this.runPipeline$(log)).pipe(
       tap(() => {
         if (this.serial.isConnected()) {
           this.lastBootstrappedEpoch = epoch;
@@ -74,7 +88,16 @@ export class PiZeroSerialBootstrapService {
         log(`[コンソール] 接続後の初期化に失敗しました: ${message}`);
         return throwError(() => error);
       }),
+      finalize(() => {
+        if (this.activeBootstrapEpoch === epoch) {
+          this.activeBootstrap$ = null;
+          this.activeBootstrapEpoch = null;
+        }
+      }),
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
+
+    return this.activeBootstrap$;
   }
 
   /**
@@ -92,7 +115,7 @@ export class PiZeroSerialBootstrapService {
 
     return this.serial.readUntilPrompt$({
       prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-      timeout: SERIAL_TIMEOUT.SHORT,
+      timeout: SERIAL_TIMEOUT.SHELL_PROMPT_PROBE,
     }).pipe(
       map(() => true),
       catchError(() => of(false)),
@@ -108,7 +131,7 @@ export class PiZeroSerialBootstrapService {
     return this.serial
       .readUntilPrompt$({
         prompt: PI_ZERO_SERIAL_LOGIN_LINE_PATTERN,
-        timeout: SERIAL_TIMEOUT.FILE_TRANSFER,
+        timeout: SERIAL_TIMEOUT.DEFAULT,
       })
       .pipe(
         tap(() => {
@@ -119,7 +142,7 @@ export class PiZeroSerialBootstrapService {
         switchMap(() =>
           this.serial.exec$(PI_ZERO_LOGIN_USER, {
             prompt: PI_ZERO_SERIAL_PASSWORD_LINE_PATTERN,
-            timeout: SERIAL_TIMEOUT.LONG,
+            timeout: SERIAL_TIMEOUT.DEFAULT,
           }),
         ),
         tap(() => {
@@ -128,7 +151,7 @@ export class PiZeroSerialBootstrapService {
         switchMap(() =>
           this.serial.exec$(PI_ZERO_LOGIN_PASSWORD, {
             prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-            timeout: SERIAL_TIMEOUT.LONG,
+            timeout: SERIAL_TIMEOUT.DEFAULT,
           }),
         ),
         tap(() => log('[コンソール] ログインが完了しました。')),
@@ -147,7 +170,7 @@ export class PiZeroSerialBootstrapService {
         return this.serial
           .exec$(step.command, {
             prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-            timeout: SERIAL_TIMEOUT.DEFAULT,
+            timeout: SERIAL_TIMEOUT.SHORT,
           })
           .pipe(
             tap(({ stdout }) => {
