@@ -1,12 +1,12 @@
 <div class="flex flex-col gap-1 w-full min-w-0">
-  @if (currentLabel) {
-    <p class="text-sm text-gray-700 truncate" [title]="currentLabel">
-      {{ currentLabel }}
+  @if (currentLabel()) {
+    <p class="text-sm text-gray-700 truncate" [title]="currentLabel()">
+      {{ currentLabel() }}
     </p>
   }
   <mat-progress-bar
-    [mode]="indeterminate ? 'indeterminate' : 'determinate'"
-    [value]="progress"
+    [mode]="indeterminate() ? 'indeterminate' : 'determinate'"
+    [value]="progress()"
   />
-  <p class="text-xs text-gray-500">{{ progress }}%</p>
+  <p class="text-xs text-gray-500">{{ progress() }}%</p>
 </div>

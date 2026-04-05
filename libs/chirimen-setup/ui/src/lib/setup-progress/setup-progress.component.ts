@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
@@ -8,7 +8,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 })
 export class SetupProgressComponent {
   /** 0–100 */
-  @Input() progress = 0;
-  @Input() currentLabel = '';
-  @Input() indeterminate = false;
+  readonly progress = input(0);
+  readonly currentLabel = input('');
+  readonly indeterminate = input(false);
 }
