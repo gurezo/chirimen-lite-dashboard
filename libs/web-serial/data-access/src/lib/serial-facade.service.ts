@@ -10,9 +10,7 @@ import {
   Subject,
   switchMap,
   take,
-  tap,
   throwError,
-  type Subscription,
 } from 'rxjs';
 import {
   CommandExecutionConfig,
@@ -36,9 +34,6 @@ export class SerialFacadeService {
   private command = inject(SerialCommandService);
   private validator = inject(SerialValidatorService);
   private shellReadiness = inject(PiZeroShellReadinessService);
-
-  private readBuffer = '';
-  private readSubscription: Subscription | null = null;
 
   /** 接続成功のたびに増加（同一接続の post-connect 処理を1回に制限するため） */
   private connectionEpoch = 0;
@@ -101,18 +96,7 @@ export class SerialFacadeService {
   }
 
   private startReadStreamSubscription(): void {
-    this.readBuffer = '';
-    this.readSubscription?.unsubscribe();
-    this.readSubscription = this.transport.getReadStream().subscribe({
-      next: (chunk) => {
-        this.readBuffer += chunk;
-        const matched = this.command.processInput(this.readBuffer);
-        if (matched) {
-          this.readBuffer = '';
-        }
-      },
-      error: (err) => console.error('Serial read stream error:', err),
-    });
+    this.command.startReadLoop();
   }
 
   /**
@@ -121,9 +105,7 @@ export class SerialFacadeService {
   disconnect$(): Observable<void> {
     this.shellReadiness.reset();
     this.command.cancelAllCommands();
-    this.readSubscription?.unsubscribe();
-    this.readSubscription = null;
-    this.readBuffer = '';
+    this.command.stopReadLoop();
     return this.transport.disconnect$().pipe(
       catchError((error) => {
         console.error('Disconnect error:', error);
@@ -203,10 +185,7 @@ export class SerialFacadeService {
     retry = 0
   ): Promise<CommandResult> {
     const config: CommandExecutionConfig = { prompt, timeout, retry };
-    const clearReadBuffer = () => {
-      this.readBuffer = '';
-    };
-    return this.command.exec(cmd, config, (data) => this.write(data), clearReadBuffer);
+    return this.command.exec(cmd, config);
   }
 
   /**
@@ -219,15 +198,7 @@ export class SerialFacadeService {
     retry = 0
   ): Promise<CommandResult> {
     const config: CommandExecutionConfig = { prompt, timeout, retry };
-    const clearReadBuffer = () => {
-      this.readBuffer = '';
-    };
-    return this.command.execRaw(
-      cmdRaw,
-      config,
-      (data) => this.write(data),
-      clearReadBuffer
-    );
+    return this.command.execRaw(cmdRaw, config);
   }
 
   /**
@@ -239,16 +210,7 @@ export class SerialFacadeService {
     retry = 0
   ): Promise<CommandResult> {
     const config: CommandExecutionConfig = { prompt, timeout, retry };
-    return this.command.readUntilPrompt(
-      config,
-      undefined,
-      () => {
-        const matched = this.command.processInput(this.readBuffer);
-        if (matched) {
-          this.readBuffer = '';
-        }
-      },
-    );
+    return this.command.readUntilPrompt(config);
   }
 
   /** 現在のシリアル接続セッション番号（切断後も値は保持され、次回接続で増える） */
@@ -264,7 +226,7 @@ export class SerialFacadeService {
    * 読み取り中かどうか（ストリーム購読中は true）
    */
   isReading(): boolean {
-    return this.readSubscription != null && !this.readSubscription.closed;
+    return this.command.isReading();
   }
 
   isWriteReady(): boolean {
