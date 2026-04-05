@@ -1,7 +1,27 @@
 /// <reference types="@types/w3c-web-serial" />
 
 import { Injectable } from '@angular/core';
-import { firstValueFrom, type Subscription } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  Subscription,
+  TimeoutError,
+  catchError,
+  concatMap,
+  defer,
+  EMPTY,
+  filter,
+  finalize,
+  firstValueFrom,
+  map,
+  merge,
+  mergeMap,
+  of,
+  retry,
+  take,
+  throwError,
+  timeout,
+} from 'rxjs';
 import { SerialTransportService } from './serial-transport.service';
 
 /**
@@ -37,23 +57,29 @@ export interface CommandResult {
   providedIn: 'root',
 })
 export class SerialCommandService {
-  private commandSeq = 0;
   private readBuffer = '';
   private readSubscription: Subscription | null = null;
-  private pendingCommands = new Map<
-    string,
-    {
-      resolve: (value: string) => void;
-      reject: (reason: unknown) => void;
-      timeoutId: number;
-      config: CommandExecutionConfig;
-    }
-  >();
+  /** 受信チャンクでバッファが更新されたことを Observable 側の待機に伝える */
+  private readonly bufferNotify$ = new Subject<void>();
+  /** コマンド実行を直列化（複数 exec$ が同時に走らない） */
+  private readonly executionQueue$ = new Subject<Observable<unknown>>();
+  /** cancelAllCommands 用。enqueue 時点の世代と異なれば実行を打ち切る */
+  private generation = 0;
+  private pendingCount = 0;
 
-  constructor(private readonly transport: SerialTransportService) {}
-
-  private nextCommandId(): string {
-    return `cmd-${++this.commandSeq}-${Date.now()}`;
+  constructor(private readonly transport: SerialTransportService) {
+    this.executionQueue$
+      .pipe(
+        concatMap((work) =>
+          work.pipe(
+            catchError((err: unknown) => {
+              console.error('Serial command queue work error:', err);
+              return EMPTY;
+            }),
+          ),
+        ),
+      )
+      .subscribe();
   }
 
   private matchesPrompt(input: string, prompt: string | RegExp): boolean {
@@ -73,7 +99,7 @@ export class SerialCommandService {
     this.readSubscription = this.transport.getReadStream().subscribe({
       next: (chunk) => {
         this.readBuffer += chunk;
-        this.tryResolvePendingFromBuffer();
+        this.bufferNotify$.next();
       },
       error: (err) => console.error('Serial read stream error:', err),
     });
@@ -99,147 +125,197 @@ export class SerialCommandService {
     this.readBuffer = '';
   }
 
-  /** 現在バッファが待機中コマンドのプロンプトに一致すれば解決する */
-  private tryResolvePendingFromBuffer(): string | null {
-    for (const [commandId, command] of this.pendingCommands) {
-      if (this.matchesPrompt(this.readBuffer, command.config.prompt)) {
-        clearTimeout(command.timeoutId);
-        this.pendingCommands.delete(commandId);
-        const stdout = this.readBuffer;
-        command.resolve(stdout);
+  private enqueueCommand$<T>(
+    factory: (enqueuedGen: number) => Observable<T>,
+  ): Observable<T> {
+    return new Observable<T>((subscriber) => {
+      const enqueuedGen = this.generation;
+      this.pendingCount++;
+      this.executionQueue$.next(
+        defer(() => {
+          if (this.generation !== enqueuedGen) {
+            return throwError(() => new Error('All commands cancelled'));
+          }
+          return factory(enqueuedGen);
+        }).pipe(
+          finalize(() => {
+            this.pendingCount--;
+          }),
+          mergeMap((value) => {
+            subscriber.next(value as T);
+            subscriber.complete();
+            return EMPTY;
+          }),
+          catchError((err: unknown) => {
+            subscriber.error(err);
+            return EMPTY;
+          }),
+        ),
+      );
+    });
+  }
+
+  private waitForPromptMatch$(
+    config: CommandExecutionConfig,
+    enqueuedGen: number,
+  ): Observable<string> {
+    return merge(of(undefined), this.bufferNotify$).pipe(
+      map(() => {
+        if (this.generation !== enqueuedGen) {
+          throw new Error('All commands cancelled');
+        }
+        return this.readBuffer;
+      }),
+      filter((buf) => this.matchesPrompt(buf, config.prompt)),
+      take(1),
+      map((buf) => {
+        const stdout = buf;
         this.readBuffer = '';
         return stdout;
+      }),
+      timeout({ first: config.timeout }),
+      catchError((err: unknown) => {
+        if (err instanceof TimeoutError) {
+          return throwError(() => new Error('Command execution timeout'));
+        }
+        return throwError(() => err);
+      }),
+    );
+  }
+
+  private buildExecPipeline$(
+    sendData: string,
+    config: CommandExecutionConfig,
+    enqueuedGen: number,
+    onAttemptStart?: () => void,
+  ): Observable<CommandResult> {
+    const retryCount = config.retry ?? 0;
+    const attempt$ = defer(() => {
+      if (this.generation !== enqueuedGen) {
+        return throwError(() => new Error('All commands cancelled'));
       }
-    }
-    return null;
+      onAttemptStart?.();
+      this.clearReadBuffer();
+      return this.transport.write(sendData).pipe(
+        mergeMap(() => this.waitForPromptMatch$(config, enqueuedGen)),
+        map((stdout) => ({ stdout })),
+      );
+    });
+    return attempt$.pipe(retry({ count: retryCount }));
+  }
+
+  private buildReadUntilPromptPipeline$(
+    config: CommandExecutionConfig,
+    enqueuedGen: number,
+    onAttemptStart?: () => void,
+  ): Observable<CommandResult> {
+    const retryCount = config.retry ?? 0;
+    const attempt$ = defer(() => {
+      if (this.generation !== enqueuedGen) {
+        return throwError(() => new Error('All commands cancelled'));
+      }
+      onAttemptStart?.();
+      if (this.matchesPrompt(this.readBuffer, config.prompt)) {
+        const stdout = this.readBuffer;
+        this.readBuffer = '';
+        return of<CommandResult>({ stdout });
+      }
+      return this.waitForPromptMatch$(config, enqueuedGen).pipe(
+        map((stdout) => ({ stdout })),
+      );
+    });
+    return attempt$.pipe(retry({ count: retryCount }));
   }
 
   /**
    * コマンド実行（stdin に `cmd + '\n'` を送信し、prompt まで待機）
    */
-  async exec(
+  exec$(
     cmd: string,
     config: CommandExecutionConfig,
-    onAttemptStart?: () => void
-  ): Promise<CommandResult> {
-    return this.execInternal(cmd + '\n', config, onAttemptStart);
+    onAttemptStart?: () => void,
+  ): Observable<CommandResult> {
+    return this.enqueueCommand$((enqueuedGen) =>
+      this.buildExecPipeline$(cmd + '\n', config, enqueuedGen, onAttemptStart),
+    );
   }
 
   /**
    * raw コマンド実行（stdin に `cmdRaw` をそのまま送信）
    */
-  async execRaw(
+  execRaw$(
     cmdRaw: string,
     config: CommandExecutionConfig,
-    onAttemptStart?: () => void
-  ): Promise<CommandResult> {
-    return this.execInternal(cmdRaw, config, onAttemptStart);
+    onAttemptStart?: () => void,
+  ): Observable<CommandResult> {
+    return this.enqueueCommand$((enqueuedGen) =>
+      this.buildExecPipeline$(cmdRaw, config, enqueuedGen, onAttemptStart),
+    );
   }
 
   /**
    * 読み取りのみ（送信せず prompt まで待機）
    */
+  readUntilPrompt$(
+    config: CommandExecutionConfig,
+    onAttemptStart?: () => void,
+  ): Observable<CommandResult> {
+    return this.enqueueCommand$((enqueuedGen) =>
+      this.buildReadUntilPromptPipeline$(
+        config,
+        enqueuedGen,
+        onAttemptStart,
+      ),
+    );
+  }
+
+  /**
+   * コマンド実行（stdin に `cmd + '\n'` を送信し、prompt まで待機）
+   * @deprecated Prefer {@link SerialCommandService.exec$} for reactive pipelines.
+   */
+  async exec(
+    cmd: string,
+    config: CommandExecutionConfig,
+    onAttemptStart?: () => void,
+  ): Promise<CommandResult> {
+    return firstValueFrom(this.exec$(cmd, config, onAttemptStart));
+  }
+
+  /**
+   * raw コマンド実行（stdin に `cmdRaw` をそのまま送信）
+   * @deprecated Prefer {@link SerialCommandService.execRaw$}.
+   */
+  async execRaw(
+    cmdRaw: string,
+    config: CommandExecutionConfig,
+    onAttemptStart?: () => void,
+  ): Promise<CommandResult> {
+    return firstValueFrom(this.execRaw$(cmdRaw, config, onAttemptStart));
+  }
+
+  /**
+   * 読み取りのみ（送信せず prompt まで待機）
+   * @deprecated Prefer {@link SerialCommandService.readUntilPrompt$}.
+   */
   async readUntilPrompt(
     config: CommandExecutionConfig,
-    onAttemptStart?: () => void
+    onAttemptStart?: () => void,
   ): Promise<CommandResult> {
-    const retry = config.retry ?? 0;
-    let lastError: unknown;
-
-    for (let attempt = 0; attempt <= retry; attempt++) {
-      onAttemptStart?.();
-      // Keep readBuffer: login/boot lines may already be present after a prior
-      // readUntilPrompt timeout (shell probe → login: wait).
-
-      const { id, promise } = this.registerWait(config);
-      this.tryResolvePendingFromBuffer();
-      try {
-        const stdout = await promise;
-        return { stdout };
-      } catch (error: unknown) {
-        lastError = error;
-        if (attempt === retry) {
-          throw error;
-        }
-      } finally {
-        this.cancelCommand(id);
-      }
-    }
-
-    throw lastError ?? new Error('readUntilPrompt failed');
+    return firstValueFrom(this.readUntilPrompt$(config, onAttemptStart));
   }
 
-  private async execInternal(
-    sendData: string,
-    config: CommandExecutionConfig,
-    onAttemptStart?: () => void
-  ): Promise<CommandResult> {
-    const retry = config.retry ?? 0;
-    let lastError: unknown;
-
-    for (let attempt = 0; attempt <= retry; attempt++) {
-      onAttemptStart?.();
-      this.clearReadBuffer();
-
-      const { id, promise } = this.registerWait(config);
-      try {
-        await firstValueFrom(this.transport.write(sendData));
-        const stdout = await promise;
-        return { stdout };
-      } catch (error: unknown) {
-        lastError = error;
-        this.cancelCommand(id);
-        void promise.catch(() => undefined);
-        if (attempt === retry) {
-          throw error;
-        }
-      }
-    }
-
-    throw lastError ?? new Error('exec failed');
-  }
-
-  private registerWait(
-    config: CommandExecutionConfig
-  ): { id: string; promise: Promise<string> } {
-    const id = this.nextCommandId();
-
-    return {
-      id,
-      promise: new Promise((resolve, reject) => {
-        const timeoutId = setTimeout(() => {
-          this.pendingCommands.delete(id);
-          reject(new Error('Command execution timeout'));
-        }, config.timeout) as unknown as number;
-
-        this.pendingCommands.set(id, {
-          resolve,
-          reject,
-          timeoutId,
-          config,
-        });
-      }),
-    };
-  }
-
+  /**
+   * 単一の待機 ID によるキャンセルはサポートしない（世代ベースの cancelAllCommands を利用）。
+   */
   cancelCommand(commandId: string): void {
-    const command = this.pendingCommands.get(commandId);
-    if (command) {
-      clearTimeout(command.timeoutId);
-      command.reject(new Error('Command cancelled'));
-      this.pendingCommands.delete(commandId);
-    }
+    void commandId;
   }
 
   cancelAllCommands(): void {
-    for (const [, command] of this.pendingCommands) {
-      clearTimeout(command.timeoutId);
-      command.reject(new Error('All commands cancelled'));
-    }
-    this.pendingCommands.clear();
+    this.generation++;
   }
 
   getPendingCommandCount(): number {
-    return this.pendingCommands.size;
+    return this.pendingCount;
   }
 }
