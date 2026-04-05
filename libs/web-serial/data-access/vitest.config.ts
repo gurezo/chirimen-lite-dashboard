@@ -5,6 +5,7 @@ export default defineConfig({
   cacheDir: resolve(process.cwd(), 'node_modules/.vite'),
   resolve: {
     alias: {
+      '@libs-connect-util': resolve(__dirname, '../../connect/util/src/index.ts'),
       '@libs-web-serial-util': resolve(__dirname, '../util/src/index.ts'),
     },
   },
