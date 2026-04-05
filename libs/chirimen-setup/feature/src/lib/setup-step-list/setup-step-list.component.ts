@@ -1,15 +1,15 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'lib-setup-step-list',
   template: `
     <ul>
-      @for (step of steps; track step) {
+      @for (step of steps(); track step) {
         <li>{{ step }}</li>
       }
     </ul>
   `,
 })
 export class SetupStepListComponent {
-  @Input() steps: string[] = [];
+  readonly steps = input<string[]>([]);
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { ButtonComponent } from '@libs-shared-ui';
 
 @Component({
@@ -6,23 +6,23 @@ import { ButtonComponent } from '@libs-shared-ui';
   imports: [ButtonComponent],
   template: `
     <choh-button
-      [label]="loading ? loadingLabel : label"
+      [label]="loading() ? loadingLabel() : label()"
       type="button"
-      [disabled]="disabled || loading"
+      [disabled]="disabled() || loading()"
       (clickEvent)="handleClick()"
     />
   `,
 })
 export class SetupExecuteButtonComponent {
-  @Input() label = 'セットアップを実行';
-  @Input() loadingLabel = '実行中…';
-  @Input() disabled = false;
-  @Input() loading = false;
+  readonly label = input('セットアップを実行');
+  readonly loadingLabel = input('実行中…');
+  readonly disabled = input(false);
+  readonly loading = input(false);
 
-  @Output() readonly execute = new EventEmitter<void>();
+  readonly execute = output<void>();
 
   handleClick(): void {
-    if (!this.disabled && !this.loading) {
+    if (!this.disabled() && !this.loading()) {
       this.execute.emit();
     }
   }
