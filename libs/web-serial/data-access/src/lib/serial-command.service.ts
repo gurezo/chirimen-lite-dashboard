@@ -246,31 +246,4 @@ export class SerialCommandService {
   getPendingCommandCount(): number {
     return this.pendingCommands.size;
   }
-
-  /**
-   * 特定のパターンを待機する（簡易実装）
-   *
-   * @param writeData 送信するデータ
-   * @param pattern 待機するパターン
-   * @param timeoutMs タイムアウト時間（ミリ秒）
-   * @returns マッチした結果
-   */
-  async waitForPattern(
-    writeData: string,
-    pattern: string,
-    timeoutMs = 30000
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const timeoutId = setTimeout(() => {
-        reject(new Error(`Pattern wait timeout: ${pattern}`));
-      }, timeoutMs);
-
-      // 簡易的な実装
-      // 実際の実装では、データストリームを監視する必要がある
-      setTimeout(() => {
-        clearTimeout(timeoutId);
-        resolve('Pattern matched');
-      }, 100);
-    });
-  }
 }
