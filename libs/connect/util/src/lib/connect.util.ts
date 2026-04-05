@@ -21,7 +21,7 @@ export interface ConnectClient {
   prompt: string;
   /**
    * 接続直後のタイムゾーン初期化（各ステップの説明とコマンド）
-   * sudo がパスワードを要求する場合でも後続へ進めるよう set-timezone は `|| true`
+   * `sudo -n` で対話的パスワード待ちを避け、失敗時も `|| true` で後続へ進める
    */
   timezoneSteps: PostConnectTimezoneStep[];
 }
@@ -33,7 +33,8 @@ export function createConnectClient(): ConnectClient {
       {
         statusMessage:
           '[コンソール] タイムゾーンを Asia/Tokyo に設定しています...',
-        command: 'sudo timedatectl set-timezone Asia/Tokyo || true',
+        command:
+          'sudo -n timedatectl set-timezone Asia/Tokyo 2>/dev/null || true',
       },
       {
         statusMessage: '[コンソール] タイムゾーンの状態を表示します。',

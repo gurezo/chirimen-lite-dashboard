@@ -6,6 +6,7 @@ import {
   PI_ZERO_LOGIN_USER,
   PI_ZERO_SERIAL_LOGIN_LINE_PATTERN,
   PI_ZERO_SERIAL_PASSWORD_LINE_PATTERN,
+  PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
 } from '@libs-web-serial-util';
 import { SerialFacadeService } from './serial-facade.service';
 
@@ -52,7 +53,11 @@ export class PiZeroSerialBootstrapService {
 
     let atShell = false;
     try {
-      await this.serial.readUntilPrompt(client.prompt, 5000, 0);
+      await this.serial.readUntilPrompt(
+        PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
+        5000,
+        0,
+      );
       atShell = true;
     } catch {
       atShell = false;
@@ -77,7 +82,7 @@ export class PiZeroSerialBootstrapService {
       log('[コンソール] パスワードを送信中（画面には表示しません）...');
       await this.serial.exec(
         PI_ZERO_LOGIN_PASSWORD,
-        client.prompt,
+        PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
         30000,
         0,
       );
@@ -90,12 +95,12 @@ export class PiZeroSerialBootstrapService {
       try {
         const { stdout } = await this.serial.exec(
           step.command,
-          client.prompt,
+          PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
           10000,
           0,
         );
         const cleaned = sanitizeSerialStdout(
-          stdout,
+          typeof stdout === 'string' ? stdout : '',
           step.command,
           client.prompt,
         );
