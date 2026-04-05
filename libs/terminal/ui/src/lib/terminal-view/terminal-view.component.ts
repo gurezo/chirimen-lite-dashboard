@@ -25,7 +25,7 @@ import { PI_ZERO_PROMPT } from '@libs-web-serial-util';
 @Component({
   selector: 'choh-terminal-view',
   host: {
-    class: 'block h-full min-h-0 min-w-0',
+    class: 'block h-full min-h-0 min-w-0 pt-1 pl-1',
   },
   template: `
     <div class="flex h-full min-h-0 min-w-0 flex-col">
