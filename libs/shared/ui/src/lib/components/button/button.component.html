@@ -1,8 +1,8 @@
 <button
   mat-raised-button
-  color="{{ color }}"
-  [disabled]="disabled"
+  color="{{ color() }}"
+  [disabled]="disabled()"
   (click)="clickEvent.emit()"
 >
-  {{ label }}
+  {{ label() }}
 </button>
