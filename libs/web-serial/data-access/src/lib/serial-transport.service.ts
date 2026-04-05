@@ -2,8 +2,17 @@
 
 import { Injectable } from '@angular/core';
 import { createSerialClient, SerialClient } from '@gurezo/web-serial-rxjs';
-import { catchError, map, Observable, throwError } from 'rxjs';
-import { firstValueFrom } from 'rxjs';
+import {
+  catchError,
+  defaultIfEmpty,
+  defer,
+  firstValueFrom,
+  map,
+  Observable,
+  of,
+  tap,
+  throwError,
+} from 'rxjs';
 import {
   getConnectionErrorMessage,
   getReadErrorMessage,
@@ -23,6 +32,58 @@ export class SerialTransportService {
   private readonly encoder = new TextEncoder();
 
   /**
+   * Serial ポートに接続（Observable）
+   * @param baudRate ボーレート (デフォルト: 115200)
+   */
+  connect$(
+    baudRate = 115200
+  ): Observable<{ port: SerialPort } | { error: string }> {
+    return defer(() => {
+      this.client = createSerialClient({ baudRate });
+      return this.client!.connect().pipe(
+        map((): { port: SerialPort } | { error: string } => {
+          const port = this.client!.currentPort;
+          if (!port) {
+            return {
+              error: getConnectionErrorMessage(
+                new Error('Port is not available after connection')
+              ),
+            };
+          }
+          return { port };
+        }),
+        catchError((error) =>
+          of({ error: getConnectionErrorMessage(error) })
+        )
+      );
+    });
+  }
+
+  /**
+   * Serial ポートから切断（Observable）
+   */
+  disconnect$(): Observable<void> {
+    return defer(() => {
+      if (!this.client) {
+        return of(undefined);
+      }
+      const client = this.client;
+      return client.disconnect().pipe(
+        defaultIfEmpty(undefined),
+        tap(() => {
+          if (this.client === client) {
+            this.client = undefined;
+          }
+        }),
+        catchError((error) => {
+          console.error('Error closing port:', error);
+          return throwError(() => error);
+        })
+      );
+    });
+  }
+
+  /**
    * Serial ポートに接続
    * @param baudRate ボーレート (デフォルト: 115200)
    * @returns 接続成功時は SerialPort、失敗時はエラーメッセージ
@@ -30,37 +91,14 @@ export class SerialTransportService {
   async connect(
     baudRate = 115200
   ): Promise<{ port: SerialPort } | { error: string }> {
-    try {
-      this.client = createSerialClient({ baudRate });
-      await firstValueFrom(this.client.connect());
-
-      const port = this.client.currentPort;
-      if (!port) {
-        const errorMessage = getConnectionErrorMessage(
-          new Error('Port is not available after connection')
-        );
-        return { error: errorMessage };
-      }
-      return { port };
-    } catch (error) {
-      const errorMessage = getConnectionErrorMessage(error);
-      return { error: errorMessage };
-    }
+    return firstValueFrom(this.connect$(baudRate));
   }
 
   /**
    * Serial ポートから切断
    */
   async disconnect(): Promise<void> {
-    try {
-      if (this.client) {
-        await firstValueFrom(this.client.disconnect());
-        this.client = undefined;
-      }
-    } catch (error) {
-      console.error('Error closing port:', error);
-      throw error;
-    }
+    return firstValueFrom(this.disconnect$());
   }
 
   /**
