@@ -14,14 +14,14 @@ describe('WifiInfoComponent', () => {
 
     fixture = TestBed.createComponent(WifiInfoComponent);
     component = fixture.componentInstance;
-    component.wifiInfo = {
+    fixture.componentRef.setInput('wifiInfo', {
       ssid: 'test-ssid',
       address: '00:00:00:00:00:00',
       channel: 1,
       frequency: '2.4 GHz',
       quality: '70/70',
       spec: '802.11n',
-    } satisfies WiFiInfo;
+    } satisfies WiFiInfo);
     fixture.detectChanges();
   });
 

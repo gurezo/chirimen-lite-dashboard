@@ -8,15 +8,15 @@
   (keydown.space)="$event.preventDefault(); onCardActivate()"
 >
   <mat-card-header>
-    <mat-card-title>SSID: {{ wifiInfo.ssid }}</mat-card-title>
+    <mat-card-title>SSID: {{ wifiInfo().ssid }}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <ul>
-      <li>address: {{ wifiInfo.address }}</li>
-      <li>channel: {{ wifiInfo.channel }}</li>
-      <li>frequency: {{ wifiInfo.frequency }}</li>
-      <li>quality: {{ wifiInfo.quality }}</li>
-      <li>spec: {{ wifiInfo.spec }}</li>
+      <li>address: {{ wifiInfo().address }}</li>
+      <li>channel: {{ wifiInfo().channel }}</li>
+      <li>frequency: {{ wifiInfo().frequency }}</li>
+      <li>quality: {{ wifiInfo().quality }}</li>
+      <li>spec: {{ wifiInfo().spec }}</li>
     </ul>
   </mat-card-content>
 </mat-card>
