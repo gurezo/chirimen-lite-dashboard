@@ -6,6 +6,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@libs-connect-util': resolve(__dirname, '../../connect/util/src/index.ts'),
+      '@libs-terminal-util': resolve(__dirname, '../../terminal/util/src/index.ts'),
       '@libs-web-serial-util': resolve(__dirname, '../util/src/index.ts'),
     },
   },

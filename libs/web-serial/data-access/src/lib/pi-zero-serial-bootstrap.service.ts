@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { createConnectClient } from '@libs-connect-util';
+import { sanitizeSerialStdout } from '@libs-terminal-util';
 import {
   PI_ZERO_LOGIN_PASSWORD,
   PI_ZERO_LOGIN_USER,
@@ -83,12 +84,33 @@ export class PiZeroSerialBootstrapService {
       log('[コンソール] ログインが完了しました。');
     }
 
-    for (const cmd of client.timezoneCommands) {
+    log('[コンソール] タイムゾーン関連の初期化を開始します。');
+    for (const step of client.timezoneSteps) {
+      log(step.statusMessage);
       try {
-        await this.serial.exec(cmd, client.prompt, 10000, 0);
-      } catch (error) {
-        console.warn(`Initial command failed: ${cmd}`, error);
+        const { stdout } = await this.serial.exec(
+          step.command,
+          client.prompt,
+          10000,
+          0,
+        );
+        const cleaned = sanitizeSerialStdout(
+          stdout,
+          step.command,
+          client.prompt,
+        );
+        for (const line of cleaned.split(/\r?\n/)) {
+          if (line.length > 0) {
+            log(line);
+          }
+        }
+      } catch (error: unknown) {
+        const message =
+          error instanceof Error ? error.message : String(error);
+        log(`[コンソール] コマンドが失敗しました: ${message}`);
+        console.warn(`Initial command failed: ${step.command}`, error);
       }
     }
+    log('[コンソール] タイムゾーン関連の初期化が完了しました。');
   }
 }

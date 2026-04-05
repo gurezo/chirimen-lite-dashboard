@@ -4,7 +4,7 @@
   "sourceRoot": "libs/web-serial/data-access/src",
   "projectType": "library",
   "tags": ["type:data-access", "domain:web-serial"],
-  "implicitDependencies": ["libs-web-serial-util"],
+  "implicitDependencies": ["libs-web-serial-util", "libs-terminal-util"],
   "targets": {
     "build": {
       "executor": "nx:run-commands",
