@@ -1,7 +1,17 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  EventEmitter,
+  inject,
+  OnInit,
+  Output,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FileService } from '@libs-file-manager-data-access';
 import { FileTreeComponent } from '@libs-file-manager-ui';
 import { FileTreeNode, joinPath } from '@libs-file-manager-util';
+import { PiZeroShellReadinessService } from '@libs-web-serial-data-access';
+import { filter, take } from 'rxjs/operators';
 
 @Component({
   selector: 'lib-file-tree-feature',
@@ -55,6 +65,8 @@ import { FileTreeNode, joinPath } from '@libs-file-manager-util';
 })
 export class FileTreeFeatureComponent implements OnInit {
   private file = inject(FileService);
+  private shellReadiness = inject(PiZeroShellReadinessService);
+  private destroyRef = inject(DestroyRef);
   @Output() readonly fileSelected = new EventEmitter<string>();
 
   nodes: FileTreeNode[] = [];
@@ -62,15 +74,32 @@ export class FileTreeFeatureComponent implements OnInit {
   loading = false;
   errorMessage: string | null = null;
 
-  async ngOnInit(): Promise<void> {
-    await this.loadCurrentPath();
+  ngOnInit(): void {
+    this.loading = true;
+    if (this.shellReadiness.isReady()) {
+      void this.loadCurrentPath();
+      return;
+    }
+    this.shellReadiness.ready$
+      .pipe(
+        filter(Boolean),
+        take(1),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => void this.loadCurrentPath());
   }
 
   async reload(): Promise<void> {
+    if (!this.shellReadiness.isReady()) {
+      return;
+    }
     await this.loadCurrentPath();
   }
 
   async onDirectorySelected(node: FileTreeNode): Promise<void> {
+    if (!this.shellReadiness.isReady()) {
+      return;
+    }
     this.currentPath = node.path;
     await this.loadCurrentPath();
   }
@@ -80,6 +109,9 @@ export class FileTreeFeatureComponent implements OnInit {
   }
 
   async goParent(): Promise<void> {
+    if (!this.shellReadiness.isReady()) {
+      return;
+    }
     if (this.currentPath === '.') {
       return;
     }
