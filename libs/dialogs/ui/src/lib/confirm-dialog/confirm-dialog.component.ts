@@ -14,17 +14,17 @@ export interface ConfirmDialogData {
   selector: 'lib-confirm-dialog',
   template: `
     <div class="dialog-content">
-      @if (title) {
-        <h2>{{ title }}</h2>
+      @if (viewTitle) {
+        <h2>{{ viewTitle }}</h2>
       }
-      @if (message) {
-        <p>{{ message }}</p>
+      @if (viewMessage) {
+        <p>{{ viewMessage }}</p>
       }
       <div class="dialog-actions">
-        @if (!hideCancel) {
-          <button type="button" (click)="cancel()">{{ cancelLabel }}</button>
+        @if (!viewHideCancel) {
+          <button type="button" (click)="cancel()">{{ viewCancelLabel }}</button>
         }
-        <button type="button" (click)="confirm()">{{ confirmLabel }}</button>
+        <button type="button" (click)="confirm()">{{ viewConfirmLabel }}</button>
       </div>
     </div>
   `,
@@ -46,30 +46,33 @@ export class ConfirmDialogComponent implements OnInit {
   private dialogRef = inject(DialogRef<boolean>, { optional: true });
   private data = inject<ConfirmDialogData | null>(DIALOG_DATA, { optional: true });
 
-  readonly titleInput = input('Confirm', { alias: 'title' });
-  readonly messageInput = input('Are you sure?', { alias: 'message' });
-  readonly confirmLabelInput = input('OK', { alias: 'confirmLabel' });
-  readonly cancelLabelInput = input('Cancel', { alias: 'cancelLabel' });
-  readonly hideCancelInput = input(false, { alias: 'hideCancel' });
+  readonly title = input('Confirm');
+  readonly message = input('Are you sure?');
+  readonly confirmLabel = input('OK');
+  readonly cancelLabel = input('Cancel');
+  readonly hideCancel = input(false);
 
-  title = 'Confirm';
-  message = 'Are you sure?';
-  confirmLabel = 'OK';
-  cancelLabel = 'Cancel';
-  hideCancel = false;
+  /** 入力と DIALOG_DATA をマージした表示用（テンプレートはこちらを参照） */
+  viewTitle = 'Confirm';
+  viewMessage = 'Are you sure?';
+  viewConfirmLabel = 'OK';
+  viewCancelLabel = 'Cancel';
+  viewHideCancel = false;
 
   ngOnInit(): void {
-    this.title = this.titleInput();
-    this.message = this.messageInput();
-    this.confirmLabel = this.confirmLabelInput();
-    this.cancelLabel = this.cancelLabelInput();
-    this.hideCancel = this.hideCancelInput();
+    this.viewTitle = this.title();
+    this.viewMessage = this.message();
+    this.viewConfirmLabel = this.confirmLabel();
+    this.viewCancelLabel = this.cancelLabel();
+    this.viewHideCancel = this.hideCancel();
     if (this.data) {
-      if (this.data.title != null) this.title = this.data.title;
-      if (this.data.message != null) this.message = this.data.message;
-      if (this.data.confirmLabel != null) this.confirmLabel = this.data.confirmLabel;
-      if (this.data.cancelLabel != null) this.cancelLabel = this.data.cancelLabel;
-      if (this.data.hideCancel === true) this.hideCancel = true;
+      if (this.data.title != null) this.viewTitle = this.data.title;
+      if (this.data.message != null) this.viewMessage = this.data.message;
+      if (this.data.confirmLabel != null)
+        this.viewConfirmLabel = this.data.confirmLabel;
+      if (this.data.cancelLabel != null)
+        this.viewCancelLabel = this.data.cancelLabel;
+      if (this.data.hideCancel === true) this.viewHideCancel = true;
     }
   }
 
