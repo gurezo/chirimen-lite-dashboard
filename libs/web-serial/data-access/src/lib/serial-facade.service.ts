@@ -1,7 +1,21 @@
 /// <reference types="@types/w3c-web-serial" />
 
 import { Injectable, inject } from '@angular/core';
-import { firstValueFrom, Subject, take, type Subscription } from 'rxjs';
+import {
+  catchError,
+  defer,
+  firstValueFrom,
+  from,
+  map,
+  of,
+  type Observable,
+  Subject,
+  switchMap,
+  take,
+  tap,
+  throwError,
+  type Subscription,
+} from 'rxjs';
 import {
   CommandExecutionConfig,
   type CommandResult,
@@ -46,43 +60,58 @@ export class SerialFacadeService {
   }
 
   /**
+   * Serial ポートに接続（Observable）
+   *
+   * @param baudRate ボーレート (デフォルト: 115200)
+   */
+  connect$(baudRate = 115200): Observable<boolean> {
+    return defer(() => {
+      const preConnect$ = this.isConnected()
+        ? this.disconnect$()
+        : of(undefined);
+      return preConnect$.pipe(
+        switchMap(() => this.transport.connect$(baudRate)),
+        switchMap((result) => {
+          if ('error' in result) {
+            console.error('Connection failed:', result.error);
+            return of(false);
+          }
+          const { port } = result;
+          return from(this.validator.isSupportedDevice(port)).pipe(
+            switchMap((isValid) => {
+              if (!isValid) {
+                return this.transport.disconnect$().pipe(
+                  tap(() =>
+                    console.warn(
+                      'Unsupported device detected - not a Raspberry Pi Zero. Connection cancelled.',
+                    )
+                  ),
+                  map(() => false)
+                );
+              }
+              this.startReadStreamSubscription();
+              this.connectionEpoch += 1;
+              this.connectionEstablished.next();
+              return of(true);
+            })
+          );
+        }),
+        catchError((error) => {
+          console.error('Connection error:', error);
+          return of(false);
+        })
+      );
+    });
+  }
+
+  /**
    * Serial ポートに接続
    *
    * @param baudRate ボーレート (デフォルト: 115200)
    * @returns 接続成功の場合 true、失敗の場合 false
    */
   async connect(baudRate = 115200): Promise<boolean> {
-    try {
-      if (this.isConnected()) {
-        await this.disconnect();
-      }
-
-      const result = await this.transport.connect(baudRate);
-
-      if ('error' in result) {
-        console.error('Connection failed:', result.error);
-        return false;
-      }
-
-      const { port } = result;
-
-      const isValid = await this.validator.isSupportedDevice(port);
-      if (!isValid) {
-        await this.transport.disconnect();
-        console.warn(
-          'Unsupported device detected - not a Raspberry Pi Zero. Connection cancelled.',
-        );
-        return false;
-      }
-
-      this.startReadStreamSubscription();
-      this.connectionEpoch += 1;
-      this.connectionEstablished.next();
-      return true;
-    } catch (error) {
-      console.error('Connection error:', error);
-      return false;
-    }
+    return firstValueFrom(this.connect$(baudRate));
   }
 
   private startReadStreamSubscription(): void {
@@ -101,41 +130,60 @@ export class SerialFacadeService {
   }
 
   /**
+   * Serial ポートから切断（Observable）
+   */
+  disconnect$(): Observable<void> {
+    this.command.cancelAllCommands();
+    this.readSubscription?.unsubscribe();
+    this.readSubscription = null;
+    this.readBuffer = '';
+    return this.transport.disconnect$().pipe(
+      catchError((error) => {
+        console.error('Disconnect error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
    * Serial ポートから切断
    */
   async disconnect(): Promise<void> {
-    try {
-      this.command.cancelAllCommands();
-      this.readSubscription?.unsubscribe();
-      this.readSubscription = null;
-      this.readBuffer = '';
-      await this.transport.disconnect();
-    } catch (error) {
-      console.error('Disconnect error:', error);
-      throw error;
+    return firstValueFrom(this.disconnect$());
+  }
+
+  /**
+   * データを書き込む（Observable）
+   */
+  write$(data: string): Observable<void> {
+    if (!this.transport.isConnected()) {
+      return throwError(() => new Error('Serial port not connected'));
     }
+    return this.transport.write(data);
   }
 
   /**
    * データを書き込む
    */
   async write(data: string): Promise<void> {
+    return firstValueFrom(this.write$(data));
+  }
+
+  /**
+   * 1 チャンクだけ読み取る（Observable）
+   */
+  read$(): Observable<string> {
     if (!this.transport.isConnected()) {
-      throw new Error('Serial port not connected');
+      return throwError(() => new Error('Serial port not connected'));
     }
-    return firstValueFrom(this.transport.write(data));
+    return this.transport.getReadStream().pipe(take(1));
   }
 
   /**
    * 1回だけ読み取る
    */
   async read(): Promise<string> {
-    if (!this.transport.isConnected()) {
-      throw new Error('Serial port not connected');
-    }
-    return firstValueFrom(
-      this.transport.getReadStream().pipe(take(1))
-    );
+    return firstValueFrom(this.read$());
   }
 
   /**
