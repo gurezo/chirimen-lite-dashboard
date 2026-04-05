@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
-import { FileListService } from '@libs-file-manager-data-access';
+import { FileService } from '@libs-file-manager-data-access';
 import { FileTreeComponent } from '@libs-file-manager-ui';
 import { FileTreeNode, joinPath } from '@libs-file-manager-util';
 
@@ -54,7 +54,7 @@ import { FileTreeNode, joinPath } from '@libs-file-manager-util';
   `,
 })
 export class FileTreeFeatureComponent implements OnInit {
-  private fileList = inject(FileListService);
+  private file = inject(FileService);
   @Output() readonly fileSelected = new EventEmitter<string>();
 
   nodes: FileTreeNode[] = [];
@@ -97,7 +97,7 @@ export class FileTreeFeatureComponent implements OnInit {
     this.loading = true;
     this.errorMessage = null;
     try {
-      this.nodes = await this.fileList.list(this.currentPath);
+      this.nodes = await this.file.listTree(this.currentPath);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
       this.errorMessage = message;

@@ -1,16 +1,16 @@
 /// <reference types="vitest/globals" />
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FileTreeFeatureComponent } from './file-tree-feature.component';
-import { FileListService } from '@libs-file-manager-data-access';
+import { FileService } from '@libs-file-manager-data-access';
 import { FileTreeNode } from '@libs-file-manager-util';
 
 describe('FileTreeFeatureComponent', () => {
   let component: FileTreeFeatureComponent;
   let fixture: ComponentFixture<FileTreeFeatureComponent>;
-  const listMock = vi.fn<() => Promise<FileTreeNode[]>>();
+  const listTreeMock = vi.fn<() => Promise<FileTreeNode[]>>();
 
   beforeEach(async () => {
-    listMock.mockResolvedValue([
+    listTreeMock.mockResolvedValue([
       { name: 'docs', path: './docs', isDirectory: true },
       { name: 'main.ts', path: './main.ts', isDirectory: false },
     ]);
@@ -19,8 +19,8 @@ describe('FileTreeFeatureComponent', () => {
       imports: [FileTreeFeatureComponent],
       providers: [
         {
-          provide: FileListService,
-          useValue: { list: listMock },
+          provide: FileService,
+          useValue: { listTree: listTreeMock },
         },
       ],
     }).compileComponents();
@@ -35,7 +35,7 @@ describe('FileTreeFeatureComponent', () => {
   });
 
   it('loads nodes on init', () => {
-    expect(listMock).toHaveBeenCalledWith('.');
+    expect(listTreeMock).toHaveBeenCalledWith('.');
     expect(component.nodes.length).toBe(2);
   });
 });
