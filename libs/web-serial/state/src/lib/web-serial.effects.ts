@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, from, map, of, switchMap } from 'rxjs';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
-import { createConnectClient } from '@libs-connect-util';
 import { WebSerialActions } from './web-serial.actions';
 
 // エラーメッセージ定数
@@ -24,25 +23,6 @@ export class WebSerialEffects {
   actions$ = inject(Actions);
   service = inject(SerialFacadeService);
 
-  private async initializeAfterConnect(): Promise<void> {
-    const client = createConnectClient();
-    try {
-      // まずログイン済み/シェル待ちを軽く確認
-      await this.service.readUntilPrompt(client.prompt, 5000, 0);
-
-      // TZ 設定は best-effort（sudo/prompt 問題で失敗しても接続成功扱い）
-      for (const cmd of client.timezoneCommands) {
-        try {
-          await this.service.exec(cmd, client.prompt, 10000, 0);
-        } catch (error) {
-          console.warn(`Initial command failed: ${cmd}`, error);
-        }
-      }
-    } catch {
-      // readUntilPrompt が失敗しても接続成功扱い
-    }
-  }
-
   init$ = createEffect(
     () => this.actions$.pipe(ofType(WebSerialActions.init)),
     { dispatch: false }
@@ -62,10 +42,6 @@ export class WebSerialEffects {
                 })
               );
             }
-            // ポート確立直後に UI を接続済みへ（initializeAfterConnect はターミナル表示後に続行）
-            void this.initializeAfterConnect().catch((err) =>
-              console.warn('Post-connect initialization failed', err)
-            );
             return of(
               WebSerialActions.onConnectSuccess({
                 isConnected: true,
