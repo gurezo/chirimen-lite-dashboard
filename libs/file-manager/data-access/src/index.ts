@@ -1,3 +1,4 @@
+export * from './lib/file.service';
 export * from './lib/file-list.service';
 export * from './lib/file-read.service';
 export * from './lib/file-create.service';
