@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, firstValueFrom } from 'rxjs';
 import { SerialCommandService } from './serial-command.service';
 import {
   PI_ZERO_PROMPT,
@@ -111,5 +111,30 @@ describe('SerialCommandService', () => {
 
     const result = await execPromise;
     expect(result.stdout).toContain('hi');
+  });
+
+  it('exec$ resolves via firstValueFrom like exec', async () => {
+    const { service, chunks, transport } = createService();
+
+    let releaseWrite: (() => void) | undefined;
+    transport.write = vi.fn(
+      () =>
+        new Observable<void>((subscriber) => {
+          releaseWrite = () => {
+            subscriber.next();
+            subscriber.complete();
+          };
+        })
+    );
+
+    const resultPromise = firstValueFrom(
+      service.exec$('ls', { prompt: PI_ZERO_PROMPT, timeout: 1000, retry: 0 }),
+    );
+
+    releaseWrite?.();
+    chunks.next(`ls\r\noutput\r\n${PI_ZERO_PROMPT}`);
+
+    const result = await resultPromise;
+    expect(result.stdout).toContain(PI_ZERO_PROMPT);
   });
 });
