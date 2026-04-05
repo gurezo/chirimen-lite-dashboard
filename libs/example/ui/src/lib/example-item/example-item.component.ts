@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -10,9 +10,9 @@ import { ExampleItem } from '@libs-example-util';
   templateUrl: './example-item.component.html',
 })
 export class ExampleItemComponent {
-  @Input() label!: string;
-  @Input() exampleItem!: ExampleItem[];
-  @Output() readonly saveExample = new EventEmitter<ExampleItem>();
+  readonly label = input.required<string>();
+  readonly exampleItem = input.required<ExampleItem[]>();
+  readonly saveExample = output<ExampleItem>();
   displayedColumns: string[] = [
     'id',
     'title',

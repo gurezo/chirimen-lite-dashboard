@@ -1,6 +1,6 @@
 <div>
-  <h2>{{ label }}</h2>
-  <table mat-table [dataSource]="exampleItem">
+  <h2>{{ label() }}</h2>
+  <table mat-table [dataSource]="exampleItem()">
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef>センサー</th>
       <td mat-cell *matCellDef="let element">{{ element.id }}</td>
