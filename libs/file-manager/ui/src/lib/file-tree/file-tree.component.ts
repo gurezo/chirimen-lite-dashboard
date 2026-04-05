@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { FileTreeNode } from '@libs-file-manager-util';
 
@@ -7,11 +7,11 @@ import { FileTreeNode } from '@libs-file-manager-util';
   imports: [MatIcon],
   template: `
     <div class="file-tree text-sm">
-      @if (!nodes.length) {
+      @if (!nodes().length) {
         <p class="text-gray-500">No files</p>
       } @else {
         <ul class="space-y-1">
-          @for (node of nodes; track node.path) {
+          @for (node of nodes(); track node.path) {
             <li>
               <button
                 type="button"
@@ -34,10 +34,10 @@ import { FileTreeNode } from '@libs-file-manager-util';
   `,
 })
 export class FileTreeComponent {
-  @Input() nodes: FileTreeNode[] = [];
+  readonly nodes = input<FileTreeNode[]>([]);
 
-  @Output() readonly directorySelected = new EventEmitter<FileTreeNode>();
-  @Output() readonly fileSelected = new EventEmitter<FileTreeNode>();
+  readonly directorySelected = output<FileTreeNode>();
+  readonly fileSelected = output<FileTreeNode>();
 
   onSelect(node: FileTreeNode): void {
     if (node.isDirectory) {

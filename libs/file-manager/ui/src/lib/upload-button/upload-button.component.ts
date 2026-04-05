@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, output } from '@angular/core';
 
 @Component({
   selector: 'lib-upload-button',
@@ -9,5 +9,5 @@ import { Component, EventEmitter, Output } from '@angular/core';
   `,
 })
 export class UploadButtonComponent {
-  @Output() readonly upload = new EventEmitter<void>();
+  readonly upload = output<void>();
 }
