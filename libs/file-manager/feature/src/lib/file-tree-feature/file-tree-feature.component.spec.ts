@@ -66,6 +66,9 @@ describe('FileTreeFeatureComponent', () => {
     await fixture.whenStable();
 
     expect(listTreeMock).not.toHaveBeenCalled();
+    expect(
+      fixture.nativeElement.querySelector('mat-progress-spinner'),
+    ).toBeTruthy();
 
     readySubject.next(true);
     await fixture.whenStable();
