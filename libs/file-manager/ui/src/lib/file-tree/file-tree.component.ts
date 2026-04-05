@@ -19,7 +19,7 @@ import { FileTreeNode } from '@libs-file-manager-util';
                 (click)="onSelect(node)"
               >
                 @if (node.isDirectory) {
-                  <mat-icon aria-hidden="true" class="shrink-0">folder</mat-icon>
+                  <mat-icon aria-hidden="true" class="shrink-0 text-amber-500">folder</mat-icon>
                   <span>{{ node.name }}</span>
                 } @else {
                   <mat-icon aria-hidden="true" class="shrink-0">article</mat-icon>
