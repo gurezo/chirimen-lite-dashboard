@@ -1,15 +1,15 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'lib-progress-dialog',
   template: `
     <div class="dialog-content">
-      @if (message) {
-        <p>{{ message }}</p>
+      @if (message()) {
+        <p>{{ message() }}</p>
       }
-      <p>Progress: {{ progress }}%</p>
+      <p>Progress: {{ progress() }}%</p>
       <div class="progress-bar">
-        <div class="progress-fill" [style.width.%]="progress"></div>
+        <div class="progress-fill" [style.width.%]="progress()"></div>
       </div>
     </div>
   `,
@@ -35,6 +35,6 @@ import { Component, Input } from '@angular/core';
   ],
 })
 export class ProgressDialogComponent {
-  @Input() message = '';
-  @Input() progress = 0;
+  readonly message = input('');
+  readonly progress = input(0);
 }

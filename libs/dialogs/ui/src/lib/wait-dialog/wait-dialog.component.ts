@@ -1,11 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'lib-wait-dialog',
   template: `
     <div class="dialog-content">
-      @if (message) {
-        <p>{{ message }}</p>
+      @if (message()) {
+        <p>{{ message() }}</p>
       }
       <div class="spinner" aria-busy="true"></div>
     </div>
@@ -37,5 +37,5 @@ import { Component, Input } from '@angular/core';
   ],
 })
 export class WaitDialogComponent {
-  @Input() message = 'Please wait...';
+  readonly message = input('Please wait...');
 }
