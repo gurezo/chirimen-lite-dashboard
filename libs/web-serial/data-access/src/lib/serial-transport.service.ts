@@ -18,6 +18,7 @@ import {
   getConnectionErrorMessage,
   getReadErrorMessage,
   getWriteErrorMessage,
+  RASPBERRY_PI_ZERO_INFO,
 } from '@libs-web-serial-util';
 
 /**
@@ -47,7 +48,15 @@ export class SerialTransportService {
     baudRate = 115200
   ): Observable<{ port: SerialPort } | { error: string }> {
     return defer(() => {
-      const client = createSerialClient({ baudRate });
+      const client = createSerialClient({
+        baudRate,
+        filters: [
+          {
+            usbVendorId: RASPBERRY_PI_ZERO_INFO.usbVendorId,
+            usbProductId: RASPBERRY_PI_ZERO_INFO.usbProductId,
+          },
+        ],
+      });
       this.client = client;
       this.readShared$ = null;
       return client.connect().pipe(
