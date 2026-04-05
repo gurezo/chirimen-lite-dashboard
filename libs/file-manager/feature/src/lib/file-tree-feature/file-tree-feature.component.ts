@@ -6,6 +6,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FileService } from '@libs-file-manager-data-access';
 import { FileTreeComponent } from '@libs-file-manager-ui';
@@ -15,7 +16,7 @@ import { filter, take } from 'rxjs/operators';
 
 @Component({
   selector: 'lib-file-tree-feature',
-  imports: [FileTreeComponent],
+  imports: [FileTreeComponent, MatProgressSpinner],
   host: {
     class: 'flex min-h-0 min-w-0 flex-1 flex-col',
   },

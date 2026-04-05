@@ -19,7 +19,11 @@
     }
 
     @if (loading) {
-      <p class="text-xs text-gray-500">loading...</p>
+      <mat-progress-spinner
+        mode="indeterminate"
+        diameter="28"
+        aria-label="Loading files"
+      />
     }
   </div>
 
