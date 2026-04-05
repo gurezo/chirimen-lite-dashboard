@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { SerialError, SerialErrorCode } from '@gurezo/web-serial-rxjs';
 import { catchError, map, of, switchMap } from 'rxjs';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { WebSerialActions } from './web-serial.actions';
@@ -12,6 +13,31 @@ const ERROR_MESSAGES = {
   UNSUPPORTED_DEVICE:
     'サポートされていないデバイスです。Raspberry Pi Zero以外のデバイスは接続できません。',
 } as const;
+
+function connectFailureMessage(error: unknown): string {
+  if (error instanceof SerialError) {
+    if (error.is(SerialErrorCode.OPERATION_CANCELLED)) {
+      return ERROR_MESSAGES.NO_PORT_SELECTED;
+    }
+    if (
+      error.is(SerialErrorCode.PORT_NOT_AVAILABLE) ||
+      error.is(SerialErrorCode.PORT_OPEN_FAILED)
+    ) {
+      return ERROR_MESSAGES.UNSUPPORTED_DEVICE;
+    }
+  }
+  if (error instanceof Error && error.message?.includes('No port selected')) {
+    return ERROR_MESSAGES.NO_PORT_SELECTED;
+  }
+  if (
+    error instanceof Error &&
+    (error.message?.includes('not a Raspberry Pi Zero') ||
+      error.message?.includes('not supported'))
+  ) {
+    return ERROR_MESSAGES.UNSUPPORTED_DEVICE;
+  }
+  return ERROR_MESSAGES.CONNECTION_FAILED;
+}
 
 /**
  * WebSerialEffects
@@ -38,7 +64,7 @@ export class WebSerialEffects {
               return of(
                 WebSerialActions.onConnectFail({
                   isConnected: false,
-                  errorMessage: ERROR_MESSAGES.UNSUPPORTED_DEVICE,
+                  errorMessage: ERROR_MESSAGES.CONNECTION_FAILED,
                 })
               );
             }
@@ -49,20 +75,11 @@ export class WebSerialEffects {
               })
             );
           }),
-          catchError((error) => {
-            let errorMessage: string = ERROR_MESSAGES.CONNECTION_FAILED;
-            if (error.message?.includes('No port selected')) {
-              errorMessage = ERROR_MESSAGES.NO_PORT_SELECTED;
-            } else if (
-              error.message?.includes('not a Raspberry Pi Zero') ||
-              error.message?.includes('not supported')
-            ) {
-              errorMessage = ERROR_MESSAGES.UNSUPPORTED_DEVICE;
-            }
+          catchError((error: unknown) => {
             return [
               WebSerialActions.onConnectFail({
                 isConnected: false,
-                errorMessage: errorMessage,
+                errorMessage: connectFailureMessage(error),
               }),
             ];
           })

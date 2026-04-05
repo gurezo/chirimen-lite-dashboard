@@ -5,8 +5,6 @@ import {
   catchError,
   defer,
   firstValueFrom,
-  from,
-  map,
   of,
   type Observable,
   Subject,
@@ -78,26 +76,11 @@ export class SerialFacadeService {
             console.error('Connection failed:', result.error);
             return of(false);
           }
-          const { port } = result;
-          return from(this.validator.isSupportedDevice(port)).pipe(
-            switchMap((isValid) => {
-              if (!isValid) {
-                return this.transport.disconnect$().pipe(
-                  tap(() =>
-                    console.warn(
-                      'Unsupported device detected - not a Raspberry Pi Zero. Connection cancelled.',
-                    )
-                  ),
-                  map(() => false)
-                );
-              }
-              this.startReadStreamSubscription();
-              this.connectionEpoch += 1;
-              this.shellReadiness.reset();
-              this.connectionEstablished.next();
-              return of(true);
-            })
-          );
+          this.startReadStreamSubscription();
+          this.connectionEpoch += 1;
+          this.shellReadiness.reset();
+          this.connectionEstablished.next();
+          return of(true);
         }),
         catchError((error) => {
           console.error('Connection error:', error);
