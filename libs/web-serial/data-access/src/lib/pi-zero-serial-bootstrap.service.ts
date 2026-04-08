@@ -132,6 +132,7 @@ export class PiZeroSerialBootstrapService {
           this.serial.exec$(PI_ZERO_LOGIN_USER, {
             prompt: PI_ZERO_SERIAL_PASSWORD_LINE_PATTERN,
             timeout: SERIAL_TIMEOUT.DEFAULT,
+            retry: 1,
           }),
         ),
         tap(() => {
@@ -140,7 +141,8 @@ export class PiZeroSerialBootstrapService {
         switchMap(() =>
           this.serial.exec$(PI_ZERO_LOGIN_PASSWORD, {
             prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-            timeout: SERIAL_TIMEOUT.DEFAULT,
+            timeout: SERIAL_TIMEOUT.LONG,
+            retry: 1,
           }),
         ),
         tap(() => log('[コンソール] ログインが完了しました。')),
