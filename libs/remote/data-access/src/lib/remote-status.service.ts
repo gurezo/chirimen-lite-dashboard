@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { PI_ZERO_PROMPT, SERIAL_TIMEOUT } from '@libs-web-serial-util';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class RemoteStatusService {
@@ -9,10 +10,10 @@ export class RemoteStatusService {
 
   async listPlain(): Promise<string> {
     return (
-      await this.serial.exec('forever list --plain', {
+      await firstValueFrom(this.serial.exec$('forever list --plain', {
         prompt: this.prompt,
         timeout: SERIAL_TIMEOUT.FILE_TRANSFER,
-      })
+      }))
     ).stdout;
   }
 }

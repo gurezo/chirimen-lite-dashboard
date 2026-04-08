@@ -11,6 +11,7 @@ import {
   wrapSerialError,
 } from '@libs-web-serial-util';
 import type { WiFiInfo } from '@libs-shared-types';
+import { firstValueFrom } from 'rxjs';
 
 /**
  * WiFi スキャン・状態取得を担当
@@ -28,16 +29,16 @@ export class WifiScanService {
   }> {
     try {
       const ifconfigOutput = (
-        await this.serial.exec('ifconfig', {
+        await firstValueFrom(this.serial.exec$('ifconfig', {
           prompt: PI_ZERO_PROMPT,
           timeout: SERIAL_TIMEOUT.DEFAULT,
-        })
+        }))
       ).stdout;
       const iwconfigOutput = (
-        await this.serial.exec('iwconfig', {
+        await firstValueFrom(this.serial.exec$('iwconfig', {
           prompt: PI_ZERO_PROMPT,
           timeout: SERIAL_TIMEOUT.DEFAULT,
-        })
+        }))
       ).stdout;
 
       const { ipInfo, ipaddr } = parseWifiIfconfigOutput(ifconfigOutput);
@@ -52,10 +53,10 @@ export class WifiScanService {
   async scanNetworks(): Promise<{ rawData: string[]; wifiInfos: WiFiInfo[] }> {
     try {
       const output = (
-        await this.serial.exec('sudo iwlist wlan0 scan', {
+        await firstValueFrom(this.serial.exec$('sudo iwlist wlan0 scan', {
           prompt: PI_ZERO_PROMPT,
           timeout: SERIAL_TIMEOUT.LONG,
-        })
+        }))
       ).stdout;
 
       const lines = output.split('\n');
@@ -70,10 +71,10 @@ export class WifiScanService {
   async getDetailedWifiStatus(): Promise<string> {
     try {
       return (
-        await this.serial.exec('iwconfig wlan0', {
+        await firstValueFrom(this.serial.exec$('iwconfig wlan0', {
           prompt: PI_ZERO_PROMPT,
           timeout: SERIAL_TIMEOUT.DEFAULT,
-        })
+        }))
       ).stdout;
     } catch (error: unknown) {
       throw wrapSerialError('Failed to get WiFi status', error);
@@ -83,10 +84,10 @@ export class WifiScanService {
   async getIpAddress(): Promise<string> {
     try {
       const stdout = (
-        await this.serial.exec('hostname -I', {
+        await firstValueFrom(this.serial.exec$('hostname -I', {
           prompt: PI_ZERO_PROMPT,
           timeout: SERIAL_TIMEOUT.DEFAULT,
-        })
+        }))
       ).stdout;
 
       const lines = stdout.split('\n');
@@ -101,10 +102,10 @@ export class WifiScanService {
   async showNetworkConfig(): Promise<string> {
     try {
       return (
-        await this.serial.exec('cat /etc/network/interfaces', {
+        await firstValueFrom(this.serial.exec$('cat /etc/network/interfaces', {
           prompt: PI_ZERO_PROMPT,
           timeout: SERIAL_TIMEOUT.DEFAULT,
-        })
+        }))
       ).stdout;
     } catch (error: unknown) {
       throw wrapSerialError('Failed to show network config', error);
@@ -116,13 +117,13 @@ export class WifiScanService {
    */
   async checkChirimenTutorialReachability(): Promise<string> {
     try {
-      const { stdout } = await this.serial.exec(
+      const { stdout } = await firstValueFrom(this.serial.exec$(
         'wget --spider -nv https://tutorial.chirimen.org/',
         {
           prompt: PI_ZERO_PROMPT,
           timeout: SERIAL_TIMEOUT.FILE_TRANSFER,
         }
-      );
+      ));
       return stdout;
     } catch (error: unknown) {
       throw wrapSerialError('Connectivity check failed', error);

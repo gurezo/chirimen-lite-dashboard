@@ -41,9 +41,8 @@ describe('SerialCommandService', () => {
         })
     );
 
-    const execPromise = service.exec(
-      'ls',
-      { prompt: PI_ZERO_PROMPT, timeout: 1000, retry: 0 }
+    const execPromise = firstValueFrom(
+      service.exec$('ls', { prompt: PI_ZERO_PROMPT, timeout: 1000, retry: 0 }),
     );
 
     releaseWrite?.();
@@ -57,11 +56,13 @@ describe('SerialCommandService', () => {
   it('readUntilPrompt resolves without writing', async () => {
     const { service, chunks } = createService();
 
-    const readPromise = service.readUntilPrompt({
-      prompt: PI_ZERO_PROMPT,
-      timeout: 1000,
-      retry: 0,
-    });
+    const readPromise = firstValueFrom(
+      service.readUntilPrompt$({
+        prompt: PI_ZERO_PROMPT,
+        timeout: 1000,
+        retry: 0,
+      }),
+    );
 
     queueMicrotask(() => {
       chunks.next(`welcome\r\n${PI_ZERO_PROMPT}`);
@@ -74,22 +75,26 @@ describe('SerialCommandService', () => {
   it('readUntilPrompt sees data already buffered before the wait starts', async () => {
     const { service, chunks } = createService();
     chunks.next('Raspberry Pi OS\r\n\r\nraspberrypi login: ');
-    const result = await service.readUntilPrompt({
-      prompt: PI_ZERO_SERIAL_LOGIN_LINE_PATTERN,
-      timeout: 1000,
-      retry: 0,
-    });
+    const result = await firstValueFrom(
+      service.readUntilPrompt$({
+        prompt: PI_ZERO_SERIAL_LOGIN_LINE_PATTERN,
+        timeout: 1000,
+        retry: 0,
+      }),
+    );
     expect(result.stdout).toMatch(/login:\s*/i);
   });
 
   it('readUntilPrompt matches Japanese login prompt in buffer', async () => {
     const { service, chunks } = createService();
     chunks.next('ホスト名 ログイン: ');
-    const result = await service.readUntilPrompt({
-      prompt: PI_ZERO_SERIAL_LOGIN_LINE_PATTERN,
-      timeout: 1000,
-      retry: 0,
-    });
+    const result = await firstValueFrom(
+      service.readUntilPrompt$({
+        prompt: PI_ZERO_SERIAL_LOGIN_LINE_PATTERN,
+        timeout: 1000,
+        retry: 0,
+      }),
+    );
     expect(result.stdout).toMatch(/ログイン/);
   });
 
@@ -108,13 +113,12 @@ describe('SerialCommandService', () => {
     );
 
     const escaped = PI_ZERO_PROMPT.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const execPromise = service.exec(
-      'echo hi',
-      {
+    const execPromise = firstValueFrom(
+      service.exec$('echo hi', {
         prompt: new RegExp(escaped),
         timeout: 1000,
         retry: 0,
-      }
+      }),
     );
 
     releaseWrite?.();

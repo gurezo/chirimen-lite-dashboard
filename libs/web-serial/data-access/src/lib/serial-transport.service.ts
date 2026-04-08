@@ -6,7 +6,6 @@ import {
   catchError,
   defaultIfEmpty,
   defer,
-  firstValueFrom,
   map,
   Observable,
   of,
@@ -101,24 +100,6 @@ export class SerialTransportService {
         })
       );
     });
-  }
-
-  /**
-   * Serial ポートに接続
-   * @param baudRate ボーレート (デフォルト: 115200)
-   * @returns 接続成功時は SerialPort、失敗時はエラーメッセージ
-   */
-  async connect(
-    baudRate = 115200
-  ): Promise<{ port: SerialPort } | { error: string }> {
-    return firstValueFrom(this.connect$(baudRate));
-  }
-
-  /**
-   * Serial ポートから切断
-   */
-  async disconnect(): Promise<void> {
-    return firstValueFrom(this.disconnect$());
   }
 
   /**

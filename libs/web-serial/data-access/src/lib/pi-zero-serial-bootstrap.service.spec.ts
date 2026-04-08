@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { from } from 'rxjs';
+import { firstValueFrom, from } from 'rxjs';
 import {
   PI_ZERO_LOGIN_PASSWORD,
   PI_ZERO_LOGIN_USER,
@@ -34,15 +34,13 @@ describe('PiZeroSerialBootstrapService', () => {
     const serial = {
       isConnected: () => true,
       getConnectionEpoch: () => 1,
-      readUntilPrompt,
       readUntilPrompt$: (o: unknown) => from(readUntilPrompt(o)),
-      exec,
       exec$: (c: string, o: unknown) => from(exec(c, o)),
     } as unknown as SerialFacadeService;
 
     const shellReadiness = createShellReadinessMock();
     const service = new PiZeroSerialBootstrapService(serial, shellReadiness);
-    await service.runAfterConnect();
+    await firstValueFrom(service.runAfterConnect$());
 
     expect(vi.mocked(shellReadiness.setReady)).toHaveBeenCalledWith(true);
     expect(readUntilPrompt).toHaveBeenCalledTimes(1);
@@ -77,16 +75,14 @@ describe('PiZeroSerialBootstrapService', () => {
     const serial = {
       isConnected: () => true,
       getConnectionEpoch: () => 1,
-      readUntilPrompt,
       readUntilPrompt$: (o: unknown) => from(readUntilPrompt(o)),
-      exec,
       exec$: (c: string, o: unknown) => from(exec(c, o)),
     } as unknown as SerialFacadeService;
 
     const shellReadiness = createShellReadinessMock();
     const service = new PiZeroSerialBootstrapService(serial, shellReadiness);
     const lines: string[] = [];
-    await service.runAfterConnect((line) => lines.push(line));
+    await firstValueFrom(service.runAfterConnect$((line) => lines.push(line)));
 
     expect(vi.mocked(shellReadiness.setReady)).toHaveBeenCalledWith(true);
     expect(readUntilPrompt).toHaveBeenCalledTimes(2);
@@ -141,16 +137,14 @@ describe('PiZeroSerialBootstrapService', () => {
     const serial = {
       isConnected: () => true,
       getConnectionEpoch: () => 1,
-      readUntilPrompt,
       readUntilPrompt$: (o: unknown) => from(readUntilPrompt(o)),
-      exec,
       exec$: (c: string, o: unknown) => from(exec(c, o)),
     } as unknown as SerialFacadeService;
 
     const shellReadiness = createShellReadinessMock();
     const service = new PiZeroSerialBootstrapService(serial, shellReadiness);
-    await service.runAfterConnect();
-    await service.runAfterConnect();
+    await firstValueFrom(service.runAfterConnect$());
+    await firstValueFrom(service.runAfterConnect$());
 
     expect(readUntilPrompt).toHaveBeenCalledTimes(1);
     expect(vi.mocked(shellReadiness.setReady)).toHaveBeenCalledTimes(1);
@@ -170,16 +164,14 @@ describe('PiZeroSerialBootstrapService', () => {
     const serial = {
       isConnected: () => true,
       getConnectionEpoch: () => 1,
-      readUntilPrompt,
       readUntilPrompt$: (o: unknown) => from(readUntilPrompt(o)),
-      exec,
       exec$: (c: string, o: unknown) => from(exec(c, o)),
     } as unknown as SerialFacadeService;
 
     const lines: string[] = [];
     const shellReadiness = createShellReadinessMock();
     const service = new PiZeroSerialBootstrapService(serial, shellReadiness);
-    await service.runAfterConnect((line) => lines.push(line));
+    await firstValueFrom(service.runAfterConnect$((line) => lines.push(line)));
 
     expect(vi.mocked(shellReadiness.setReady)).toHaveBeenCalledWith(true);
     expect(

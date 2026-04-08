@@ -4,6 +4,7 @@ import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { FileUtils } from '@libs-wifi-util';
 import { PI_ZERO_PROMPT, SERIAL_TIMEOUT } from '@libs-web-serial-util';
 import { FileTreeNode, parseLsOutput } from '@libs-file-manager-util';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class FileService {
@@ -18,10 +19,10 @@ export class FileService {
     const escaped = FileUtils.escapePath(dir);
 
     const stdout = (
-      await this.serial.exec(`ls -al --quoting-style=c -- ${escaped}`, {
+      await firstValueFrom(this.serial.exec$(`ls -al --quoting-style=c -- ${escaped}`, {
         prompt: PI_ZERO_PROMPT,
         timeout: SERIAL_TIMEOUT.LONG,
-      })
+      }))
     ).stdout;
 
     return stdout
@@ -40,26 +41,26 @@ export class FileService {
 
   async mkdir(path: string): Promise<void> {
     const escaped = FileUtils.escapePath(path);
-    await this.serial.exec(`mkdir -p -- ${escaped}`, {
+    await firstValueFrom(this.serial.exec$(`mkdir -p -- ${escaped}`, {
       prompt: PI_ZERO_PROMPT,
       timeout: SERIAL_TIMEOUT.DEFAULT,
-    });
+    }));
   }
 
   async touch(path: string): Promise<void> {
     const escaped = FileUtils.escapePath(path);
-    await this.serial.exec(`touch -- ${escaped}`, {
+    await firstValueFrom(this.serial.exec$(`touch -- ${escaped}`, {
       prompt: PI_ZERO_PROMPT,
       timeout: SERIAL_TIMEOUT.DEFAULT,
-    });
+    }));
   }
 
   async remove(path: string): Promise<void> {
     const escaped = FileUtils.escapePath(path);
-    await this.serial.exec(`rm -- ${escaped}`, {
+    await firstValueFrom(this.serial.exec$(`rm -- ${escaped}`, {
       prompt: PI_ZERO_PROMPT,
       timeout: SERIAL_TIMEOUT.DEFAULT,
-    });
+    }));
   }
 
   async read(path: string): Promise<string> {
@@ -73,10 +74,10 @@ export class FileService {
   async move(fromPath: string, toPath: string): Promise<void> {
     const fromEscaped = FileUtils.escapePath(fromPath);
     const toEscaped = FileUtils.escapePath(toPath);
-    await this.serial.exec(`mv -- ${fromEscaped} ${toEscaped}`, {
+    await firstValueFrom(this.serial.exec$(`mv -- ${fromEscaped} ${toEscaped}`, {
       prompt: PI_ZERO_PROMPT,
       timeout: SERIAL_TIMEOUT.DEFAULT,
-    });
+    }));
   }
 
   /**

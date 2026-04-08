@@ -4,7 +4,6 @@ import { Injectable, inject } from '@angular/core';
 import {
   catchError,
   defer,
-  firstValueFrom,
   of,
   type Observable,
   Subject,
@@ -100,17 +99,6 @@ export class SerialFacadeService {
     });
   }
 
-  /**
-   * Serial ポートに接続
-   *
-   * @param baudRate ボーレート (デフォルト: 115200)
-   * @returns 接続成功の場合 true、失敗の場合 false
-   */
-  async connect(baudRate = 115200): Promise<boolean> {
-    const result = await firstValueFrom(this.connect$(baudRate));
-    return result.ok;
-  }
-
   private startReadStreamSubscription(): void {
     this.command.startReadLoop();
   }
@@ -131,13 +119,6 @@ export class SerialFacadeService {
   }
 
   /**
-   * Serial ポートから切断
-   */
-  async disconnect(): Promise<void> {
-    return firstValueFrom(this.disconnect$());
-  }
-
-  /**
    * データを書き込む（Observable）
    */
   write$(data: string): Observable<void> {
@@ -148,13 +129,6 @@ export class SerialFacadeService {
   }
 
   /**
-   * データを書き込む
-   */
-  async write(data: string): Promise<void> {
-    return firstValueFrom(this.write$(data));
-  }
-
-  /**
    * 1 チャンクだけ読み取る（Observable）
    */
   read$(): Observable<string> {
@@ -162,20 +136,6 @@ export class SerialFacadeService {
       return throwError(() => new Error('Serial port not connected'));
     }
     return this.transport.getReadStream().pipe(take(1));
-  }
-
-  /**
-   * 1回だけ読み取る
-   */
-  async read(): Promise<string> {
-    return firstValueFrom(this.read$());
-  }
-
-  /**
-   * 1回だけ文字列として読み取る
-   */
-  async readString(): Promise<string> {
-    return this.read();
   }
 
   /**
@@ -218,33 +178,6 @@ export class SerialFacadeService {
       retry = 0,
     } = options;
     return this.command.readUntilPrompt$({ prompt, timeout, retry });
-  }
-
-  /**
-   * コマンド実行（stdout 相当を返す）
-   * @deprecated Prefer {@link SerialFacadeService.exec$}.
-   */
-  async exec(cmd: string, options: SerialExecOptions): Promise<CommandResult> {
-    return firstValueFrom(this.exec$(cmd, options));
-  }
-
-  /**
-   * raw コマンド実行（改行制御が必要なケース向け）
-   * @deprecated Prefer {@link SerialFacadeService.execRaw$}.
-   */
-  async execRaw(
-    cmdRaw: string,
-    options: SerialExecOptions,
-  ): Promise<CommandResult> {
-    return firstValueFrom(this.execRaw$(cmdRaw, options));
-  }
-
-  /**
-   * 送信せずに prompt まで待機
-   * @deprecated Prefer {@link SerialFacadeService.readUntilPrompt$}.
-   */
-  async readUntilPrompt(options: SerialExecOptions): Promise<CommandResult> {
-    return firstValueFrom(this.readUntilPrompt$(options));
   }
 
   /** 現在のシリアル接続セッション番号（切断後も値は保持され、次回接続で増える） */

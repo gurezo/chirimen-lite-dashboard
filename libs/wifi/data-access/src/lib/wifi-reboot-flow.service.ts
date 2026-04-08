@@ -5,6 +5,7 @@ import {
   SERIAL_TIMEOUT,
   wrapSerialError,
 } from '@libs-web-serial-util';
+import { firstValueFrom } from 'rxjs';
 
 /**
  * WiFi 再起動・有効/無効のフローを担当
@@ -20,15 +21,15 @@ export class WifiRebootFlowService {
    */
   async restartWifiService(): Promise<void> {
     try {
-      await this.serial.exec('sudo systemctl restart wpa_supplicant', {
+      await firstValueFrom(this.serial.exec$('sudo systemctl restart wpa_supplicant', {
         prompt: PI_ZERO_PROMPT,
         timeout: SERIAL_TIMEOUT.DEFAULT,
-      });
+      }));
 
-      await this.serial.exec('sudo systemctl restart networking', {
+      await firstValueFrom(this.serial.exec$('sudo systemctl restart networking', {
         prompt: PI_ZERO_PROMPT,
         timeout: SERIAL_TIMEOUT.DEFAULT,
-      });
+      }));
     } catch (error: unknown) {
       throw wrapSerialError('Failed to restart WiFi service', error);
     }
@@ -39,10 +40,10 @@ export class WifiRebootFlowService {
    */
   async enableWifi(): Promise<void> {
     try {
-      await this.serial.exec('sudo ifconfig wlan0 up', {
+      await firstValueFrom(this.serial.exec$('sudo ifconfig wlan0 up', {
         prompt: PI_ZERO_PROMPT,
         timeout: SERIAL_TIMEOUT.DEFAULT,
-      });
+      }));
     } catch (error: unknown) {
       throw wrapSerialError('Failed to enable WiFi', error);
     }
@@ -53,10 +54,10 @@ export class WifiRebootFlowService {
    */
   async disableWifi(): Promise<void> {
     try {
-      await this.serial.exec('sudo ifconfig wlan0 down', {
+      await firstValueFrom(this.serial.exec$('sudo ifconfig wlan0 down', {
         prompt: PI_ZERO_PROMPT,
         timeout: SERIAL_TIMEOUT.DEFAULT,
-      });
+      }));
     } catch (error: unknown) {
       throw wrapSerialError('Failed to disable WiFi', error);
     }
@@ -67,10 +68,10 @@ export class WifiRebootFlowService {
    */
   async rebootDevice(): Promise<void> {
     try {
-      await this.serial.exec('sudo reboot', {
+      await firstValueFrom(this.serial.exec$('sudo reboot', {
         prompt: PI_ZERO_PROMPT,
         timeout: SERIAL_TIMEOUT.REBOOT,
-      });
+      }));
     } catch {
       // 再起動でシリアルが切れるとタイムアウトや切断エラーになり得る
     }
