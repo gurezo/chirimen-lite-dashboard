@@ -100,6 +100,7 @@ describe('PiZeroSerialBootstrapService', () => {
       expect.objectContaining({
         prompt: expect.any(RegExp),
         timeout: SERIAL_TIMEOUT.DEFAULT,
+        retry: 1,
       }),
     );
     expect(exec).toHaveBeenNthCalledWith(
@@ -107,7 +108,8 @@ describe('PiZeroSerialBootstrapService', () => {
       PI_ZERO_LOGIN_PASSWORD,
       expect.objectContaining({
         prompt: PI_ZERO_SHELL_PROMPT_LINE_PATTERN,
-        timeout: SERIAL_TIMEOUT.DEFAULT,
+        timeout: SERIAL_TIMEOUT.LONG,
+        retry: 1,
       }),
     );
     expect(lines.some((l) => l.includes('ログインユーザー'))).toBe(true);
