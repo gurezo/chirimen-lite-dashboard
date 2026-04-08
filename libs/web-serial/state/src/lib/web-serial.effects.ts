@@ -26,14 +26,12 @@ export class WebSerialEffects {
             if (!result.ok) {
               return of(
                 WebSerialActions.onConnectFail({
-                  isConnected: false,
                   errorMessage: result.errorMessage,
                 }),
               );
             }
             return of(
               WebSerialActions.onConnectSuccess({
-                isConnected: true,
                 message: CONNECTION_SUCCESS_MESSAGE,
               }),
             );
@@ -41,7 +39,6 @@ export class WebSerialEffects {
           catchError((error: unknown) => {
             return [
               WebSerialActions.onConnectFail({
-                isConnected: false,
                 errorMessage: getConnectionErrorMessage(error),
               }),
             ];
