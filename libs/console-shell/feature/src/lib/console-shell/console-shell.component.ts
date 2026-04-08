@@ -112,8 +112,6 @@ export class ConsoleShellComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   ngOnInit() {
-    this.store.dispatch(WebSerialActions.init());
-
     this.subscriptions.add(
       this.router.events
         .pipe(

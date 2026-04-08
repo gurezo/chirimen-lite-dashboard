@@ -115,10 +115,6 @@ describe('ConsoleShellComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should dispatch init on ngOnInit', () => {
-    expect(storeDispatch).toHaveBeenCalled();
-  });
-
   it('should dispatch onConnect when onConnect is called', () => {
     storeDispatch.mockClear();
     component.onConnect();
