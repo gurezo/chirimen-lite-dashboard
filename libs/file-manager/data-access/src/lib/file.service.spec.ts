@@ -4,6 +4,7 @@ import { FileContentService } from '@libs-wifi-data-access';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { PI_ZERO_PROMPT, SERIAL_TIMEOUT } from '@libs-web-serial-util';
 import { FileUtils } from '@libs-wifi-util';
+import { from } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { FileService } from './file.service';
 
@@ -20,7 +21,12 @@ describe('FileService', () => {
     const injector = Injector.create({
       providers: [
         FileService,
-        { provide: SerialFacadeService, useValue: { exec } },
+        {
+          provide: SerialFacadeService,
+          useValue: {
+            exec$: (...args: unknown[]) => from(exec(...args)),
+          },
+        },
         {
           provide: FileContentService,
           useValue: { readFile, writeBinaryFile },
