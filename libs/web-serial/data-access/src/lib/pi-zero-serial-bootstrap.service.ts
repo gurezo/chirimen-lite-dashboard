@@ -16,10 +16,8 @@ import type { Observable } from 'rxjs';
 import {
   catchError,
   concatMap,
-  defaultIfEmpty,
   defer,
   finalize,
-  firstValueFrom,
   from,
   ignoreElements,
   map,
@@ -98,16 +96,6 @@ export class PiZeroSerialBootstrapService {
     );
 
     return this.activeBootstrap$;
-  }
-
-  /**
-   * 接続セッションごとに1回、シェル到達（必要ならログイン）と接続直後の初期化を行う。
-   * @deprecated Prefer {@link PiZeroSerialBootstrapService.runAfterConnect$}.
-   */
-  async runAfterConnect(onStatus?: PiZeroBootstrapStatusHandler): Promise<void> {
-    await firstValueFrom(
-      this.runAfterConnect$(onStatus).pipe(defaultIfEmpty(undefined)),
-    );
   }
 
   private runPipeline$(log: PiZeroBootstrapStatusHandler): Observable<void> {

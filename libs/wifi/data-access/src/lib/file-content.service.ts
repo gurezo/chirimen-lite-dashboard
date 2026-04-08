@@ -6,6 +6,7 @@ import {
   SERIAL_TIMEOUT,
   wrapSerialError,
 } from '@libs-web-serial-util';
+import { firstValueFrom } from 'rxjs';
 
 /**
  * ファイル内容情報
@@ -31,10 +32,10 @@ export class FileContentService {
   async readFile(path: string): Promise<FileContentInfo> {
     try {
       const result = (
-        await this.serial.exec(`base64 -- ${FileUtils.escapePath(path)}`, {
+        await firstValueFrom(this.serial.exec$(`base64 -- ${FileUtils.escapePath(path)}`, {
           prompt: PI_ZERO_PROMPT,
           timeout: SERIAL_TIMEOUT.LONG,
-        })
+        }))
       ).stdout;
 
       const lines = result.split('\n').map((line) => line.trim());
@@ -70,10 +71,10 @@ export class FileContentService {
   async writeTextFile(path: string, content: string): Promise<void> {
     try {
       const command = FileUtils.generateHeredocCommand(path, content);
-      await this.serial.exec(command, {
+      await firstValueFrom(this.serial.exec$(command, {
         prompt: 'EOL',
         timeout: SERIAL_TIMEOUT.DEFAULT,
-      });
+      }));
     } catch (error: unknown) {
       throw wrapSerialError('Failed to write text file', error);
     }
@@ -83,30 +84,30 @@ export class FileContentService {
     try {
       const base64 = FileUtils.arrayBufferToBase64(buffer);
 
-      await this.serial.write('\x03');
+      await firstValueFrom(this.serial.write$('\x03'));
       await this.sleep(100);
 
-      await this.serial.exec(`base64 -d > ${FileUtils.escapePath(path)}`, {
+      await firstValueFrom(this.serial.exec$(`base64 -d > ${FileUtils.escapePath(path)}`, {
         prompt: '\n',
         timeout: SERIAL_TIMEOUT.DEFAULT,
-      });
+      }));
 
       const lineLength = 512;
       for (let i = 0; i <= Math.floor(base64.length / lineLength); i++) {
         const line = base64.substring(i * lineLength, (i + 1) * lineLength);
-        await this.serial.exec(line, {
+        await firstValueFrom(this.serial.exec$(line, {
           prompt: '\n',
           timeout: SERIAL_TIMEOUT.LINE,
-        });
+        }));
         await this.sleep(1);
       }
 
-      await this.serial.write('\x04');
+      await firstValueFrom(this.serial.write$('\x04'));
       await this.sleep(10);
-      await this.serial.exec('', {
+      await firstValueFrom(this.serial.exec$('', {
         prompt: '\\$',
         timeout: SERIAL_TIMEOUT.LINE,
-      });
+      }));
     } catch (error: unknown) {
       throw wrapSerialError('Failed to write binary file', error);
     }
@@ -115,10 +116,10 @@ export class FileContentService {
   async appendToFile(path: string, content: string): Promise<void> {
     try {
       const command = FileUtils.generateAppendCommand(path, content);
-      await this.serial.exec(command, {
+      await firstValueFrom(this.serial.exec$(command, {
         prompt: 'EOL',
         timeout: SERIAL_TIMEOUT.DEFAULT,
-      });
+      }));
     } catch (error: unknown) {
       throw wrapSerialError('Failed to append to file', error);
     }

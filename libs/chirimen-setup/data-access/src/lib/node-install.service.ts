@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { PI_ZERO_PROMPT, SERIAL_TIMEOUT } from '@libs-web-serial-util';
+import { firstValueFrom } from 'rxjs';
 import {
   buildNodeInstallStepList,
   type NodeInstallOptions,
@@ -28,10 +29,10 @@ export class NodeInstallService {
   ): Promise<void> {
     const steps = this.buildInstallSteps(options);
     for (const step of steps) {
-      const { stdout } = await this.serial.exec(step.command, {
+      const { stdout } = await firstValueFrom(this.serial.exec$(step.command, {
         prompt: this.prompt,
         timeout: SERIAL_TIMEOUT.NODE_INSTALL,
-      });
+      }));
       onAfterStep?.(step, stdout);
     }
   }

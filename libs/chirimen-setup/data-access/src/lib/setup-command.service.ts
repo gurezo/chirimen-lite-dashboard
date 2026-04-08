@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { PI_ZERO_PROMPT, SERIAL_TIMEOUT } from '@libs-web-serial-util';
+import { firstValueFrom } from 'rxjs';
 import {
   EXTRA_SETUP_STEPS,
   ExtraSetupService,
@@ -77,10 +78,10 @@ export class SetupCommandService {
     });
 
     try {
-      const { stdout } = await this.serial.exec(postStep.command, {
+      const { stdout } = await firstValueFrom(this.serial.exec$(postStep.command, {
         prompt: this.prompt,
         timeout: SERIAL_TIMEOUT.FILE_TRANSFER,
-      });
+      }));
       emit('post', postStep.label, postStep.command, stdout);
     } catch {
       emit('post', postStep.label, postStep.command, '');

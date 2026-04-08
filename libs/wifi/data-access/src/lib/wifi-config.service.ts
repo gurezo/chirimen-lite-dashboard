@@ -8,6 +8,7 @@ import {
   SERIAL_TIMEOUT,
   wrapSerialError,
 } from '@libs-web-serial-util';
+import { firstValueFrom } from 'rxjs';
 
 /**
  * WiFi 設定（setWiFi / configureWifi）を担当
@@ -25,14 +26,14 @@ export class WifiConfigService {
    */
   async setWiFi(ssid: string, password: string): Promise<void> {
     try {
-      await this.serial.exec('cd', {
+      await firstValueFrom(this.serial.exec$('cd', {
         prompt: PI_ZERO_PROMPT,
         timeout: SERIAL_TIMEOUT.DEFAULT,
-      });
-      await this.serial.exec('sudo touch /boot/ssh', {
+      }));
+      await firstValueFrom(this.serial.exec$('sudo touch /boot/ssh', {
         prompt: PI_ZERO_PROMPT,
         timeout: SERIAL_TIMEOUT.DEFAULT,
-      });
+      }));
 
       const wifiSetupScript = this.generateWifiSetupScript();
 
@@ -40,13 +41,13 @@ export class WifiConfigService {
 
       const qSsid = shellSingleQuote(ssid);
       const qPass = shellSingleQuote(password);
-      await this.serial.exec(
+      await firstValueFrom(this.serial.exec$(
         `chmod +x wifi_setup.sh && ./wifi_setup.sh ${qSsid} ${qPass}`,
         {
           prompt: PI_ZERO_PROMPT,
           timeout: SERIAL_TIMEOUT.LONG,
         }
-      );
+      ));
     } catch (error: unknown) {
       throw wrapSerialError('Failed to set WiFi', error);
     }
@@ -107,34 +108,34 @@ network={
 
   private async saveWifiConfig(configContent: string): Promise<void> {
     try {
-      await this.serial.exec(
+      await firstValueFrom(this.serial.exec$(
         'sudo cp /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf.backup',
         {
           prompt: PI_ZERO_PROMPT,
           timeout: SERIAL_TIMEOUT.DEFAULT,
         }
-      );
+      ));
 
       const encoder = new TextEncoder();
       const uint8Array = encoder.encode(configContent);
       const base64 = FileUtils.arrayBufferToBase64(uint8Array.buffer);
 
-      await this.serial.write('\x03');
+      await firstValueFrom(this.serial.write$('\x03'));
       await this.sleep(100);
 
-      await this.serial.exec(
+      await firstValueFrom(this.serial.exec$(
         'sudo tee /etc/wpa_supplicant/wpa_supplicant.conf > /dev/null',
         {
           prompt: '\n',
           timeout: SERIAL_TIMEOUT.DEFAULT,
         }
-      );
-      await this.serial.exec(base64, {
+      ));
+      await firstValueFrom(this.serial.exec$(base64, {
         prompt: '\n',
         timeout: SERIAL_TIMEOUT.LINE,
-      });
+      }));
 
-      await this.serial.write('\x04');
+      await firstValueFrom(this.serial.write$('\x04'));
       await this.sleep(10);
     } catch (error: unknown) {
       throw wrapSerialError('Failed to save WiFi config', error);

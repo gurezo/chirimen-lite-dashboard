@@ -9,7 +9,14 @@ import {
   input,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { EMPTY, Subscription, catchError, finalize, switchMap } from 'rxjs';
+import {
+  EMPTY,
+  Subscription,
+  catchError,
+  finalize,
+  firstValueFrom,
+  switchMap,
+} from 'rxjs';
 import { FitAddon } from '@xterm/addon-fit';
 import { Terminal } from '@xterm/xterm';
 import {
@@ -129,10 +136,10 @@ export class TerminalViewComponent implements AfterViewInit, OnDestroy {
       this.xterminal,
       async (command) => {
         return this.enqueueExec(async () => {
-          const { stdout } = await this.serial.exec(command, {
+          const { stdout } = await firstValueFrom(this.serial.exec$(command, {
             prompt: this.remotePrompt(),
             timeout: SERIAL_TIMEOUT.DEFAULT,
-          });
+          }));
           return sanitizeSerialStdout(stdout, command, this.remotePrompt());
         });
       },
@@ -150,10 +157,10 @@ export class TerminalViewComponent implements AfterViewInit, OnDestroy {
           }
           this.xterminal.writeln(`$ ${cmd}`);
           try {
-            const { stdout } = await this.serial.exec(cmd, {
+            const { stdout } = await firstValueFrom(this.serial.exec$(cmd, {
               prompt: this.remotePrompt(),
               timeout: SERIAL_TIMEOUT.DEFAULT,
-            });
+            }));
             const out = sanitizeSerialStdout(
               stdout,
               cmd,

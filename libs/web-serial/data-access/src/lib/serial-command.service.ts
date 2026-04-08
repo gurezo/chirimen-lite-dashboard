@@ -12,7 +12,6 @@ import {
   EMPTY,
   filter,
   finalize,
-  firstValueFrom,
   map,
   merge,
   mergeMap,
@@ -267,41 +266,6 @@ export class SerialCommandService {
         onAttemptStart,
       ),
     );
-  }
-
-  /**
-   * コマンド実行（stdin に `cmd + '\n'` を送信し、prompt まで待機）
-   * @deprecated Prefer {@link SerialCommandService.exec$} for reactive pipelines.
-   */
-  async exec(
-    cmd: string,
-    config: CommandExecutionConfig,
-    onAttemptStart?: () => void,
-  ): Promise<CommandResult> {
-    return firstValueFrom(this.exec$(cmd, config, onAttemptStart));
-  }
-
-  /**
-   * raw コマンド実行（stdin に `cmdRaw` をそのまま送信）
-   * @deprecated Prefer {@link SerialCommandService.execRaw$}.
-   */
-  async execRaw(
-    cmdRaw: string,
-    config: CommandExecutionConfig,
-    onAttemptStart?: () => void,
-  ): Promise<CommandResult> {
-    return firstValueFrom(this.execRaw$(cmdRaw, config, onAttemptStart));
-  }
-
-  /**
-   * 読み取りのみ（送信せず prompt まで待機）
-   * @deprecated Prefer {@link SerialCommandService.readUntilPrompt$}.
-   */
-  async readUntilPrompt(
-    config: CommandExecutionConfig,
-    onAttemptStart?: () => void,
-  ): Promise<CommandResult> {
-    return firstValueFrom(this.readUntilPrompt$(config, onAttemptStart));
   }
 
   /**
