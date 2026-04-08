@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NEVER, of } from 'rxjs';
+import { NEVER, from, of } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@xterm/xterm', () => {
@@ -42,14 +42,14 @@ describe('TerminalViewComponent', () => {
       .overrideProvider(SerialFacadeService, {
         useValue: {
           isConnected: () => true,
-          exec: execMock,
+          exec$: (...args: unknown[]) =>
+            from(execMock(...(args as [string, unknown]))),
           connectionEstablished$: NEVER,
           getConnectionEpoch: () => 1,
         },
       })
       .overrideProvider(PiZeroSerialBootstrapService, {
         useValue: {
-          runAfterConnect: vi.fn().mockResolvedValue(undefined),
           runAfterConnect$: vi.fn(() => of(undefined)),
         },
       })

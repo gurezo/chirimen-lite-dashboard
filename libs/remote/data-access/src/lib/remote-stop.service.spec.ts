@@ -1,5 +1,6 @@
 import '@angular/compiler';
 import { Injector } from '@angular/core';
+import { from } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
 import { PI_ZERO_PROMPT, SERIAL_TIMEOUT } from '@libs-web-serial-util';
@@ -14,7 +15,12 @@ describe('RemoteStopService', () => {
     const injector = Injector.create({
       providers: [
         RemoteStopService,
-        { provide: SerialFacadeService, useValue: { exec } },
+        {
+          provide: SerialFacadeService,
+          useValue: {
+            exec$: (...args: unknown[]) => from(exec(...args)),
+          },
+        },
       ],
     });
     svc = injector.get(RemoteStopService);
