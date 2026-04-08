@@ -16,21 +16,18 @@ export const webSerialReducer = createReducer(
   on(WebSerialActions.onConnect, (state) => ({
     ...state,
   })),
-  on(WebSerialActions.onConnectSuccess, (state, { isConnected, message }) => ({
+  on(WebSerialActions.onConnectSuccess, (state, { message }) => ({
     ...state,
-    isConnected,
+    isConnected: true,
     connectionMessage: message,
     errorMessage: '',
   })),
-  on(
-    WebSerialActions.onConnectFail,
-    (state, { isConnected, errorMessage }) => ({
-      ...state,
-      isConnected,
-      connectionMessage: '',
-      errorMessage,
-    })
-  ),
+  on(WebSerialActions.onConnectFail, (state, { errorMessage }) => ({
+    ...state,
+    isConnected: false,
+    connectionMessage: '',
+    errorMessage,
+  })),
   on(WebSerialActions.onDisConnect, () => ({
     ...initialWebSerialState,
   })),
