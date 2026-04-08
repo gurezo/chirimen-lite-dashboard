@@ -96,28 +96,3 @@ export function getRaspberryPiZeroError(): string {
   return 'Web Serial is not Raspberry Pi Zero';
 }
 
-/** NgRx ストア・トースト向け: 接続フローで捕捉した未知の例外を日本語メッセージにする */
-export function getWebSerialConnectFailureMessage(error: unknown): string {
-  if (error instanceof SerialError) {
-    if (error.is(SerialErrorCode.OPERATION_CANCELLED)) {
-      return 'ポートが選択されませんでした';
-    }
-    if (
-      error.is(SerialErrorCode.PORT_NOT_AVAILABLE) ||
-      error.is(SerialErrorCode.PORT_OPEN_FAILED)
-    ) {
-      return 'サポートされていないデバイスです。Raspberry Pi Zero以外のデバイスは接続できません。';
-    }
-  }
-  if (error instanceof Error && error.message?.includes('No port selected')) {
-    return 'ポートが選択されませんでした';
-  }
-  if (
-    error instanceof Error &&
-    (error.message?.includes('not a Raspberry Pi Zero') ||
-      error.message?.includes('not supported'))
-  ) {
-    return 'サポートされていないデバイスです。Raspberry Pi Zero以外のデバイスは接続できません。';
-  }
-  return '接続に失敗しました';
-}

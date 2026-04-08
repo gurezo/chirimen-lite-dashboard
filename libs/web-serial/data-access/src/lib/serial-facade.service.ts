@@ -17,7 +17,7 @@ import {
   SerialCommandService,
 } from './serial-command.service';
 import {
-  getWebSerialConnectFailureMessage,
+  getConnectionErrorMessage,
   SERIAL_TIMEOUT,
   type SerialExecOptions,
 } from '@libs-web-serial-util';
@@ -93,7 +93,7 @@ export class SerialFacadeService {
           console.error('Connection error:', error);
           return of<SerialFacadeConnectResult>({
             ok: false,
-            errorMessage: getWebSerialConnectFailureMessage(error),
+            errorMessage: getConnectionErrorMessage(error),
           });
         })
       );

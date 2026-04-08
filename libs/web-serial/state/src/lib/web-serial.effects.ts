@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, of, switchMap } from 'rxjs';
 import { SerialFacadeService } from '@libs-web-serial-data-access';
-import { getWebSerialConnectFailureMessage } from '@libs-web-serial-util';
+import { getConnectionErrorMessage } from '@libs-web-serial-util';
 import { WebSerialActions } from './web-serial.actions';
 
 const CONNECTION_SUCCESS_MESSAGE = 'Web Serial Open Success';
@@ -42,7 +42,7 @@ export class WebSerialEffects {
             return [
               WebSerialActions.onConnectFail({
                 isConnected: false,
-                errorMessage: getWebSerialConnectFailureMessage(error),
+                errorMessage: getConnectionErrorMessage(error),
               }),
             ];
           }),
