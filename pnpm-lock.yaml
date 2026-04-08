@@ -39,8 +39,8 @@ importers:
         specifier: 21.1.6
         version: 21.1.6(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.1)(zone.js@0.16.0))(rxjs@7.8.1))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.1)(zone.js@0.16.0))(@angular/platform-browser@21.1.6(@angular/animations@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.1)(zone.js@0.16.0)))(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.1)(zone.js@0.16.0))(rxjs@7.8.1))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.1)(zone.js@0.16.0)))(rxjs@7.8.1)
       '@gurezo/web-serial-rxjs':
-        specifier: 0.1.11
-        version: 0.1.11(rxjs@7.8.1)
+        specifier: 0.2.0
+        version: 0.2.0(rxjs@7.8.1)
       '@ngrx/component-store':
         specifier: 21.0.1
         version: 21.0.1(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.1)(zone.js@0.16.0))(rxjs@7.8.1)
@@ -1790,8 +1790,8 @@ packages:
       '@noble/hashes':
         optional: true
 
-  '@gurezo/web-serial-rxjs@0.1.11':
-    resolution: {integrity: sha512-HzX55v+DhZM2ceEB1B3ftg1+4ZBhlLU14gTzJRQ0nVoderDM8sy/niVYJNIMLGtJw9bsT0lruQ5BJEn3e6rbJA==}
+  '@gurezo/web-serial-rxjs@0.2.0':
+    resolution: {integrity: sha512-h96/KcYLnIbDrnCa5+QsuK70gTDQIpVui25orYbaKi8B2MpDzQFSUV3I8WI+d0f4YZnekv67spBCqv63Cujkvw==}
     peerDependencies:
       rxjs: ^7.8.0
 
@@ -11895,7 +11895,7 @@ snapshots:
 
   '@exodus/bytes@1.15.0': {}
 
-  '@gurezo/web-serial-rxjs@0.1.11(rxjs@7.8.1)':
+  '@gurezo/web-serial-rxjs@0.2.0(rxjs@7.8.1)':
     dependencies:
       rxjs: 7.8.1
 
