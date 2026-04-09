@@ -4,14 +4,7 @@ import { ButtonComponent } from '@libs-shared-ui';
 @Component({
   selector: 'lib-remote-stop-button',
   imports: [ButtonComponent],
-  template: `
-    <choh-button
-      [label]="label()"
-      type="button"
-      [disabled]="disabled()"
-      (clickEvent)="stopClick.emit()"
-    />
-  `,
+  templateUrl: './remote-stop-button.component.html',
 })
 export class RemoteStopButtonComponent {
   readonly label = input('停止');

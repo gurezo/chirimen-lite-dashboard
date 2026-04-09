@@ -3,38 +3,7 @@ import type { ForeverProcess } from '@libs-shared-types';
 
 @Component({
   selector: 'lib-remote-status-list',
-  template: `
-    <div>
-      <h3 class="text-base font-semibold mb-2">実行中のアプリ (forever)</h3>
-    </div>
-    <div
-      class="max-h-[min(360px,40vh)] overflow-y-auto w-full border border-gray-200 rounded"
-      role="list"
-    >
-      @for (p of processes(); track trackKey(p)) {
-        <button
-          type="button"
-          role="listitem"
-          class="w-full text-left px-3 py-2 border-b border-gray-100 hover:bg-gray-50"
-          [class.bg-blue-50]="isSelected(p)"
-          (click)="rowSelected.emit(p)"
-        >
-          <div class="font-mono text-sm">{{ p.uid }}</div>
-          <div class="text-xs text-gray-600 break-all">{{ p.script }}</div>
-          <div class="text-xs mt-0.5" [class.text-green-700]="p.running" [class.text-gray-500]="!p.running">
-            {{ p.running ? '実行中' : '停止' }}
-            @if (p.uptime) {
-              <span class="text-gray-400"> · {{ p.uptime }}</span>
-            }
-          </div>
-        </button>
-      } @empty {
-        <p class="p-3 text-sm text-gray-600">
-          プロセスがありません。「更新」で一覧を取得してください。
-        </p>
-      }
-    </div>
-  `,
+  templateUrl: './remote-status-list.component.html',
 })
 export class RemoteStatusListComponent {
   readonly processes = input<ForeverProcess[]>([]);
