@@ -1,0 +1,10 @@
+<div class="file-name-display">
+  @if (fileName()) {
+    <span>{{ fileName() }}</span>
+    @if (isDirty()) {
+      <span> *</span>
+    }
+  } @else {
+    <span>—</span>
+  }
+</div>

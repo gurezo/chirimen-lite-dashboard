@@ -39,29 +39,7 @@ const DEFAULT_CODE = `
     EditorToolbarComponent,
     FileNameDisplayComponent,
   ],
-  template: `
-    <div
-      class="editor-page flex h-full min-h-0 min-w-0 flex-col"
-    >
-      <choh-editor-toolbar
-        class="shrink-0"
-        [saveDisabled]="!isDirty() || isSaving()"
-        (saveRequested)="saveCurrentFile()"
-      />
-      <choh-file-name-display
-        class="shrink-0"
-        [fileName]="currentFileName()"
-        [isDirty]="isDirty()"
-      />
-      <choh-monaco-editor
-        class="min-h-0 min-w-0 flex-1"
-        [code]="code()"
-        (codeChange)="code.set($event)"
-        (editorInitialized)="onEditorInitialized($event)"
-        (contentEdited)="isDirty.set(true)"
-      />
-    </div>
-  `,
+  templateUrl: './editor-page.component.html',
 })
 export class EditorPageComponent implements OnInit {
   code = signal(DEFAULT_CODE.trim());
