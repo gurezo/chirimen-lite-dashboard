@@ -1,0 +1,10 @@
+@if (status(); as st) {
+  <div class="wifi-status">
+    @if (st.ipInfo) {
+      <pre class="text-sm">{{ st.ipInfo }}</pre>
+    }
+    @if (st.wlInfo) {
+      <pre class="text-sm">{{ st.wlInfo }}</pre>
+    }
+  </div>
+}

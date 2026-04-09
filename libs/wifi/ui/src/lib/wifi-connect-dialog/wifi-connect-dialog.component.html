@@ -1,0 +1,37 @@
+<div class="flex flex-col gap-4 p-4 min-w-[280px]">
+  <h2 class="text-lg font-medium m-0">WiFi に接続</h2>
+  <form class="flex flex-col gap-3" (ngSubmit)="$event.preventDefault(); connect()">
+    <mat-form-field appearance="outline">
+      <mat-label>SSID</mat-label>
+      <input matInput name="ssid" [(ngModel)]="ssid" [disabled]="connecting()" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>パスワード</mat-label>
+      <input
+        matInput
+        type="password"
+        name="password"
+        [(ngModel)]="password"
+        [disabled]="connecting()"
+        autocomplete="off"
+      />
+    </mat-form-field>
+    <div class="flex justify-end gap-2">
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="cancel()"
+        [disabled]="connecting()"
+      >
+        キャンセル
+      </button>
+      <button mat-flat-button color="primary" type="submit" [disabled]="connecting()">
+        @if (connecting()) {
+          接続中…
+        } @else {
+          接続
+        }
+      </button>
+    </div>
+  </form>
+</div>

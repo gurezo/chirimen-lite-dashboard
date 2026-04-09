@@ -9,21 +9,7 @@ import { WifiInfoComponent } from '../wifi-info/wifi-info.component';
 @Component({
   selector: 'choh-wifi-list',
   imports: [WifiInfoComponent, MatDividerModule],
-  template: `
-    <div>
-      <h3>WiFi Scan Result</h3>
-    </div>
-    <div class="max-h-[620px] overflow-y-auto w-full">
-      @for (wifiInfo of wifiInfoList(); track wifiInfo.address + wifiInfo.ssid + $index) {
-        <choh-wifi-info
-          [wifiInfo]="wifiInfo"
-          (selectNetwork)="networkSelected.emit($event)"
-        />
-      } @empty {
-        <span>スキャン結果がありません。「Wifi Scan」で取得してください。</span>
-      }
-    </div>
-  `,
+  templateUrl: './wifi-list.component.html',
 })
 export class WifiListComponent {
   readonly wifiInfoList = input<WiFiInfo[]>([]);
