@@ -31,11 +31,15 @@ import { TerminalViewComponent } from './terminal-view.component';
 describe('TerminalViewComponent', () => {
   let fixture: ComponentFixture<TerminalViewComponent>;
   let execMock: ReturnType<typeof vi.fn>;
+  let shouldRunAfterConnectMock: ReturnType<typeof vi.fn>;
+  let runAfterConnectMock: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
     execMock = vi.fn().mockResolvedValue({
       stdout: `i2cdetect -y 1\n     0  1\n${PI_ZERO_PROMPT} `,
     });
+    shouldRunAfterConnectMock = vi.fn(() => true);
+    runAfterConnectMock = vi.fn(() => of(undefined));
     await TestBed.configureTestingModule({
       imports: [TerminalViewComponent],
     })
@@ -50,7 +54,8 @@ describe('TerminalViewComponent', () => {
       })
       .overrideProvider(PiZeroSerialBootstrapService, {
         useValue: {
-          runAfterConnect$: vi.fn(() => of(undefined)),
+          shouldRunAfterConnect: shouldRunAfterConnectMock,
+          runAfterConnect$: runAfterConnectMock,
         },
       })
       .compileComponents();
@@ -78,5 +83,19 @@ describe('TerminalViewComponent', () => {
         timeout: SERIAL_TIMEOUT.DEFAULT,
       });
     });
+  });
+
+  it('skips bootstrap execution when already initialized', async () => {
+    runAfterConnectMock.mockClear();
+    shouldRunAfterConnectMock.mockReturnValue(false);
+
+    fixture.destroy();
+    fixture = TestBed.createComponent(TerminalViewComponent);
+    fixture.detectChanges();
+
+    await vi.waitFor(() => {
+      expect(shouldRunAfterConnectMock).toHaveBeenCalled();
+    });
+    expect(runAfterConnectMock).not.toHaveBeenCalled();
   });
 });
