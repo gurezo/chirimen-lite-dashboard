@@ -77,15 +77,9 @@ export class TerminalViewComponent implements AfterViewInit, OnDestroy {
           if (!this.serial.isConnected()) {
             return EMPTY;
           }
-          this.xterminal.writeln(
-            '[コンソール] シリアルに接続しました。初期化しています...',
+          return this.bootstrapAfterConnect$(
+            '[コンソール] シリアルに接続しました。',
           );
-          return this.piZeroBootstrap
-            .runAfterConnect$((line) => this.xterminal.writeln(line))
-            .pipe(
-              catchError(() => EMPTY),
-              finalize(() => this.xterminal.write('$ ')),
-            );
         }),
         takeUntilDestroyed(this.destroyRef),
       )
@@ -119,14 +113,8 @@ export class TerminalViewComponent implements AfterViewInit, OnDestroy {
 
     this.xterminal.reset();
     if (this.serial.isConnected()) {
-      this.xterminal.writeln('[コンソール] シリアル接続済み。初期化しています...');
-      this.piZeroBootstrap
-        .runAfterConnect$((line) => this.xterminal.writeln(line))
-        .pipe(
-          takeUntilDestroyed(this.destroyRef),
-          catchError(() => EMPTY),
-          finalize(() => this.xterminal.write('$ ')),
-        )
+      this.bootstrapAfterConnect$('[コンソール] シリアル接続済み。')
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe();
     } else {
       this.xterminal.writeln('$ ');
@@ -187,5 +175,20 @@ export class TerminalViewComponent implements AfterViewInit, OnDestroy {
     } catch {
       // Dimensions may be zero before layout stabilizes
     }
+  }
+
+  private bootstrapAfterConnect$(prefixMessage: string) {
+    if (!this.piZeroBootstrap.shouldRunAfterConnect()) {
+      this.xterminal.writeln(`${prefixMessage} 初期化済みのためスキップします。`);
+      this.xterminal.write('$ ');
+      return EMPTY;
+    }
+    this.xterminal.writeln(`${prefixMessage} 初期化しています...`);
+    return this.piZeroBootstrap.runAfterConnect$((line) =>
+      this.xterminal.writeln(line),
+    ).pipe(
+      catchError(() => EMPTY),
+      finalize(() => this.xterminal.write('$ ')),
+    );
   }
 }
