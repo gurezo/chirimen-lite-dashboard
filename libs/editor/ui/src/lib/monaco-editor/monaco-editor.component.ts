@@ -6,17 +6,7 @@ import type { editor } from 'monaco-editor';
 @Component({
   selector: 'choh-monaco-editor',
   imports: [FormsModule, MonacoEditorModule],
-  template: `
-    <div class="flex h-full min-h-0 min-w-0 flex-col">
-      <ngx-monaco-editor
-        class="block min-h-0 min-w-0 flex-1"
-        [options]="editorOptions()"
-        [ngModel]="code()"
-        (ngModelChange)="code.set($event)"
-        (onInit)="onEditorInit($event)"
-      />
-    </div>
-  `,
+  templateUrl: './monaco-editor.component.html',
 })
 export class MonacoEditorComponent {
   code = model<string>('');
