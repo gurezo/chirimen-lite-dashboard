@@ -4,14 +4,7 @@ import { ButtonComponent } from '@libs-shared-ui';
 @Component({
   selector: 'lib-remote-run-button',
   imports: [ButtonComponent],
-  template: `
-    <choh-button
-      [label]="label()"
-      type="button"
-      [disabled]="disabled()"
-      (clickEvent)="runClick.emit()"
-    />
-  `,
+  templateUrl: './remote-run-button.component.html',
 })
 export class RemoteRunButtonComponent {
   readonly label = input('起動');
