@@ -2,13 +2,7 @@ import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'lib-setup-step-list',
-  template: `
-    <ul>
-      @for (step of steps(); track step) {
-        <li>{{ step }}</li>
-      }
-    </ul>
-  `,
+  templateUrl: './setup-step-list.component.html',
 })
 export class SetupStepListComponent {
   readonly steps = input<string[]>([]);

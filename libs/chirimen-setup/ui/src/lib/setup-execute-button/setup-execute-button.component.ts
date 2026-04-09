@@ -4,14 +4,7 @@ import { ButtonComponent } from '@libs-shared-ui';
 @Component({
   selector: 'lib-setup-execute-button',
   imports: [ButtonComponent],
-  template: `
-    <choh-button
-      [label]="loading() ? loadingLabel() : label()"
-      type="button"
-      [disabled]="disabled() || loading()"
-      (clickEvent)="handleClick()"
-    />
-  `,
+  templateUrl: './setup-execute-button.component.html',
 })
 export class SetupExecuteButtonComponent {
   readonly label = input('セットアップを実行');

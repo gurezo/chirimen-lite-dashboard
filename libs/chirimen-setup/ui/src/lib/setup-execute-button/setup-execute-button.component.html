@@ -1,0 +1,6 @@
+<choh-button
+  [label]="loading() ? loadingLabel() : label()"
+  type="button"
+  [disabled]="disabled() || loading()"
+  (clickEvent)="handleClick()"
+/>
