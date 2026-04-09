@@ -50,19 +50,29 @@ export class PiZeroSerialBootstrapService {
   /**
    * 接続セッションごとに1回、シェル到達（必要ならログイン）と接続直後の初期化を行う。
    */
+  shouldRunAfterConnect(): boolean {
+    if (!this.serial.isConnected()) {
+      return false;
+    }
+    const epoch = this.serial.getConnectionEpoch();
+    if (epoch === this.lastBootstrappedEpoch) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * 接続セッション内で未初期化の場合のみ初期化パイプラインを実行する。
+   */
   runAfterConnect$(
     onStatus?: PiZeroBootstrapStatusHandler,
   ): Observable<void> {
     const log = onStatus ?? (() => undefined);
 
-    if (!this.serial.isConnected()) {
+    if (!this.shouldRunAfterConnect()) {
       return of(undefined);
     }
-
     const epoch = this.serial.getConnectionEpoch();
-    if (epoch === this.lastBootstrappedEpoch) {
-      return of(undefined);
-    }
 
     if (
       this.activeBootstrap$ !== null &&
