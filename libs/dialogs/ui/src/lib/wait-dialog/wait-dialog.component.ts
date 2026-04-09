@@ -2,14 +2,7 @@ import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'lib-wait-dialog',
-  template: `
-    <div class="dialog-content">
-      @if (message()) {
-        <p>{{ message() }}</p>
-      }
-      <div class="spinner" aria-busy="true"></div>
-    </div>
-  `,
+  templateUrl: './wait-dialog.component.html',
   styles: [
     `
       .dialog-content {
