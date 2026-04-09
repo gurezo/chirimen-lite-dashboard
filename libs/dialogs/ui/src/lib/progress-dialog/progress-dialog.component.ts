@@ -2,17 +2,7 @@ import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'lib-progress-dialog',
-  template: `
-    <div class="dialog-content">
-      @if (message()) {
-        <p>{{ message() }}</p>
-      }
-      <p>Progress: {{ progress() }}%</p>
-      <div class="progress-bar">
-        <div class="progress-fill" [style.width.%]="progress()"></div>
-      </div>
-    </div>
-  `,
+  templateUrl: './progress-dialog.component.html',
   styles: [
     `
       .dialog-content {

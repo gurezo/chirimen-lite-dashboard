@@ -1,0 +1,9 @@
+<div class="dialog-content">
+  @if (message()) {
+    <p>{{ message() }}</p>
+  }
+  <p>Progress: {{ progress() }}%</p>
+  <div class="progress-bar">
+    <div class="progress-fill" [style.width.%]="progress()"></div>
+  </div>
+</div>

@@ -12,22 +12,7 @@ export interface ConfirmDialogData {
 
 @Component({
   selector: 'lib-confirm-dialog',
-  template: `
-    <div class="dialog-content">
-      @if (viewTitle) {
-        <h2>{{ viewTitle }}</h2>
-      }
-      @if (viewMessage) {
-        <p>{{ viewMessage }}</p>
-      }
-      <div class="dialog-actions">
-        @if (!viewHideCancel) {
-          <button type="button" (click)="cancel()">{{ viewCancelLabel }}</button>
-        }
-        <button type="button" (click)="confirm()">{{ viewConfirmLabel }}</button>
-      </div>
-    </div>
-  `,
+  templateUrl: './confirm-dialog.component.html',
   styles: [
     `
       .dialog-content {
