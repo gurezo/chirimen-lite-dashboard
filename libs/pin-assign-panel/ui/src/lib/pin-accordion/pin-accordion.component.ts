@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
  */
 @Component({
   selector: 'choh-pin-accordion',
-  template: `<ng-content></ng-content>`,
+  templateUrl: './pin-accordion.component.html',
 })
 export class PinAccordionComponent {}
