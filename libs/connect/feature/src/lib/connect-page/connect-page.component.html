@@ -1,0 +1,18 @@
+<section
+  class="flex h-full min-h-0 flex-col items-center justify-center gap-4 text-center"
+>
+  @if (connectionStatus$ | async; as status) {
+    <lib-connection-status
+      [status]="status"
+      [message]="disconnectedMessage"
+      [imageSrc]="imageSrc"
+      [imageAlt]="imageAlt"
+    />
+    @if (status === 'disconnected') {
+      <lib-connect-button
+        [label]="connectButtonLabel"
+        (connect)="onConnect()"
+      />
+    }
+  }
+</section>
