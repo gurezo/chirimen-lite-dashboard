@@ -36,14 +36,7 @@ import { PI_ZERO_PROMPT, SERIAL_TIMEOUT } from '@libs-web-serial-util';
   host: {
     class: 'block h-full min-h-0 min-w-0',
   },
-  template: `
-    <div class="flex h-full min-h-0 min-w-0 flex-col">
-      <div
-        #consoleDom
-        class="min-h-0 min-w-0 flex-1 overflow-hidden"
-      ></div>
-    </div>
-  `,
+  templateUrl: './terminal-view.component.html',
 })
 export class TerminalViewComponent implements AfterViewInit, OnDestroy {
   /**
