@@ -13,26 +13,7 @@ import { map } from 'rxjs';
   selector: 'lib-connect-page',
   host: { class: 'flex min-h-0 flex-1 flex-col' },
   imports: [AsyncPipe, ConnectButtonComponent, ConnectionStatusComponent],
-  template: `
-    <section
-      class="flex h-full min-h-0 flex-col items-center justify-center gap-4 text-center"
-    >
-      @if (connectionStatus$ | async; as status) {
-        <lib-connection-status
-          [status]="status"
-          [message]="disconnectedMessage"
-          [imageSrc]="imageSrc"
-          [imageAlt]="imageAlt"
-        />
-        @if (status === 'disconnected') {
-          <lib-connect-button
-            [label]="connectButtonLabel"
-            (connect)="onConnect()"
-          />
-        }
-      }
-    </section>
-  `,
+  templateUrl: './connect-page.component.html',
 })
 export class ConnectPageComponent {
   private store = inject(Store);
