@@ -153,6 +153,30 @@ describe('PiZeroSerialBootstrapService', () => {
     expect(vi.mocked(shellReadiness.setReady)).toHaveBeenCalledWith(true);
   });
 
+  it('re-runs bootstrap when connection epoch changes', async () => {
+    let epoch = 1;
+    const readUntilPrompt = vi.fn().mockResolvedValue({
+      stdout: `${PI_ZERO_PROMPT} `,
+    });
+    const exec = vi.fn().mockResolvedValue({ stdout: '' });
+    const serial = {
+      isConnected: () => true,
+      getConnectionEpoch: () => epoch,
+      readUntilPrompt$: (o: unknown) => from(readUntilPrompt(o)),
+      exec$: (c: string, o: unknown) => from(exec(c, o)),
+    } as unknown as SerialFacadeService;
+
+    const shellReadiness = createShellReadinessMock();
+    const service = new PiZeroSerialBootstrapService(serial, shellReadiness);
+
+    await firstValueFrom(service.runAfterConnect$());
+    epoch = 2;
+    await firstValueFrom(service.runAfterConnect$());
+
+    expect(readUntilPrompt).toHaveBeenCalledTimes(2);
+    expect(vi.mocked(shellReadiness.setReady)).toHaveBeenCalledTimes(2);
+  });
+
   it('logs timezone status stdout lines to the status handler', async () => {
     const readUntilPrompt = vi.fn().mockResolvedValue({
       stdout: `ready\r\n${PI_ZERO_PROMPT} `,
